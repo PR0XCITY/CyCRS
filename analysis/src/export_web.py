@@ -7,7 +7,7 @@ from src.cards import load_cards, to_plain, validate_card
 from src.classify import PROFILE_ASSETS
 from src.nbutil import MODELS, OUT, ROOT
 from src.recommender import CATEGORIES, SIZES, split_tokens
-from src.sources import CONTROLS, SOURCES_MD, read_values
+from src.sources import CASES, CONTROLS, DATASETS, SOURCES_MD, read_values
 
 WEB = ROOT.parent / "web" / "public" / "model"
 MAX_BYTES = 2 * 1024 * 1024
@@ -76,10 +76,35 @@ SCHEMA = {
             }
         ],
         "bibliography": [{"publisher": STR, "title": STR, "year": STR, "url": STR, "used_for": STR}],
+        "cases": [
+            {
+                "name": STR,
+                "year": STR,
+                "sector": STR,
+                "size_bucket": STR,
+                "assets": STR,
+                "actual_actions": STR,
+                "summary": STR,
+                "source_url": STR,
+                "accessed": STR,
+            }
+        ],
     },
     "lineage.json": {
         "steps": [{"step": STR, "rows": NUM, "rule": STR}],
         "example_incident": {"source": STR, "incident": "object", "flattened": "object"},
+        "datasets": [
+            {
+                "dataset": STR,
+                "publisher": STR,
+                "url": STR,
+                "version": STR,
+                "access_date": STR,
+                "sha256": STR,
+                "files": STR,
+                "notes": STR,
+            }
+        ],
     },
     "cards.json": [
         {"id": STR, "order": NUM, "stage": STR, "used_live": "boolean", "title": STR, "card": "object"}
@@ -265,14 +290,22 @@ def sources_export():
         for r in read_values().values()
         if str(r["value"]).strip()
     ]
-    return {"values": vs, "bibliography": bibliography()}
+    with Path(CASES).open(newline="", encoding="utf-8") as f:
+        cs = list(csv.DictReader(f))
+    return {"values": vs, "bibliography": bibliography(), "cases": cs}
 
 
 def lineage_export():
     c = json.loads((OUT / "cards" / "data-preparation.json").read_text(encoding="utf-8"))
     t = next(x for x in c["results"]["tables"] if x["title"].startswith("Row counts"))
     ex = json.loads((ROOT / "data" / "processed" / "example_incident.json").read_text(encoding="utf-8"))
-    return {"steps": [dict(zip(t["columns"], r, strict=True)) for r in t["rows"]], "example_incident": ex}
+    with Path(DATASETS).open(newline="", encoding="utf-8") as f:
+        ds = list(csv.DictReader(f))
+    return {
+        "steps": [dict(zip(t["columns"], r, strict=True)) for r in t["rows"]],
+        "example_incident": ex,
+        "datasets": ds,
+    }
 
 
 def card_order(c):

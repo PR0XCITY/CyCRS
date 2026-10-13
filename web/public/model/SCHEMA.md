@@ -66,6 +66,15 @@ Numbers are rounded to 8 decimals. Each file is under 2 MB.
 | `bibliography[].year` | string |
 | `bibliography[].url` | string |
 | `bibliography[].used_for` | string |
+| `cases[].name` | string |
+| `cases[].year` | string |
+| `cases[].sector` | string |
+| `cases[].size_bucket` | string |
+| `cases[].assets` | string |
+| `cases[].actual_actions` | string |
+| `cases[].summary` | string |
+| `cases[].source_url` | string |
+| `cases[].accessed` | string |
 
 ## lineage.json
 
@@ -77,6 +86,14 @@ Numbers are rounded to 8 decimals. Each file is under 2 MB.
 | `example_incident.source` | string |
 | `example_incident.incident` | object |
 | `example_incident.flattened` | object |
+| `datasets[].dataset` | string |
+| `datasets[].publisher` | string |
+| `datasets[].url` | string |
+| `datasets[].version` | string |
+| `datasets[].access_date` | string |
+| `datasets[].sha256` | string |
+| `datasets[].files` | string |
+| `datasets[].notes` | string |
 
 ## cards.json
 
