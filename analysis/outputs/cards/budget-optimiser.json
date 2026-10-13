@@ -1,0 +1,317 @@
+{
+  "id": "budget-optimiser",
+  "title": "What to buy first for your budget",
+  "module": "6: Optimisation under a budget",
+  "stage": "decide",
+  "used_live": true,
+  "order": 15,
+  "question": "Which security controls should this business buy first to cut the most expected loss within its budget?",
+  "data_in": {
+    "dataset": "Expected losses per category and data/raw/controls.csv",
+    "n_rows": 12,
+    "variables": [
+      {
+        "name": "effectiveness",
+        "type": "numeric",
+        "scale": "ratio",
+        "transform": "sourced"
+      },
+      {
+        "name": "annual_cost_inr",
+        "type": "numeric",
+        "scale": "ratio",
+        "transform": "sourced"
+      },
+      {
+        "name": "coverage",
+        "type": "numeric",
+        "scale": "ratio",
+        "transform": "share of category incidents the control addresses"
+      }
+    ],
+    "prep_steps": [
+      "Only controls with both a sourced effectiveness and a cost are optimised (4 of 12); the rest are listed as not scored",
+      "Coverage share of each control per category measured on training incidents only",
+      "Controls already in place start in the chosen set"
+    ],
+    "sample_rows": [
+      {
+        "control": "MFA",
+        "effectiveness": 0.9922,
+        "annual_cost_inr": 0.0,
+        "hacking": 0.1536,
+        "malware": 0.0941,
+        "social": 0.3451,
+        "error": 0.0015,
+        "misuse": 0.0086,
+        "physical": 0.0075
+      },
+      {
+        "control": "Offline or cloud backups",
+        "effectiveness": 0.6,
+        "annual_cost_inr": 1560.0,
+        "hacking": 0.3505,
+        "malware": 1.0,
+        "social": 0.4381,
+        "error": 0.0031,
+        "misuse": 0.007,
+        "physical": 0.005
+      },
+      {
+        "control": "Patch management",
+        "effectiveness": null,
+        "annual_cost_inr": 0.0,
+        "hacking": 0.3163,
+        "malware": 0.5008,
+        "social": 0.1571,
+        "error": 0.0031,
+        "misuse": 0.0,
+        "physical": 0.0
+      },
+      {
+        "control": "Endpoint protection",
+        "effectiveness": 0.99,
+        "annual_cost_inr": 0.0,
+        "hacking": 0.3505,
+        "malware": 1.0,
+        "social": 0.4381,
+        "error": 0.0031,
+        "misuse": 0.007,
+        "physical": 0.005
+      },
+      {
+        "control": "Phishing awareness training",
+        "effectiveness": null,
+        "annual_cost_inr": 0.0,
+        "hacking": 0.0857,
+        "malware": 0.1463,
+        "social": 0.7677,
+        "error": 0.0005,
+        "misuse": 0.0039,
+        "physical": 0.0042
+      },
+      {
+        "control": "Email filtering",
+        "effectiveness": 0.999,
+        "annual_cost_inr": 32400.0,
+        "hacking": 0.0841,
+        "malware": 0.1535,
+        "social": 0.7345,
+        "error": 0.0005,
+        "misuse": 0.0016,
+        "physical": 0.0017
+      },
+      {
+        "control": "Password manager",
+        "effectiveness": null,
+        "annual_cost_inr": 45718.9,
+        "hacking": 0.1536,
+        "malware": 0.0941,
+        "social": 0.3451,
+        "error": 0.0015,
+        "misuse": 0.0086,
+        "physical": 0.0075
+      },
+      {
+        "control": "Router and firewall hardening",
+        "effectiveness": null,
+        "annual_cost_inr": null,
+        "hacking": 0.0578,
+        "malware": 0.0129,
+        "social": 0.0133,
+        "error": 0.0015,
+        "misuse": 0.0281,
+        "physical": 0.0008
+      }
+    ]
+  },
+  "why": "Each step picks the affordable control that removes the most expected loss per rupee, free controls first, and recomputes after every pick because controls overlap on the same attacks. Against exhaustive search on the 5 reference profiles the greedy plan is at most 0.00% worse, while every step can be shown to the user and it runs instantly in the browser.",
+  "data_properties": [
+    {
+      "name": "Controls optimised",
+      "value": "4 of 12",
+      "implication": "Others lack a sourced effectiveness or cost."
+    },
+    {
+      "name": "Worst greedy gap vs exhaustive (reference profiles)",
+      "value": 0.0,
+      "implication": "Loss of optimality from choosing greedily."
+    },
+    {
+      "name": "Residual risk after plan, small retail shop",
+      "value": 13.97220738,
+      "implication": "Share of expected loss left after the plan."
+    }
+  ],
+  "alternatives": [
+    {
+      "model": "Exhaustive search over all control sets",
+      "why_not": "Optimal but grows as 2 to the power of the number of controls and cannot explain why one set beat another; the measured gap is 0.00%."
+    },
+    {
+      "model": "Integer linear programming",
+      "why_not": "Control effects multiply, so the objective is not linear; a solver would need an approximation and a library in the browser."
+    }
+  ],
+  "formula_tex": [
+    {
+      "label": "Loss with controls",
+      "tex": "L_c(S) = L_c \\prod_{k \\in S}\\left(1 - e_k s_{kc}\\right)"
+    },
+    {
+      "label": "Greedy choice",
+      "tex": "k^* = \\arg\\max_{k:\\,c_k \\le B} \\frac{L(S)-L(S\\cup\\{k\\})}{c_k}"
+    }
+  ],
+  "assumptions": [
+    {
+      "check": "Controls act independently",
+      "statistic": null,
+      "p_value": null,
+      "verdict": "assumed",
+      "action_taken": "Effects multiplied; overlap handled by recomputing after each pick."
+    },
+    {
+      "check": "Greedy gap vs exhaustive",
+      "statistic": 0.0,
+      "p_value": null,
+      "verdict": "negligible",
+      "action_taken": "Greedy used live."
+    }
+  ],
+  "results": {
+    "key_numbers": {
+      "controls_scored": 4,
+      "max_gap_pct": 0.0
+    },
+    "tables": [
+      {
+        "title": "Greedy vs exhaustive on reference profiles",
+        "columns": [
+          "profile",
+          "greedy_loss",
+          "exhaustive_loss",
+          "gap_pct",
+          "greedy_plan",
+          "exhaustive_plan"
+        ],
+        "rows": [
+          [
+            "small retail shop",
+            30459144.7393,
+            30459144.7393,
+            0.0,
+            "Endpoint protection; MFA; Offline or cloud backups; Email filtering",
+            "MFA; Offline or cloud backups; Endpoint protection; Email filtering"
+          ],
+          [
+            "medium clinic with MFA, no budget",
+            4703929.9268,
+            4703929.9268,
+            0.0,
+            "MFA; Endpoint protection",
+            "MFA; Endpoint protection"
+          ],
+          [
+            "small consultancy, tiny budget",
+            186508972.8662,
+            186508972.8662,
+            0.0,
+            "Endpoint protection; MFA",
+            "MFA; Endpoint protection"
+          ],
+          [
+            "large finance firm, big budget",
+            51100192.2916,
+            51100192.2916,
+            0.0,
+            "Endpoint protection; MFA; Offline or cloud backups; Email filtering",
+            "MFA; Offline or cloud backups; Endpoint protection; Email filtering"
+          ],
+          [
+            "other sector, unknown size",
+            11485798.7733,
+            11485798.7733,
+            0.0,
+            "Endpoint protection; MFA; Offline or cloud backups; Email filtering",
+            "MFA; Offline or cloud backups; Endpoint protection; Email filtering"
+          ]
+        ]
+      },
+      {
+        "title": "Controls not scored",
+        "columns": [
+          "control",
+          "reason"
+        ],
+        "rows": [
+          [
+            "Patch management",
+            "effectiveness MISSING"
+          ],
+          [
+            "Phishing awareness training",
+            "effectiveness MISSING"
+          ],
+          [
+            "Password manager",
+            "effectiveness MISSING"
+          ],
+          [
+            "Router and firewall hardening",
+            "effectiveness and cost MISSING"
+          ],
+          [
+            "Staff access reviews",
+            "effectiveness and cost MISSING"
+          ],
+          [
+            "Device encryption",
+            "effectiveness MISSING"
+          ],
+          [
+            "Payment and UPI fraud controls",
+            "effectiveness and cost MISSING"
+          ],
+          [
+            "Incident response plan",
+            "effectiveness and cost MISSING"
+          ]
+        ]
+      }
+    ],
+    "charts": [
+      {
+        "type": "bar",
+        "title": "Greedy steps, small retail shop",
+        "x_label": "Step",
+        "y_label": "Expected loss after step (INR)",
+        "data": [
+          {
+            "x": "Endpoint protection",
+            "y": 48475597.79554221
+          },
+          {
+            "x": "MFA",
+            "y": 41633296.14040394
+          },
+          {
+            "x": "Offline or cloud backups",
+            "y": 33316699.89645784
+          },
+          {
+            "x": "Email filtering",
+            "y": 30459144.73929258
+          }
+        ]
+      }
+    ]
+  },
+  "yields": "For a small retail shop with INR 50,000 a year, the plan is Endpoint protection, MFA, Offline or cloud backups, Email filtering, cutting expected loss to 14.0% of the starting estimate. Only 4 controls have sourced effectiveness and cost, so the others are shown as not yet scored rather than guessed.",
+  "feeds": [],
+  "limitations": [
+    "8 controls cannot be ranked until their effectiveness or cost is sourced.",
+    "Effectiveness figures come from vendor or non-Indian studies.",
+    "Independence of controls is an assumption."
+  ]
+}

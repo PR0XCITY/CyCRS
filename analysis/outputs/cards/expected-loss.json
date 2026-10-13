@@ -1,0 +1,286 @@
+{
+  "id": "expected-loss",
+  "title": "Expected yearly loss in rupees",
+  "module": "6: Probability and expected value",
+  "stage": "decide",
+  "used_live": true,
+  "order": 14,
+  "question": "How much is each kind of attack expected to cost this business per year, in rupees?",
+  "data_in": {
+    "dataset": "Outputs of attack-likelihood and mlr-impact, plus sourced values in config.yaml",
+    "n_rows": 5,
+    "variables": [
+      {
+        "name": "p_c",
+        "type": "numeric",
+        "scale": "ratio",
+        "transform": "probability of category c given an incident"
+      },
+      {
+        "name": "pi",
+        "type": "numeric",
+        "scale": "ratio",
+        "transform": "annual_incident_prob"
+      },
+      {
+        "name": "I_c",
+        "type": "numeric",
+        "scale": "ratio",
+        "transform": "records x per_record_cost_inr"
+      }
+    ],
+    "prep_steps": [
+      "p_c from the attack-likelihood logistic models",
+      "Records from the business MLR with only category c switched on",
+      "Cost per record from config (IBM India, derived)"
+    ],
+    "sample_rows": [
+      {
+        "profile": "small retail shop",
+        "hacking": 62415080.07,
+        "malware": 148300068.31,
+        "social": 2363806.93,
+        "error": 657010.56,
+        "misuse": 45659.48,
+        "physical": 4216461.26
+      },
+      {
+        "profile": "medium clinic with MFA, no budget",
+        "hacking": 802498.64,
+        "malware": 992263.35,
+        "social": 358063.11,
+        "error": 3739984.62,
+        "misuse": 197261.52,
+        "physical": 202874.2
+      },
+      {
+        "profile": "small consultancy, tiny budget",
+        "hacking": 315759326.53,
+        "malware": 221089704.06,
+        "social": 3023663.7,
+        "error": 7212865.99,
+        "misuse": 956777.02,
+        "physical": 499163.03
+      },
+      {
+        "profile": "large finance firm, big budget",
+        "hacking": 117455375.13,
+        "malware": 253282480.38,
+        "social": 12704565.76,
+        "error": 1014942.03,
+        "misuse": 12473.21,
+        "physical": 1372301.43
+      },
+      {
+        "profile": "other sector, unknown size",
+        "hacking": 930941.01,
+        "malware": 193841.28,
+        "social": 182941.47,
+        "error": 6015532.69,
+        "misuse": 261879.87,
+        "physical": 4952686.64
+      },
+      {
+        "profile": "small retail shop p_c",
+        "hacking": 0.561836,
+        "malware": 0.693699,
+        "social": 0.18049,
+        "error": 0.066528,
+        "misuse": 0.029869,
+        "physical": 0.224607
+      },
+      {
+        "profile": "medium clinic with MFA, no budget p_c",
+        "hacking": 0.01078,
+        "malware": 0.006926,
+        "social": 0.040803,
+        "error": 0.565219,
+        "misuse": 0.192751,
+        "physical": 0.016128
+      },
+      {
+        "profile": "small consultancy, tiny budget p_c",
+        "hacking": 0.648395,
+        "malware": 0.235921,
+        "social": 0.052659,
+        "error": 0.166575,
+        "misuse": 0.142562,
+        "physical": 0.006065
+      }
+    ]
+  },
+  "why": "Risk is chance times cost, so each category's expected annual loss is pi x p_c x I_c with pi 0.468 (fallback level 1_india_msme) and a cost per record of INR 6,456. The attack models give p_c given an incident and the impact model gives records lost on the log scale, so the product keeps every step traceable to one model card.",
+  "data_properties": [
+    {
+      "name": "Annual incident probability",
+      "value": 0.468,
+      "implication": "Fallback level 1_india_msme."
+    },
+    {
+      "name": "Cost per record (INR)",
+      "value": 6455.69620253,
+      "implication": "Derived from IBM 2026 India total cost / average records."
+    },
+    {
+      "name": "Largest expected loss, small retail shop",
+      "value": "malware INR 148,300,068",
+      "implication": "First category to defend."
+    },
+    {
+      "name": "Largest single-incident impact vs IBM India average breach cost",
+      "value": 7.8527,
+      "implication": "Impacts for small businesses reach 7.9 times the average for large Indian organisations, so rupee figures overstate small-business loss."
+    }
+  ],
+  "alternatives": [
+    {
+      "model": "Raw incident counts per category",
+      "why_not": "Ignores how costly each attack type is; error incidents are common but lose fewer records than malware."
+    },
+    {
+      "model": "Monte Carlo loss simulation",
+      "why_not": "Adds random draws a shop owner cannot retrace; the expected-value formula is exact and reproducible in the browser."
+    }
+  ],
+  "formula_tex": [
+    {
+      "label": "Expected loss per category",
+      "tex": "L_c = \\pi \\, p_c \\, I_c"
+    },
+    {
+      "label": "Impact",
+      "tex": "I_c = (10^{\\hat y_c}-1)\\times \\text{cost per record}"
+    },
+    {
+      "label": "Total",
+      "tex": "L = \\sum_c L_c"
+    }
+  ],
+  "assumptions": [
+    {
+      "check": "Categories add up",
+      "statistic": null,
+      "p_value": null,
+      "verdict": "approximation",
+      "action_taken": "An incident can involve several categories, so L may double count; shown as an estimate."
+    },
+    {
+      "check": "Cost per record constant across attack types",
+      "statistic": 6455.69620253,
+      "p_value": null,
+      "verdict": "simplification",
+      "action_taken": "Single IBM India figure applied to all categories."
+    }
+  ],
+  "results": {
+    "key_numbers": {
+      "annual_incident_prob": 0.468,
+      "per_record_cost_inr": 6455.69620253,
+      "ref_total_0": 217998086.60082448,
+      "ref_total_1": 6292945.4369304,
+      "ref_total_2": 548541500.3287688,
+      "ref_total_3": 385842137.9421339,
+      "ref_total_4": 12537822.9601097
+    },
+    "tables": [
+      {
+        "title": "Expected loss trace, small retail shop",
+        "columns": [
+          "category",
+          "p_c",
+          "records",
+          "impact_inr",
+          "expected_loss_inr"
+        ],
+        "rows": [
+          [
+            "hacking",
+            0.56183564,
+            36769.80350073,
+            237374680.8275177,
+            62415080.06514207
+          ],
+          [
+            "malware",
+            0.69369873,
+            70758.9716113,
+            456798424.32610863,
+            148300068.30760446
+          ],
+          [
+            "social",
+            0.18048954,
+            4334.8196573,
+            27984278.80030264,
+            2363806.93005793
+          ],
+          [
+            "error",
+            0.06652814,
+            3268.72230553,
+            21101878.17491031,
+            657010.5614399
+          ],
+          [
+            "misuse",
+            0.02986851,
+            505.97428337,
+            3266416.25975659,
+            45659.47959397
+          ],
+          [
+            "physical",
+            0.2246073,
+            6213.48580001,
+            40112376.68361731,
+            4216461.25698616
+          ]
+        ]
+      }
+    ],
+    "charts": [
+      {
+        "type": "bar",
+        "title": "Expected annual loss by category (reference profile)",
+        "x_label": "Attack category",
+        "y_label": "INR per year",
+        "data": [
+          {
+            "x": "hacking",
+            "y": 62415080.06514207
+          },
+          {
+            "x": "malware",
+            "y": 148300068.30760446
+          },
+          {
+            "x": "social",
+            "y": 2363806.93005793
+          },
+          {
+            "x": "error",
+            "y": 657010.5614399
+          },
+          {
+            "x": "misuse",
+            "y": 45659.47959397
+          },
+          {
+            "x": "physical",
+            "y": 4216461.25698616
+          }
+        ]
+      }
+    ]
+  },
+  "yields": "For a small retail shop, CyCRS estimates about INR 217,998,087 a year of expected loss, most of it from malware. These are estimates built from public averages, and each one carries the source and fallback level of its inputs.",
+  "feeds": [
+    "budget-optimiser"
+  ],
+  "limitations": [
+    "Probabilities come from reported incidents, not from Indian small businesses directly.",
+    "Categories can overlap within one incident, so the total may overstate loss.",
+    "Impact uses IBM India average cost per record for every category.",
+    "For a small retail shop one incident is priced up to INR 456,798,424, above IBM's India average of INR 255,000,000 per breach, because VCDB record counts and IBM costs come from large organisations; use the ranking of categories and controls rather than the rupee level."
+  ]
+}

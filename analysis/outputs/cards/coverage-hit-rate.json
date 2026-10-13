@@ -1,0 +1,354 @@
+{
+  "id": "coverage-hit-rate",
+  "title": "Do the recommendations match real attacks",
+  "module": "4 and 2: Evaluation and hypothesis testing",
+  "stage": "evaluate",
+  "used_live": false,
+  "order": 16,
+  "question": "For past incidents the models never trained on, would CyCRS's top 3 controls have addressed what actually happened?",
+  "data_in": {
+    "dataset": "Held-out VCDB incidents from the Phase 4 test split",
+    "n_rows": 3105,
+    "variables": [
+      {
+        "name": "top3",
+        "type": "categorical",
+        "scale": "nominal",
+        "transform": "first three controls of the plan"
+      },
+      {
+        "name": "v_*, vec_*, action_*",
+        "type": "binary",
+        "scale": "nominal",
+        "transform": "what happened"
+      }
+    ],
+    "prep_steps": [
+      "Profile rebuilt from each test incident's sector, size and assets, no controls, unlimited budget",
+      "Hit if any top-3 control mitigates a variety, vector or category the incident actually had",
+      "Baseline: the 3 controls most often in the top 3 for training incidents (Endpoint protection, MFA, Offline or cloud backups)"
+    ],
+    "sample_rows": [
+      {
+        "sector": "Public Administration",
+        "size": "large",
+        "top3": "Endpoint protection; MFA; Offline or cloud backups",
+        "hit": false,
+        "hit_baseline": false
+      },
+      {
+        "sector": "Finance and Insurance",
+        "size": "medium",
+        "top3": "Endpoint protection; MFA; Offline or cloud backups",
+        "hit": true,
+        "hit_baseline": true
+      },
+      {
+        "sector": "Retail Trade",
+        "size": "small",
+        "top3": "Endpoint protection; MFA; Offline or cloud backups",
+        "hit": false,
+        "hit_baseline": false
+      },
+      {
+        "sector": "Public Administration",
+        "size": "large",
+        "top3": "Endpoint protection; MFA; Offline or cloud backups",
+        "hit": false,
+        "hit_baseline": false
+      },
+      {
+        "sector": "Retail Trade",
+        "size": "unknown",
+        "top3": "Endpoint protection; MFA; Offline or cloud backups",
+        "hit": false,
+        "hit_baseline": false
+      },
+      {
+        "sector": "Professional, Scientific, and Technical Services",
+        "size": "small",
+        "top3": "Endpoint protection; MFA; Offline or cloud backups",
+        "hit": false,
+        "hit_baseline": false
+      },
+      {
+        "sector": "Health Care and Social Assistance",
+        "size": "medium",
+        "top3": "Endpoint protection; MFA; Offline or cloud backups",
+        "hit": false,
+        "hit_baseline": false
+      },
+      {
+        "sector": "Professional, Scientific, and Technical Services",
+        "size": "small",
+        "top3": "Endpoint protection; MFA; Offline or cloud backups",
+        "hit": false,
+        "hit_baseline": false
+      }
+    ]
+  },
+  "why": "A hit rate on incidents the models never saw tests the whole chain, not just one model, and the binary hit outcome makes a two-proportion z-test the natural comparison with a fixed baseline. Only 4 controls can be ranked, and 100% of test incidents get exactly the baseline set, so the test has little room to show a difference.",
+  "data_properties": [
+    {
+      "name": "CyCRS hit rate",
+      "value": 0.20869565,
+      "implication": "Share of test incidents addressed by the top 3."
+    },
+    {
+      "name": "Baseline hit rate",
+      "value": 0.20869565,
+      "implication": "Same metric for the 3 most common controls."
+    },
+    {
+      "name": "Share of plans identical to baseline",
+      "value": 1.0,
+      "implication": "How much personalisation there is to measure."
+    }
+  ],
+  "alternatives": [
+    {
+      "model": "McNemar test",
+      "why_not": "The paired test is stricter for the same incidents, but the brief asks for the two-proportion z-test; both use the same counts."
+    },
+    {
+      "model": "Accuracy of category prediction",
+      "why_not": "Already measured by AUC in attack-likelihood; this checks whether the advice, not the prediction, fits."
+    }
+  ],
+  "formula_tex": [
+    {
+      "label": "Hit rate",
+      "tex": "\\mathrm{HR} = \\frac{1}{n}\\sum_i \\mathbf{1}\\left[\\exists k \\in \\mathrm{top3}_i : k \\text{ mitigates incident } i\\right]"
+    }
+  ],
+  "assumptions": [
+    {
+      "check": "Two-proportion z-test",
+      "statistic": 0.0,
+      "p_value": 1.0,
+      "verdict": "no detectable difference",
+      "action_taken": "Reported; samples are paired, so p is approximate."
+    }
+  ],
+  "results": {
+    "key_numbers": {
+      "n_test": 3105,
+      "hit_rate": 0.20869565,
+      "baseline_hit_rate": 0.20869565,
+      "z": 0.0,
+      "p_value": 1.0,
+      "cohens_h": 0.0
+    },
+    "tables": [
+      {
+        "title": "Hit rate by size",
+        "columns": [
+          "size",
+          "hit",
+          "hit_baseline",
+          "n"
+        ],
+        "rows": [
+          [
+            "large",
+            0.275,
+            0.275,
+            1331
+          ],
+          [
+            "medium",
+            0.1906,
+            0.1906,
+            362
+          ],
+          [
+            "small",
+            0.1519,
+            0.1519,
+            540
+          ],
+          [
+            "unknown",
+            0.1502,
+            0.1502,
+            872
+          ]
+        ]
+      },
+      {
+        "title": "Hit rate by sector",
+        "columns": [
+          "sector",
+          "hit",
+          "hit_baseline",
+          "n"
+        ],
+        "rows": [
+          [
+            "Health Care and Social Assistance",
+            0.1082,
+            0.1082,
+            758
+          ],
+          [
+            "Public Administration",
+            0.1248,
+            0.1248,
+            713
+          ],
+          [
+            "Educational Services",
+            0.5763,
+            0.5763,
+            354
+          ],
+          [
+            "Finance and Insurance",
+            0.2027,
+            0.2027,
+            291
+          ],
+          [
+            "Information",
+            0.1992,
+            0.1992,
+            236
+          ],
+          [
+            "Professional, Scientific, and Technical Services",
+            0.26,
+            0.26,
+            150
+          ],
+          [
+            "Retail Trade",
+            0.1986,
+            0.1986,
+            146
+          ],
+          [
+            "Manufacturing",
+            0.225,
+            0.225,
+            80
+          ],
+          [
+            "Unknown",
+            0.2273,
+            0.2273,
+            66
+          ],
+          [
+            "Administrative and Support and Waste Management and Remediation Services",
+            0.1774,
+            0.1774,
+            62
+          ],
+          [
+            "Other Services (except Public Administration)",
+            0.1273,
+            0.1273,
+            55
+          ],
+          [
+            "Accommodation and Food Services",
+            0.3261,
+            0.3261,
+            46
+          ],
+          [
+            "Transportation and Warehousing",
+            0.186,
+            0.186,
+            43
+          ],
+          [
+            "Wholesale Trade",
+            0.2581,
+            0.2581,
+            31
+          ],
+          [
+            "Arts, Entertainment, and Recreation",
+            0.2143,
+            0.2143,
+            28
+          ],
+          [
+            "Construction",
+            0.3846,
+            0.3846,
+            13
+          ],
+          [
+            "Real Estate and Rental and Leasing",
+            0.2727,
+            0.2727,
+            11
+          ],
+          [
+            "Utilities",
+            0.25,
+            0.25,
+            8
+          ],
+          [
+            "Mining, Quarrying, and Oil and Gas Extraction",
+            0.1667,
+            0.1667,
+            6
+          ],
+          [
+            "Management of Companies and Enterprises",
+            0.0,
+            0.0,
+            5
+          ],
+          [
+            "Agriculture, Forestry, Fishing and Hunting",
+            0.0,
+            0.0,
+            3
+          ]
+        ]
+      }
+    ],
+    "charts": [
+      {
+        "type": "bar",
+        "title": "Hit rate by size",
+        "x_label": "Size",
+        "y_label": "Hit rate",
+        "data": [
+          {
+            "x": "large",
+            "cycrs": 0.27498122,
+            "baseline": 0.27498122
+          },
+          {
+            "x": "medium",
+            "cycrs": 0.19060773,
+            "baseline": 0.19060773
+          },
+          {
+            "x": "small",
+            "cycrs": 0.15185185,
+            "baseline": 0.15185185
+          },
+          {
+            "x": "unknown",
+            "cycrs": 0.15022936,
+            "baseline": 0.15022936
+          }
+        ]
+      }
+    ]
+  },
+  "yields": "On 3105 unseen incidents, CyCRS's top 3 controls addressed what happened 20.9% of the time, against 20.9% for the fixed baseline (p 1). Most misses are attacks like errors and misuse whose controls cannot be scored yet, which is where sourcing more effectiveness data would help most.",
+  "feeds": [],
+  "limitations": [
+    "VCDB incidents are not Indian small businesses.",
+    "Hit means the control addresses the attack type, not that it would have stopped it.",
+    "Only 4 controls are rankable."
+  ]
+}
