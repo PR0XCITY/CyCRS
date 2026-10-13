@@ -38,3 +38,11 @@
 - Decision: business model is used live because only it needs pre-attack inputs; costs 0.093 RMSE vs best. Missing discovery handled with log days = 0 plus disc_known flag in the full model only.
 - Business multipliers: malware x5.92, hacking x3.08, misuse x0.04; Information sector x13.6, Public Administration x0.02; medium size x2.46.
 - Card id referenced for later phases: decision.
+
+## Phase 4 (2026-10-13)
+- Files: notebooks/04_classification.py, src/classify.py, tests/test_classify.py (84 pass), figures 04_*.png, outputs/{classifier_comparison,04_attack_auc,04_attack_odds,04_breach_logit_odds}.csv, 04_tree_rules.txt, models/{attack_models,attack_test_ids}.json, cards breach-classifiers, attack-likelihood.
+- Breach split train 5244 Yes / 61 No, test 2248 / 26. Dropped on train rows: action_environmental (0 cases), asset_network, sector_manufacturing (one class only).
+- Leakage: asset_person dropped everywhere (VERIS codes a person asset in every social attack; social AUC was 0.999 with it, 0.738 without).
+- CV AUC: tree 0.766 (depth 10, leaf 50), NB 0.743, logistic 0.730, LDA 0.723, KNN 0.563 (k 2). KNN, NB, LDA predict all Yes at 0.5 (specificity 0-0.08). Best = tree; Youden t 0.552, J 0.498 (spec 0.69 -> 0.81, recall 0.74 -> 0.69).
+- Logit significant ORs: health care 5.35, large size 3.14, social 10.1; max |coef| 2.31 after fixes.
+- Attack models (test AUC): physical 0.892, hacking 0.865, malware 0.840, error 0.741, social 0.738, misuse 0.690. Shared split 6944/2976 (stratified on first action); test incident ids saved for Phase 6.
