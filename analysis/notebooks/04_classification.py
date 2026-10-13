@@ -196,7 +196,12 @@ FA = list(Xa.columns)
 strat = a[[f"action_{c}" for c in CATS]].idxmax(axis=1)
 jtr, jte = train_test_split(a.index, test_size=0.3, random_state=SEED, stratify=strat)
 write_json(
-    {"incident_id": a.loc[jte, "incident_id"].tolist(), "n_train": len(jtr), "n_test": len(jte)},
+    {
+        "key": "source_file",
+        "source_file": a.loc[jte, "source_file"].tolist(),
+        "n_train": len(jtr),
+        "n_test": len(jte),
+    },
     MODELS / "attack_test_ids.json",
 )
 AT = [c for c in CATS if c != "environmental"]

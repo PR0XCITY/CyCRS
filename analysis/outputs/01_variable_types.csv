@@ -1,5 +1,6 @@
 variable,type,scale,transform
 incident_id,identifier,nominal,dropped before modelling
+source_file,identifier,nominal,dropped before modelling
 sector_code,categorical,nominal,"one-hot, Unknown kept as level"
 sector,categorical,nominal,"one-hot, Unknown kept as level"
 employee_count,categorical,ordinal,"ordered levels, Unknown kept as level"

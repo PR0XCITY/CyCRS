@@ -324,7 +324,7 @@
       }
     ],
     "prep_steps": [
-      "Read 10596 validated incident files and flattened each into one row of 53 fields",
+      "Read 10596 validated incident files and flattened each into one row of 53 fields plus two ids",
       "Mapped the first two NAICS digits to the Census 2022 sector name",
       "Grouped employee counts into small (up to 100, or VERIS Small), medium (101 to 1000), large",
       "Kept Unknown as its own category instead of filling it in",
@@ -483,7 +483,7 @@
     "key_numbers": {
       "raw_files": 10596,
       "flattened_rows": 10596,
-      "columns": 54,
+      "columns": 55,
       "classifier_rows": 7579,
       "breach_yes": 7492,
       "breach_no": 87,

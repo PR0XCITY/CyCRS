@@ -79,7 +79,7 @@ RATIO = ["data_total", "discovery_days"]
 
 
 def describe_variable(c):
-    if c == "incident_id":
+    if c in ("incident_id", "source_file"):
         return c, "identifier", "nominal", "dropped before modelling"
     if c == "breach":
         return c, "binary target", "nominal", "1 Yes, 0 No, else missing"
@@ -294,6 +294,7 @@ ef = fs[int(rng.integers(len(fs)))]
 ej = read_incident(ef)
 er = flatten_incident(ej, sm)
 er.pop("incident_id")
+er.pop("source_file", None)
 ex = {"source": "VCDB data/json/validated", "incident": trim_incident(ej), "flattened": er}
 (PROC / "example_incident.json").write_text(json.dumps(ex, indent=2, default=float), encoding="utf-8")
 
@@ -325,11 +326,11 @@ card = {
     "data_in": {
         "dataset": "VERIS Community Database (VCDB), validated incidents",
         "n_rows": n_flat,
-        "variables": vt[vt["variable"] != "incident_id"]
+        "variables": vt[~vt["variable"].isin(["incident_id", "source_file"])]
         .rename(columns={"variable": "name"})
         .to_dict(orient="records"),
         "prep_steps": [
-            f"Read {n_raw} validated incident files and flattened each into one row of {shape[1] - 1} fields",
+            f"Read {n_raw} validated incident files and flattened each into one row of {shape[1] - 2} fields plus two ids",
             "Mapped the first two NAICS digits to the Census 2022 sector name",
             "Grouped employee counts into small (up to 100, or VERIS Small), medium (101 to 1000), large",
             "Kept Unknown as its own category instead of filling it in",
