@@ -17,3 +17,7 @@ web/out/
 .DS_Store
 !web/public/model/
 !analysis/data/sources/
+web/next-env.d.ts
+web/playwright-report/
+web/test-results/
+web/*.tsbuildinfo
