@@ -21,3 +21,4 @@ web/next-env.d.ts
 web/playwright-report/
 web/test-results/
 web/*.tsbuildinfo
+web/screenshots/

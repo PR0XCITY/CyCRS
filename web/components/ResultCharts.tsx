@@ -22,7 +22,7 @@ function short(s: unknown) {
 
 export function PersonaChart({ data }: { data: Item[] }) {
   return (
-    <div className="mt-4 h-[300px]" role="img" aria-label="Distance from your profile to each persona; the chosen persona is highlighted">
+    <div className="mt-4 h-[280px]" role="img" aria-label="Distance from your profile to each persona; the chosen persona is highlighted">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} layout="vertical" margin={{ left: 8, right: 48, top: 4, bottom: 4 }}>
           <CartesianGrid horizontal={false} stroke="var(--grid)" />
@@ -42,7 +42,7 @@ export function PersonaChart({ data }: { data: Item[] }) {
 
 export function LossChart({ data }: { data: Item[] }) {
   return (
-    <div className="mt-4 h-[260px]" role="img" aria-label="Expected yearly loss for each attack type in rupees">
+    <div className="mt-4 h-[280px]" role="img" aria-label="Expected yearly loss for each attack type in rupees">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} layout="vertical" margin={{ left: 8, right: 64, top: 4, bottom: 4 }}>
           <CartesianGrid horizontal={false} stroke="var(--grid)" />

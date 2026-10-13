@@ -2,15 +2,15 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useId, useState } from "react";
-import { z } from "zod";
+import type { ZodMiniType } from "zod/mini";
 import { budgetToSlider, SLIDER_STEPS, sliderToBudget } from "@/lib/budget";
 import { inr } from "@/lib/format";
 import { CONTROL_NAMES, DRAFT_KEY, PROFILE_KEY, readStored, removeStored, schemas, SECTORS, writeStored } from "@/lib/profile";
-import type { ProfileForm } from "@/lib/schema";
+import type { ProfileForm } from "@/lib/profileSchema";
 import { useIsClient } from "@/lib/useStored";
 
 const STEPS = ["Business", "Digital footprint", "Current controls", "Budget"] as const;
-const STEP_SCHEMAS: z.ZodType[] = [schemas.business, schemas.footprint, schemas.current, schemas.budget];
+const STEP_SCHEMAS: ZodMiniType[] = [schemas.business, schemas.footprint, schemas.current, schemas.budget];
 const EMPTY: ProfileForm = {
   sector: "",
   employees: 0,
@@ -23,11 +23,11 @@ const EMPTY: ProfileForm = {
   controls: [],
   budget: 25000,
 };
-const draftSchema = z.strictObject({ step: z.number().int().min(0).max(3), form: schemas.profile.partial() });
+const draftSchema = schemas.draft;
 
 type Errors = Partial<Record<keyof ProfileForm, string>>;
 
-function errorsOf(e: z.ZodError): Errors {
+function errorsOf(e: { issues: { path: PropertyKey[]; message: string }[] }): Errors {
   const out: Errors = {};
   for (const i of e.issues) {
     const k = i.path[0] as keyof ProfileForm | undefined;

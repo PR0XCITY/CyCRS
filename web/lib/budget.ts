@@ -1,4 +1,4 @@
-import { BUDGET_MAX, BUDGET_MIN } from "@/lib/schema";
+import { BUDGET_MAX, BUDGET_MIN } from "@/lib/profileSchema";
 
 export const SLIDER_STEPS = 1000;
 

@@ -1,6 +1,6 @@
-import { model } from "@/lib/data";
+import { model } from "@/lib/modelData";
 import type { EngineProfile } from "@/lib/model";
-import { makeProfileSchema, type ProfileForm } from "@/lib/schema";
+import { makeProfileSchema, type ProfileForm } from "@/lib/profileSchema";
 import { STORAGE_EVENT } from "@/lib/events";
 
 export const PROFILE_KEY = "cycrs.profile.v1";

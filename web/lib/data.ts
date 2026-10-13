@@ -1,7 +1,7 @@
 import cardsJson from "@/public/model/cards.json";
 import lineageJson from "@/public/model/lineage.json";
-import modelJson from "@/public/model/model.json";
 import sourcesJson from "@/public/model/sources.json";
+import modelJson from "@/public/model/model.json";
 import { cardsSchema, lineageSchema, modelSchema, sourcesSchema } from "@/lib/schema";
 
 export const model = modelSchema.parse(modelJson);

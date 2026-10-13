@@ -1,18 +1,25 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { LossChart, PersonaChart } from "@/components/ResultCharts";
 import Panel from "@/components/Panel";
 import { budgetToSlider, SLIDER_STEPS, sliderToBudget } from "@/lib/budget";
-import { model } from "@/lib/data";
+import { model } from "@/lib/modelData";
 import { inr, inrFull, num, pct } from "@/lib/format";
 import { categoryLabel, featureLabel, tokenLabel } from "@/lib/labels";
 import { recommend, type Recommendation } from "@/lib/model";
 import { parseProfile, PROFILE_KEY, removeStored, sizeBucket, toEngine, writeStored } from "@/lib/profile";
-import type { ProfileForm } from "@/lib/schema";
+import type { ProfileForm } from "@/lib/profileSchema";
 import { useStoredRaw } from "@/lib/useStored";
+
+function ChartSpace() {
+  return <div className="mt-4 h-[280px]" aria-hidden="true" />;
+}
+
+const PersonaChart = dynamic(() => import("@/components/ResultCharts").then((m) => m.PersonaChart), { ssr: false, loading: ChartSpace });
+const LossChart = dynamic(() => import("@/components/ResultCharts").then((m) => m.LossChart), { ssr: false, loading: ChartSpace });
 
 type TexKey = "logit" | "sigmoid" | "impact" | "loss" | "combine" | "greedy" | "distance";
 type Props = { tex: Record<TexKey, React.ReactNode> };
@@ -49,11 +56,6 @@ function Row({ k, v }: { k: React.ReactNode; v: React.ReactNode }) {
       <td className="n">{v}</td>
     </tr>
   );
-}
-
-function prettyLevel(s: string) {
-  if (!s) return "direct value";
-  return s.replace(/^\d+_/, "").replace(/_/g, " ");
 }
 
 function controlOf(name: string) {
@@ -100,7 +102,7 @@ export default function Results({ tex }: Props) {
     if (profile) writeStored(PROFILE_KEY, { ...profile, budget: b });
   }
 
-  if (!profile || !rec) return <section className="wrap py-10 min-h-[60vh]" aria-busy="true" />;
+  if (!profile || !rec) return <section className="wrap pb-10 min-h-[60vh]" aria-busy="true" />;
 
   const cpr = rec.inputs.per_record_cost_inr?.value ?? 0;
   const pi = rec.inputs.annual_incident_prob?.value ?? 0;
@@ -108,12 +110,10 @@ export default function Results({ tex }: Props) {
   const cats = [...rec.categories].sort((a, b) => b.expected_loss_inr - a.expected_loss_inr);
 
   return (
-    <div className="wrap py-10">
+    <div className="wrap pb-10">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="label">Your risk report</p>
-          <h1 className="text-4xl md:text-5xl mt-2">Action plan</h1>
-          <p className="mt-3 text-muted">
+          <p className="text-muted">
             {profile.sector}, {sizeBucket(profile.employees)} business ({profile.employees} staff), {profile.city}. Budget <span className="num">{inr(budget)}</span> a year.
           </p>
         </div>
@@ -127,22 +127,6 @@ export default function Results({ tex }: Props) {
         </div>
       </div>
 
-      <aside className="mt-6 panel px-4 py-3 text-sm border-l-4" style={{ borderLeftColor: "var(--risk)" }} aria-label="Estimates disclaimer">
-        <p>
-          <strong>These are estimates.</strong> They combine public breach records with published averages. Rupee amounts are likely too high for a small business,
-          because the record counts and the cost per record come mostly from large organisations; trust the ranking of risks and controls more than the rupee level.
-        </p>
-        <ul className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-muted">
-          {Object.entries(rec.inputs).map(([k, v]) => (
-            <li key={k}>
-              {k.replace(/_/g, " ")}: <span className="num">{num(v.value, 4)}</span> ({prettyLevel(v.fallback_level)})
-            </li>
-          ))}
-        </ul>
-        <p className="mt-2">
-          <Link href="/data/">See every source and its fallback level</Link>
-        </p>
-      </aside>
 
       <Section n="01" id="sec-persona" title={`You look most like: ${rec.persona.chosen}`}>
         <p className="text-sm text-muted max-w-2xl">Closest group of past incidents by sector, size and the IT you rely on. Shorter bar means more similar.</p>
