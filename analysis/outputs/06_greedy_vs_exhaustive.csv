@@ -1,0 +1,6 @@
+profile,greedy_loss,exhaustive_loss,gap_pct,greedy_plan,exhaustive_plan
+small retail shop,30459144.739292584,30459144.73929258,1.2230449444157423e-14,Endpoint protection; MFA; Offline or cloud backups; Email filtering,MFA; Offline or cloud backups; Endpoint protection; Email filtering
+"medium clinic with MFA, no budget",4703929.926770514,4703929.926770514,0.0,MFA; Endpoint protection,MFA; Endpoint protection
+"small consultancy, tiny budget",186508972.86621484,186508972.86621484,0.0,Endpoint protection; MFA,MFA; Endpoint protection
+"large finance firm, big budget",51100192.29161846,51100192.29161846,0.0,Endpoint protection; MFA; Offline or cloud backups; Email filtering,MFA; Offline or cloud backups; Endpoint protection; Email filtering
+"other sector, unknown size",11485798.773349542,11485798.773349542,0.0,Endpoint protection; MFA; Offline or cloud backups; Email filtering,MFA; Offline or cloud backups; Endpoint protection; Email filtering

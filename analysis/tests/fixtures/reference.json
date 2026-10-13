@@ -1,0 +1,2044 @@
+{
+  "generated_by": "notebooks/06_recommendation_engine.py",
+  "profiles": [
+    {
+      "estimate": true,
+      "profile": {
+        "name": "small retail shop",
+        "sector": "Retail Trade",
+        "size": "small",
+        "assets": [
+          "asset_user_device",
+          "asset_server"
+        ],
+        "controls": [],
+        "budget_inr": 50000
+      },
+      "features": [
+        {
+          "name": "sector_health_care_and_social_assistance",
+          "value": 0.0
+        },
+        {
+          "name": "sector_public_administration",
+          "value": 0.0
+        },
+        {
+          "name": "sector_educational_services",
+          "value": 0.0
+        },
+        {
+          "name": "sector_finance_and_insurance",
+          "value": 0.0
+        },
+        {
+          "name": "sector_information",
+          "value": 0.0
+        },
+        {
+          "name": "sector_retail_trade",
+          "value": 1.0
+        },
+        {
+          "name": "sector_professional__scientific__and_technical_services",
+          "value": 0.0
+        },
+        {
+          "name": "sector_manufacturing",
+          "value": 0.0
+        },
+        {
+          "name": "size_medium",
+          "value": 0.0
+        },
+        {
+          "name": "size_large",
+          "value": 0.0
+        },
+        {
+          "name": "size_unknown",
+          "value": 0.0
+        },
+        {
+          "name": "asset_server",
+          "value": 1.0
+        },
+        {
+          "name": "asset_user_device",
+          "value": 1.0
+        },
+        {
+          "name": "asset_network",
+          "value": 0.0
+        },
+        {
+          "name": "asset_media",
+          "value": 0.0
+        }
+      ],
+      "categories": [
+        {
+          "category": "hacking",
+          "intercept": -1.67213963,
+          "top_contributions": [
+            {
+              "feature": "asset_server",
+              "contribution": 2.19840622
+            },
+            {
+              "feature": "sector_retail_trade",
+              "contribution": -0.31421915
+            },
+            {
+              "feature": "asset_user_device",
+              "contribution": 0.03656782
+            }
+          ],
+          "z": 0.24861526,
+          "p_c": 0.56183564,
+          "log_records": 4.56550312,
+          "records": 36769.80350073,
+          "impact_inr": 237374680.8275177,
+          "expected_loss_inr": 62415080.06514207
+        },
+        {
+          "category": "malware",
+          "intercept": -3.75749996,
+          "top_contributions": [
+            {
+              "feature": "asset_server",
+              "contribution": 2.39278644
+            },
+            {
+              "feature": "asset_user_device",
+              "contribution": 2.18181429
+            },
+            {
+              "feature": "sector_retail_trade",
+              "contribution": 0.00036784
+            }
+          ],
+          "z": 0.81746861,
+          "p_c": 0.69369873,
+          "log_records": 4.84978765,
+          "records": 70758.9716113,
+          "impact_inr": 456798424.32610863,
+          "expected_loss_inr": 148300068.30760446
+        },
+        {
+          "category": "social",
+          "intercept": -4.34516383,
+          "top_contributions": [
+            {
+              "feature": "asset_user_device",
+              "contribution": 1.90844188
+            },
+            {
+              "feature": "asset_server",
+              "contribution": 1.38733799
+            },
+            {
+              "feature": "sector_retail_trade",
+              "contribution": -0.4636504
+            }
+          ],
+          "z": -1.51303436,
+          "p_c": 0.18048954,
+          "log_records": 3.63707121,
+          "records": 4334.8196573,
+          "impact_inr": 27984278.80030264,
+          "expected_loss_inr": 2363806.93005793
+        },
+        {
+          "category": "error",
+          "intercept": -1.90617247,
+          "top_contributions": [
+            {
+              "feature": "sector_retail_trade",
+              "contribution": -0.32913838
+            },
+            {
+              "feature": "asset_user_device",
+              "contribution": -0.2142928
+            },
+            {
+              "feature": "asset_server",
+              "contribution": -0.19168214
+            }
+          ],
+          "z": -2.64128579,
+          "p_c": 0.06652814,
+          "log_records": 3.51451087,
+          "records": 3268.72230553,
+          "impact_inr": 21101878.17491031,
+          "expected_loss_inr": 657010.5614399
+        },
+        {
+          "category": "misuse",
+          "intercept": -1.53564444,
+          "top_contributions": [
+            {
+              "feature": "asset_user_device",
+              "contribution": -1.15911669
+            },
+            {
+              "feature": "sector_retail_trade",
+              "contribution": -0.91500849
+            },
+            {
+              "feature": "asset_server",
+              "contribution": 0.12914279
+            }
+          ],
+          "z": -3.48062683,
+          "p_c": 0.02986851,
+          "log_records": 2.70498593,
+          "records": 505.97428337,
+          "impact_inr": 3266416.25975659,
+          "expected_loss_inr": 45659.47959397
+        },
+        {
+          "category": "physical",
+          "intercept": -0.61884188,
+          "top_contributions": [
+            {
+              "feature": "asset_server",
+              "contribution": -3.4711779
+            },
+            {
+              "feature": "sector_retail_trade",
+              "contribution": 1.62180096
+            },
+            {
+              "feature": "asset_user_device",
+              "contribution": 1.22920275
+            }
+          ],
+          "z": -1.23901607,
+          "p_c": 0.2246073,
+          "log_records": 3.7934052,
+          "records": 6213.48580001,
+          "impact_inr": 40112376.68361731,
+          "expected_loss_inr": 4216461.25698616
+        }
+      ],
+      "persona": {
+        "distances": [
+          {
+            "persona": "Educational Services, large, server",
+            "distance": 3.77656373
+          },
+          {
+            "persona": "Mixed sector, large, server",
+            "distance": 2.95137385
+          },
+          {
+            "persona": "Public Administration, large, server",
+            "distance": 3.74068865
+          },
+          {
+            "persona": "Mixed sector, small, server",
+            "distance": 2.116332
+          },
+          {
+            "persona": "Mixed sector, unknown size, server",
+            "distance": 2.91468303
+          },
+          {
+            "persona": "Health Care and Social Assistance, mixed size, user device",
+            "distance": 2.40394657
+          },
+          {
+            "persona": "Public Administration, large, media",
+            "distance": 5.24518008
+          },
+          {
+            "persona": "Health Care and Social Assistance, unknown size, media",
+            "distance": 4.51549001
+          }
+        ],
+        "chosen": "Mixed sector, small, server",
+        "index": 3
+      },
+      "plan": [
+        {
+          "control": "Endpoint protection",
+          "cost": 0.0,
+          "already_in_place": false
+        },
+        {
+          "control": "MFA",
+          "cost": 0.0,
+          "already_in_place": false
+        },
+        {
+          "control": "Offline or cloud backups",
+          "cost": 1560.0,
+          "already_in_place": false
+        },
+        {
+          "control": "Email filtering",
+          "cost": 32400.0,
+          "already_in_place": false
+        }
+      ],
+      "not_scored": [
+        {
+          "control": "Patch management",
+          "reason": "effectiveness MISSING"
+        },
+        {
+          "control": "Phishing awareness training",
+          "reason": "effectiveness MISSING"
+        },
+        {
+          "control": "Password manager",
+          "reason": "effectiveness MISSING"
+        },
+        {
+          "control": "Router and firewall hardening",
+          "reason": "effectiveness and cost MISSING"
+        },
+        {
+          "control": "Staff access reviews",
+          "reason": "effectiveness and cost MISSING"
+        },
+        {
+          "control": "Device encryption",
+          "reason": "effectiveness MISSING"
+        },
+        {
+          "control": "Payment and UPI fraud controls",
+          "reason": "effectiveness and cost MISSING"
+        },
+        {
+          "control": "Incident response plan",
+          "reason": "effectiveness and cost MISSING"
+        }
+      ],
+      "greedy_steps": [
+        {
+          "candidates": [
+            {
+              "control": "MFA",
+              "reduction": 24195494.36788231,
+              "cost": 0.0,
+              "ratio": null
+            },
+            {
+              "control": "Offline or cloud backups",
+              "reduction": 102740902.30623165,
+              "cost": 1560.0,
+              "ratio": 65859.5527604
+            },
+            {
+              "control": "Endpoint protection",
+              "reduction": 169522488.80528226,
+              "cost": 0.0,
+              "ratio": null
+            },
+            {
+              "control": "Email filtering",
+              "reduction": 29731706.05925435,
+              "cost": 32400.0,
+              "ratio": 917.64524874
+            }
+          ],
+          "pick": "Endpoint protection",
+          "loss_after": 48475597.79554221
+        },
+        {
+          "candidates": [
+            {
+              "control": "MFA",
+              "reduction": 6842301.65513827,
+              "cost": 0.0,
+              "ratio": null
+            },
+            {
+              "control": "Offline or cloud backups",
+              "reduction": 9826771.84376203,
+              "cost": 1560.0,
+              "ratio": 6299.21272036
+            },
+            {
+              "control": "Email filtering",
+              "reduction": 4640899.36604021,
+              "cost": 32400.0,
+              "ratio": 143.23763475
+            }
+          ],
+          "pick": "MFA",
+          "loss_after": 41633296.14040394
+        },
+        {
+          "candidates": [
+            {
+              "control": "Offline or cloud backups",
+              "reduction": 8316596.2439461,
+              "cost": 1560.0,
+              "ratio": 5331.15143843
+            },
+            {
+              "control": "Email filtering",
+              "reduction": 3761334.75427202,
+              "cost": 32400.0,
+              "ratio": 116.09057884
+            }
+          ],
+          "pick": "Offline or cloud backups",
+          "loss_after": 33316699.89645784
+        },
+        {
+          "candidates": [
+            {
+              "control": "Email filtering",
+              "reduction": 2857555.15716526,
+              "cost": 32400.0,
+              "ratio": 88.19614683
+            }
+          ],
+          "pick": "Email filtering",
+          "loss_after": 30459144.73929258
+        }
+      ],
+      "totals": {
+        "loss_no_controls_inr": 217998086.60082448,
+        "loss_with_current_controls_inr": 217998086.60082448,
+        "loss_after_plan_inr": 30459144.73929258,
+        "spent_inr": 33960.0,
+        "budget_inr": 50000.0,
+        "residual_risk_pct": 13.97220738
+      },
+      "inputs": {
+        "annual_incident_prob": {
+          "value": 0.468,
+          "fallback_level": "1_india_msme"
+        },
+        "per_record_cost_inr": {
+          "value": 6455.69620253,
+          "fallback_level": "1_india"
+        },
+        "breach_total_cost_inr": {
+          "value": 255000000.0,
+          "fallback_level": "1_india"
+        },
+        "breach_avg_records": {
+          "value": 39500.0,
+          "fallback_level": "1_india"
+        },
+        "usd_inr": {
+          "value": 95.2477,
+          "fallback_level": ""
+        }
+      }
+    },
+    {
+      "estimate": true,
+      "profile": {
+        "name": "medium clinic with MFA, no budget",
+        "sector": "Health Care and Social Assistance",
+        "size": "medium",
+        "assets": [
+          "asset_server",
+          "asset_media"
+        ],
+        "controls": [
+          "MFA"
+        ],
+        "budget_inr": 0
+      },
+      "features": [
+        {
+          "name": "sector_health_care_and_social_assistance",
+          "value": 1.0
+        },
+        {
+          "name": "sector_public_administration",
+          "value": 0.0
+        },
+        {
+          "name": "sector_educational_services",
+          "value": 0.0
+        },
+        {
+          "name": "sector_finance_and_insurance",
+          "value": 0.0
+        },
+        {
+          "name": "sector_information",
+          "value": 0.0
+        },
+        {
+          "name": "sector_retail_trade",
+          "value": 0.0
+        },
+        {
+          "name": "sector_professional__scientific__and_technical_services",
+          "value": 0.0
+        },
+        {
+          "name": "sector_manufacturing",
+          "value": 0.0
+        },
+        {
+          "name": "size_medium",
+          "value": 1.0
+        },
+        {
+          "name": "size_large",
+          "value": 0.0
+        },
+        {
+          "name": "size_unknown",
+          "value": 0.0
+        },
+        {
+          "name": "asset_server",
+          "value": 1.0
+        },
+        {
+          "name": "asset_user_device",
+          "value": 0.0
+        },
+        {
+          "name": "asset_network",
+          "value": 0.0
+        },
+        {
+          "name": "asset_media",
+          "value": 1.0
+        }
+      ],
+      "categories": [
+        {
+          "category": "hacking",
+          "intercept": -1.67213963,
+          "top_contributions": [
+            {
+              "feature": "asset_media",
+              "contribution": -3.65611519
+            },
+            {
+              "feature": "asset_server",
+              "contribution": 2.19840622
+            },
+            {
+              "feature": "sector_health_care_and_social_assistance",
+              "contribution": -1.37021235
+            },
+            {
+              "feature": "size_medium",
+              "contribution": -0.0191648
+            }
+          ],
+          "z": -4.51922575,
+          "p_c": 0.01077998,
+          "log_records": 4.3916549,
+          "records": 24639.80546191,
+          "impact_inr": 159067098.551601,
+          "expected_loss_inr": 802498.63513996
+        },
+        {
+          "category": "malware",
+          "intercept": -3.75749996,
+          "top_contributions": [
+            {
+              "feature": "asset_media",
+              "contribution": -3.09471579
+            },
+            {
+              "feature": "asset_server",
+              "contribution": 2.39278644
+            },
+            {
+              "feature": "sector_health_care_and_social_assistance",
+              "contribution": -0.53149155
+            },
+            {
+              "feature": "size_medium",
+              "contribution": 0.02545668
+            }
+          ],
+          "z": -4.96546418,
+          "p_c": 0.0069264,
+          "log_records": 4.67593943,
+          "records": 47416.58484907,
+          "impact_inr": 306107066.7471843,
+          "expected_loss_inr": 992263.35051655
+        },
+        {
+          "category": "social",
+          "intercept": -4.34516383,
+          "top_contributions": [
+            {
+              "feature": "asset_server",
+              "contribution": 1.38733799
+            },
+            {
+              "feature": "asset_media",
+              "contribution": -0.65106948
+            },
+            {
+              "feature": "size_medium",
+              "contribution": 0.48004799
+            },
+            {
+              "feature": "sector_health_care_and_social_assistance",
+              "contribution": -0.02848141
+            }
+          ],
+          "z": -3.15732874,
+          "p_c": 0.04080347,
+          "log_records": 3.46322299,
+          "records": 2904.51411778,
+          "impact_inr": 18750660.76035617,
+          "expected_loss_inr": 358063.10811798
+        },
+        {
+          "category": "error",
+          "intercept": -1.90617247,
+          "top_contributions": [
+            {
+              "feature": "asset_media",
+              "contribution": 1.978222
+            },
+            {
+              "feature": "size_medium",
+              "contribution": 0.22881545
+            },
+            {
+              "feature": "asset_server",
+              "contribution": -0.19168214
+            },
+            {
+              "feature": "sector_health_care_and_social_assistance",
+              "contribution": 0.15318654
+            }
+          ],
+          "z": 0.26236938,
+          "p_c": 0.56521865,
+          "log_records": 3.34066265,
+          "records": 2190.10227611,
+          "impact_inr": 14138634.94705377,
+          "expected_loss_inr": 3739984.62337022
+        },
+        {
+          "category": "misuse",
+          "intercept": -1.53564444,
+          "top_contributions": [
+            {
+              "feature": "sector_health_care_and_social_assistance",
+              "contribution": 0.63262468
+            },
+            {
+              "feature": "asset_media",
+              "contribution": -0.62235252
+            },
+            {
+              "feature": "asset_server",
+              "contribution": 0.12914279
+            },
+            {
+              "feature": "size_medium",
+              "contribution": -0.03600545
+            }
+          ],
+          "z": -1.43223494,
+          "p_c": 0.19275069,
+          "log_records": 2.53113771,
+          "records": 338.7329811,
+          "impact_inr": 2186757.21977133,
+          "expected_loss_inr": 197261.5182832
+        },
+        {
+          "category": "physical",
+          "intercept": -0.61884188,
+          "top_contributions": [
+            {
+              "feature": "asset_server",
+              "contribution": -3.4711779
+            },
+            {
+              "feature": "sector_health_care_and_social_assistance",
+              "contribution": 0.47740353
+            },
+            {
+              "feature": "size_medium",
+              "contribution": -0.25490679
+            },
+            {
+              "feature": "asset_media",
+              "contribution": -0.2434049
+            }
+          ],
+          "z": -4.11092794,
+          "p_c": 0.01612817,
+          "log_records": 3.61955698,
+          "records": 4163.44355481,
+          "impact_inr": 26877926.74625878,
+          "expected_loss_inr": 202874.2015025
+        }
+      ],
+      "persona": {
+        "distances": [
+          {
+            "persona": "Educational Services, large, server",
+            "distance": 4.89503063
+          },
+          {
+            "persona": "Mixed sector, large, server",
+            "distance": 3.67917085
+          },
+          {
+            "persona": "Public Administration, large, server",
+            "distance": 4.74378943
+          },
+          {
+            "persona": "Mixed sector, small, server",
+            "distance": 1.99900798
+          },
+          {
+            "persona": "Mixed sector, unknown size, server",
+            "distance": 3.86907681
+          },
+          {
+            "persona": "Health Care and Social Assistance, mixed size, user device",
+            "distance": 4.08271533
+          },
+          {
+            "persona": "Public Administration, large, media",
+            "distance": 3.9336048
+          },
+          {
+            "persona": "Health Care and Social Assistance, unknown size, media",
+            "distance": 2.30741273
+          }
+        ],
+        "chosen": "Mixed sector, small, server",
+        "index": 3
+      },
+      "plan": [
+        {
+          "control": "MFA",
+          "cost": 0.0,
+          "already_in_place": true
+        },
+        {
+          "control": "Endpoint protection",
+          "cost": 0.0,
+          "already_in_place": false
+        }
+      ],
+      "not_scored": [
+        {
+          "control": "Patch management",
+          "reason": "effectiveness MISSING"
+        },
+        {
+          "control": "Phishing awareness training",
+          "reason": "effectiveness MISSING"
+        },
+        {
+          "control": "Password manager",
+          "reason": "effectiveness MISSING"
+        },
+        {
+          "control": "Router and firewall hardening",
+          "reason": "effectiveness and cost MISSING"
+        },
+        {
+          "control": "Staff access reviews",
+          "reason": "effectiveness and cost MISSING"
+        },
+        {
+          "control": "Device encryption",
+          "reason": "effectiveness MISSING"
+        },
+        {
+          "control": "Payment and UPI fraud controls",
+          "reason": "effectiveness and cost MISSING"
+        },
+        {
+          "control": "Incident response plan",
+          "reason": "effectiveness and cost MISSING"
+        }
+      ],
+      "greedy_steps": [
+        {
+          "candidates": [
+            {
+              "control": "Endpoint protection",
+              "reduction": 1242558.20645386,
+              "cost": 0.0,
+              "ratio": null
+            }
+          ],
+          "pick": "Endpoint protection",
+          "loss_after": 4703929.92677051
+        }
+      ],
+      "totals": {
+        "loss_no_controls_inr": 6292945.4369304,
+        "loss_with_current_controls_inr": 5946488.13322437,
+        "loss_after_plan_inr": 4703929.92677051,
+        "spent_inr": 0.0,
+        "budget_inr": 0.0,
+        "residual_risk_pct": 74.74925651
+      },
+      "inputs": {
+        "annual_incident_prob": {
+          "value": 0.468,
+          "fallback_level": "1_india_msme"
+        },
+        "per_record_cost_inr": {
+          "value": 6455.69620253,
+          "fallback_level": "1_india"
+        },
+        "breach_total_cost_inr": {
+          "value": 255000000.0,
+          "fallback_level": "1_india"
+        },
+        "breach_avg_records": {
+          "value": 39500.0,
+          "fallback_level": "1_india"
+        },
+        "usd_inr": {
+          "value": 95.2477,
+          "fallback_level": ""
+        }
+      }
+    },
+    {
+      "estimate": true,
+      "profile": {
+        "name": "small consultancy, tiny budget",
+        "sector": "Professional, Scientific, and Technical Services",
+        "size": "small",
+        "assets": [
+          "asset_server"
+        ],
+        "controls": [],
+        "budget_inr": 1000
+      },
+      "features": [
+        {
+          "name": "sector_health_care_and_social_assistance",
+          "value": 0.0
+        },
+        {
+          "name": "sector_public_administration",
+          "value": 0.0
+        },
+        {
+          "name": "sector_educational_services",
+          "value": 0.0
+        },
+        {
+          "name": "sector_finance_and_insurance",
+          "value": 0.0
+        },
+        {
+          "name": "sector_information",
+          "value": 0.0
+        },
+        {
+          "name": "sector_retail_trade",
+          "value": 0.0
+        },
+        {
+          "name": "sector_professional__scientific__and_technical_services",
+          "value": 1.0
+        },
+        {
+          "name": "sector_manufacturing",
+          "value": 0.0
+        },
+        {
+          "name": "size_medium",
+          "value": 0.0
+        },
+        {
+          "name": "size_large",
+          "value": 0.0
+        },
+        {
+          "name": "size_unknown",
+          "value": 0.0
+        },
+        {
+          "name": "asset_server",
+          "value": 1.0
+        },
+        {
+          "name": "asset_user_device",
+          "value": 0.0
+        },
+        {
+          "name": "asset_network",
+          "value": 0.0
+        },
+        {
+          "name": "asset_media",
+          "value": 0.0
+        }
+      ],
+      "categories": [
+        {
+          "category": "hacking",
+          "intercept": -1.67213963,
+          "top_contributions": [
+            {
+              "feature": "asset_server",
+              "contribution": 2.19840622
+            },
+            {
+              "feature": "sector_professional__scientific__and_technical_services",
+              "contribution": 0.08572462
+            }
+          ],
+          "z": 0.61199121,
+          "p_c": 0.64839489,
+          "log_records": 5.20733036,
+          "records": 161186.12904474,
+          "impact_inr": 1040568681.1749178,
+          "expected_loss_inr": 315759326.52722377
+        },
+        {
+          "category": "malware",
+          "intercept": -3.75749996,
+          "top_contributions": [
+            {
+              "feature": "asset_server",
+              "contribution": 2.39278644
+            },
+            {
+              "feature": "sector_professional__scientific__and_technical_services",
+              "contribution": 0.1895378
+            }
+          ],
+          "z": -1.17517572,
+          "p_c": 0.23592072,
+          "log_records": 5.49161489,
+          "records": 310179.78446628,
+          "impact_inr": 2002426456.681037,
+          "expected_loss_inr": 221089704.05580044
+        },
+        {
+          "category": "social",
+          "intercept": -4.34516383,
+          "top_contributions": [
+            {
+              "feature": "asset_server",
+              "contribution": 1.38733799
+            },
+            {
+              "feature": "sector_professional__scientific__and_technical_services",
+              "contribution": 0.067995
+            }
+          ],
+          "z": -2.88983084,
+          "p_c": 0.05265856,
+          "log_records": 4.27889845,
+          "records": 19005.33807478,
+          "impact_inr": 122692688.83718632,
+          "expected_loss_inr": 3023663.70439527
+        },
+        {
+          "category": "error",
+          "intercept": -1.90617247,
+          "top_contributions": [
+            {
+              "feature": "sector_professional__scientific__and_technical_services",
+              "contribution": 0.48776013
+            },
+            {
+              "feature": "asset_server",
+              "contribution": -0.19168214
+            }
+          ],
+          "z": -1.61009448,
+          "p_c": 0.1665755,
+          "log_records": 4.15633811,
+          "records": 14332.03330428,
+          "impact_inr": 92523252.97700433,
+          "expected_loss_inr": 7212865.99147957
+        },
+        {
+          "category": "misuse",
+          "intercept": -1.53564444,
+          "top_contributions": [
+            {
+              "feature": "sector_professional__scientific__and_technical_services",
+              "contribution": -0.38766939
+            },
+            {
+              "feature": "asset_server",
+              "contribution": 0.12914279
+            }
+          ],
+          "z": -1.79417104,
+          "p_c": 0.1425621,
+          "log_records": 3.34681317,
+          "records": 2221.35364628,
+          "impact_inr": 14340384.29878379,
+          "expected_loss_inr": 956777.01893296
+        },
+        {
+          "category": "physical",
+          "intercept": -0.61884188,
+          "top_contributions": [
+            {
+              "feature": "asset_server",
+              "contribution": -3.4711779
+            },
+            {
+              "feature": "sector_professional__scientific__and_technical_services",
+              "contribution": -1.00910319
+            }
+          ],
+          "z": -5.09912297,
+          "p_c": 0.00606509,
+          "log_records": 4.43523244,
+          "records": 27240.58922916,
+          "impact_inr": 175856968.44141462,
+          "expected_loss_inr": 499163.03093696
+        }
+      ],
+      "persona": {
+        "distances": [
+          {
+            "persona": "Educational Services, large, server",
+            "distance": 2.90199927
+          },
+          {
+            "persona": "Mixed sector, large, server",
+            "distance": 2.08862875
+          },
+          {
+            "persona": "Public Administration, large, server",
+            "distance": 2.76859563
+          },
+          {
+            "persona": "Mixed sector, small, server",
+            "distance": 1.14728558
+          },
+          {
+            "persona": "Mixed sector, unknown size, server",
+            "distance": 2.09265857
+          },
+          {
+            "persona": "Health Care and Social Assistance, mixed size, user device",
+            "distance": 3.31081319
+          },
+          {
+            "persona": "Public Administration, large, media",
+            "distance": 4.30436198
+          },
+          {
+            "persona": "Health Care and Social Assistance, unknown size, media",
+            "distance": 3.51022223
+          }
+        ],
+        "chosen": "Mixed sector, small, server",
+        "index": 3
+      },
+      "plan": [
+        {
+          "control": "Endpoint protection",
+          "cost": 0.0,
+          "already_in_place": false
+        },
+        {
+          "control": "MFA",
+          "cost": 0.0,
+          "already_in_place": false
+        }
+      ],
+      "not_scored": [
+        {
+          "control": "Patch management",
+          "reason": "effectiveness MISSING"
+        },
+        {
+          "control": "Phishing awareness training",
+          "reason": "effectiveness MISSING"
+        },
+        {
+          "control": "Password manager",
+          "reason": "effectiveness MISSING"
+        },
+        {
+          "control": "Router and firewall hardening",
+          "reason": "effectiveness and cost MISSING"
+        },
+        {
+          "control": "Staff access reviews",
+          "reason": "effectiveness and cost MISSING"
+        },
+        {
+          "control": "Device encryption",
+          "reason": "effectiveness MISSING"
+        },
+        {
+          "control": "Payment and UPI fraud controls",
+          "reason": "effectiveness and cost MISSING"
+        },
+        {
+          "control": "Incident response plan",
+          "reason": "effectiveness and cost MISSING"
+        }
+      ],
+      "greedy_steps": [
+        {
+          "candidates": [
+            {
+              "control": "MFA",
+              "reduction": 69823111.25706857,
+              "cost": 0.0,
+              "ratio": null
+            },
+            {
+              "control": "Endpoint protection",
+              "reduction": 329785404.22142655,
+              "cost": 0.0,
+              "ratio": null
+            }
+          ],
+          "pick": "Endpoint protection",
+          "loss_after": 218756096.1073423
+        },
+        {
+          "candidates": [
+            {
+              "control": "MFA",
+              "reduction": 32247123.24112746,
+              "cost": 0.0,
+              "ratio": null
+            }
+          ],
+          "pick": "MFA",
+          "loss_after": 186508972.86621484
+        }
+      ],
+      "totals": {
+        "loss_no_controls_inr": 548541500.3287688,
+        "loss_with_current_controls_inr": 548541500.3287688,
+        "loss_after_plan_inr": 186508972.86621484,
+        "spent_inr": 0.0,
+        "budget_inr": 1000.0,
+        "residual_risk_pct": 34.00088649
+      },
+      "inputs": {
+        "annual_incident_prob": {
+          "value": 0.468,
+          "fallback_level": "1_india_msme"
+        },
+        "per_record_cost_inr": {
+          "value": 6455.69620253,
+          "fallback_level": "1_india"
+        },
+        "breach_total_cost_inr": {
+          "value": 255000000.0,
+          "fallback_level": "1_india"
+        },
+        "breach_avg_records": {
+          "value": 39500.0,
+          "fallback_level": "1_india"
+        },
+        "usd_inr": {
+          "value": 95.2477,
+          "fallback_level": ""
+        }
+      }
+    },
+    {
+      "estimate": true,
+      "profile": {
+        "name": "large finance firm, big budget",
+        "sector": "Finance and Insurance",
+        "size": "large",
+        "assets": [
+          "asset_server",
+          "asset_network",
+          "asset_user_device"
+        ],
+        "controls": [],
+        "budget_inr": 1000000
+      },
+      "features": [
+        {
+          "name": "sector_health_care_and_social_assistance",
+          "value": 0.0
+        },
+        {
+          "name": "sector_public_administration",
+          "value": 0.0
+        },
+        {
+          "name": "sector_educational_services",
+          "value": 0.0
+        },
+        {
+          "name": "sector_finance_and_insurance",
+          "value": 1.0
+        },
+        {
+          "name": "sector_information",
+          "value": 0.0
+        },
+        {
+          "name": "sector_retail_trade",
+          "value": 0.0
+        },
+        {
+          "name": "sector_professional__scientific__and_technical_services",
+          "value": 0.0
+        },
+        {
+          "name": "sector_manufacturing",
+          "value": 0.0
+        },
+        {
+          "name": "size_medium",
+          "value": 0.0
+        },
+        {
+          "name": "size_large",
+          "value": 1.0
+        },
+        {
+          "name": "size_unknown",
+          "value": 0.0
+        },
+        {
+          "name": "asset_server",
+          "value": 1.0
+        },
+        {
+          "name": "asset_user_device",
+          "value": 1.0
+        },
+        {
+          "name": "asset_network",
+          "value": 1.0
+        },
+        {
+          "name": "asset_media",
+          "value": 0.0
+        }
+      ],
+      "categories": [
+        {
+          "category": "hacking",
+          "intercept": -1.67213963,
+          "top_contributions": [
+            {
+              "feature": "asset_server",
+              "contribution": 2.19840622
+            },
+            {
+              "feature": "asset_network",
+              "contribution": 1.69941745
+            },
+            {
+              "feature": "sector_finance_and_insurance",
+              "contribution": -0.28156608
+            },
+            {
+              "feature": "size_large",
+              "contribution": -0.08020313
+            },
+            {
+              "feature": "asset_user_device",
+              "contribution": 0.03656782
+            }
+          ],
+          "z": 1.90048265,
+          "p_c": 0.86994614,
+          "log_records": 4.65020131,
+          "records": 44688.06929128,
+          "impact_inr": 288492599.22217077,
+          "expected_loss_inr": 117455375.1319572
+        },
+        {
+          "category": "malware",
+          "intercept": -3.75749996,
+          "top_contributions": [
+            {
+              "feature": "asset_network",
+              "contribution": 2.43956898
+            },
+            {
+              "feature": "asset_server",
+              "contribution": 2.39278644
+            },
+            {
+              "feature": "asset_user_device",
+              "contribution": 2.18181429
+            },
+            {
+              "feature": "size_large",
+              "contribution": 0.3496229
+            },
+            {
+              "feature": "sector_finance_and_insurance",
+              "contribution": 0.05091581
+            }
+          ],
+          "z": 3.65720846,
+          "p_c": 0.97484467,
+          "log_records": 4.93448584,
+          "records": 85996.50272857,
+          "impact_inr": 555167296.0958617,
+          "expected_loss_inr": 253282480.37852818
+        },
+        {
+          "category": "social",
+          "intercept": -4.34516383,
+          "top_contributions": [
+            {
+              "feature": "asset_network",
+              "contribution": 2.20712722
+            },
+            {
+              "feature": "asset_user_device",
+              "contribution": 1.90844188
+            },
+            {
+              "feature": "asset_server",
+              "contribution": 1.38733799
+            },
+            {
+              "feature": "size_large",
+              "contribution": 0.15373162
+            },
+            {
+              "feature": "sector_finance_and_insurance",
+              "contribution": 0.06328991
+            }
+          ],
+          "z": 1.37476479,
+          "p_c": 0.79814889,
+          "log_records": 3.7217694,
+          "records": 5268.49989265,
+          "impact_inr": 34011834.74999704,
+          "expected_loss_inr": 12704565.7575082
+        },
+        {
+          "category": "error",
+          "intercept": -1.90617247,
+          "top_contributions": [
+            {
+              "feature": "asset_network",
+              "contribution": -0.48527898
+            },
+            {
+              "feature": "sector_finance_and_insurance",
+              "contribution": 0.21537826
+            },
+            {
+              "feature": "asset_user_device",
+              "contribution": -0.2142928
+            },
+            {
+              "feature": "size_large",
+              "contribution": 0.20007338
+            },
+            {
+              "feature": "asset_server",
+              "contribution": -0.19168214
+            }
+          ],
+          "z": -2.38197475,
+          "p_c": 0.08455758,
+          "log_records": 3.59920906,
+          "records": 3972.82794945,
+          "impact_inr": 25647370.30656009,
+          "expected_loss_inr": 1014942.03258468
+        },
+        {
+          "category": "misuse",
+          "intercept": -1.53564444,
+          "top_contributions": [
+            {
+              "feature": "asset_network",
+              "contribution": -2.39980354
+            },
+            {
+              "feature": "asset_user_device",
+              "contribution": -1.15911669
+            },
+            {
+              "feature": "sector_finance_and_insurance",
+              "contribution": -0.3874536
+            },
+            {
+              "feature": "size_large",
+              "contribution": 0.35565578
+            },
+            {
+              "feature": "asset_server",
+              "contribution": 0.12914279
+            }
+          ],
+          "z": -4.9972197,
+          "p_c": 0.00671136,
+          "log_records": 2.78968412,
+          "records": 615.14669035,
+          "impact_inr": 3971200.15291211,
+          "expected_loss_inr": 12473.20780149
+        },
+        {
+          "category": "physical",
+          "intercept": -0.61884188,
+          "top_contributions": [
+            {
+              "feature": "asset_server",
+              "contribution": -3.4711779
+            },
+            {
+              "feature": "asset_user_device",
+              "contribution": 1.22920275
+            },
+            {
+              "feature": "sector_finance_and_insurance",
+              "contribution": 1.09268
+            },
+            {
+              "feature": "size_large",
+              "contribution": -0.51870841
+            },
+            {
+              "feature": "asset_network",
+              "contribution": -0.4620847
+            }
+          ],
+          "z": -2.74893014,
+          "p_c": 0.0601471,
+          "log_records": 3.87810339,
+          "records": 7551.72009546,
+          "impact_inr": 48751610.74287246,
+          "expected_loss_inr": 1372301.43375406
+        }
+      ],
+      "persona": {
+        "distances": [
+          {
+            "persona": "Educational Services, large, server",
+            "distance": 3.87877047
+          },
+          {
+            "persona": "Mixed sector, large, server",
+            "distance": 2.64687557
+          },
+          {
+            "persona": "Public Administration, large, server",
+            "distance": 3.97634757
+          },
+          {
+            "persona": "Mixed sector, small, server",
+            "distance": 4.0644099
+          },
+          {
+            "persona": "Mixed sector, unknown size, server",
+            "distance": 4.74226925
+          },
+          {
+            "persona": "Health Care and Social Assistance, mixed size, user device",
+            "distance": 3.75832701
+          },
+          {
+            "persona": "Public Administration, large, media",
+            "distance": 5.24518008
+          },
+          {
+            "persona": "Health Care and Social Assistance, unknown size, media",
+            "distance": 6.44525295
+          }
+        ],
+        "chosen": "Mixed sector, large, server",
+        "index": 1
+      },
+      "plan": [
+        {
+          "control": "Endpoint protection",
+          "cost": 0.0,
+          "already_in_place": false
+        },
+        {
+          "control": "MFA",
+          "cost": 0.0,
+          "already_in_place": false
+        },
+        {
+          "control": "Offline or cloud backups",
+          "cost": 1560.0,
+          "already_in_place": false
+        },
+        {
+          "control": "Email filtering",
+          "cost": 32400.0,
+          "already_in_place": false
+        }
+      ],
+      "not_scored": [
+        {
+          "control": "Patch management",
+          "reason": "effectiveness MISSING"
+        },
+        {
+          "control": "Phishing awareness training",
+          "reason": "effectiveness MISSING"
+        },
+        {
+          "control": "Password manager",
+          "reason": "effectiveness MISSING"
+        },
+        {
+          "control": "Router and firewall hardening",
+          "reason": "effectiveness and cost MISSING"
+        },
+        {
+          "control": "Staff access reviews",
+          "reason": "effectiveness and cost MISSING"
+        },
+        {
+          "control": "Device encryption",
+          "reason": "effectiveness MISSING"
+        },
+        {
+          "control": "Payment and UPI fraud controls",
+          "reason": "effectiveness and cost MISSING"
+        },
+        {
+          "control": "Incident response plan",
+          "reason": "effectiveness and cost MISSING"
+        }
+      ],
+      "greedy_steps": [
+        {
+          "candidates": [
+            {
+              "control": "MFA",
+              "reduction": 45902629.49726015,
+              "cost": 0.0,
+              "ratio": null
+            },
+            {
+              "control": "Offline or cloud backups",
+              "reduction": 180014931.5392752,
+              "cost": 1560.0,
+              "ratio": 115394.18688415
+            },
+            {
+              "control": "Endpoint protection",
+              "reduction": 297024637.03980404,
+              "cost": 0.0,
+              "ratio": null
+            },
+            {
+              "control": "Email filtering",
+              "reduction": 58041025.80018538,
+              "cost": 32400.0,
+              "ratio": 1791.38968519
+            }
+          ],
+          "pick": "Endpoint protection",
+          "loss_after": 88817500.90232985
+        },
+        {
+          "candidates": [
+            {
+              "control": "MFA",
+              "reduction": 14403837.97486375,
+              "cost": 0.0,
+              "ratio": null
+            },
+            {
+              "control": "Offline or cloud backups",
+              "reduction": 19546363.33677194,
+              "cost": 1560.0,
+              "ratio": 12529.72008767
+            },
+            {
+              "control": "Email filtering",
+              "reduction": 12113774.94321446,
+              "cost": 32400.0,
+              "ratio": 373.88194269
+            }
+          ],
+          "pick": "MFA",
+          "loss_after": 74413662.9274661
+        },
+        {
+          "candidates": [
+            {
+              "control": "Offline or cloud backups",
+              "reduction": 16298203.90829398,
+              "cost": 1560.0,
+              "ratio": 10447.56660788
+            },
+            {
+              "control": "Email filtering",
+              "reduction": 9287445.67939369,
+              "cost": 32400.0,
+              "ratio": 286.64955801
+            }
+          ],
+          "pick": "Offline or cloud backups",
+          "loss_after": 58115459.01917212
+        },
+        {
+          "candidates": [
+            {
+              "control": "Email filtering",
+              "reduction": 7015266.72755366,
+              "cost": 32400.0,
+              "ratio": 216.52057801
+            }
+          ],
+          "pick": "Email filtering",
+          "loss_after": 51100192.29161846
+        }
+      ],
+      "totals": {
+        "loss_no_controls_inr": 385842137.9421339,
+        "loss_with_current_controls_inr": 385842137.9421339,
+        "loss_after_plan_inr": 51100192.29161846,
+        "spent_inr": 33960.0,
+        "budget_inr": 1000000.0,
+        "residual_risk_pct": 13.24380809
+      },
+      "inputs": {
+        "annual_incident_prob": {
+          "value": 0.468,
+          "fallback_level": "1_india_msme"
+        },
+        "per_record_cost_inr": {
+          "value": 6455.69620253,
+          "fallback_level": "1_india"
+        },
+        "breach_total_cost_inr": {
+          "value": 255000000.0,
+          "fallback_level": "1_india"
+        },
+        "breach_avg_records": {
+          "value": 39500.0,
+          "fallback_level": "1_india"
+        },
+        "usd_inr": {
+          "value": 95.2477,
+          "fallback_level": ""
+        }
+      }
+    },
+    {
+      "estimate": true,
+      "profile": {
+        "name": "other sector, unknown size",
+        "sector": "Other",
+        "size": "unknown",
+        "assets": [
+          "asset_media"
+        ],
+        "controls": [],
+        "budget_inr": 35000
+      },
+      "features": [
+        {
+          "name": "sector_health_care_and_social_assistance",
+          "value": 0.0
+        },
+        {
+          "name": "sector_public_administration",
+          "value": 0.0
+        },
+        {
+          "name": "sector_educational_services",
+          "value": 0.0
+        },
+        {
+          "name": "sector_finance_and_insurance",
+          "value": 0.0
+        },
+        {
+          "name": "sector_information",
+          "value": 0.0
+        },
+        {
+          "name": "sector_retail_trade",
+          "value": 0.0
+        },
+        {
+          "name": "sector_professional__scientific__and_technical_services",
+          "value": 0.0
+        },
+        {
+          "name": "sector_manufacturing",
+          "value": 0.0
+        },
+        {
+          "name": "size_medium",
+          "value": 0.0
+        },
+        {
+          "name": "size_large",
+          "value": 0.0
+        },
+        {
+          "name": "size_unknown",
+          "value": 1.0
+        },
+        {
+          "name": "asset_server",
+          "value": 0.0
+        },
+        {
+          "name": "asset_user_device",
+          "value": 0.0
+        },
+        {
+          "name": "asset_network",
+          "value": 0.0
+        },
+        {
+          "name": "asset_media",
+          "value": 1.0
+        }
+      ],
+      "categories": [
+        {
+          "category": "hacking",
+          "intercept": -1.67213963,
+          "top_contributions": [
+            {
+              "feature": "asset_media",
+              "contribution": -3.65611519
+            },
+            {
+              "feature": "size_unknown",
+              "contribution": 0.3380276
+            }
+          ],
+          "z": -4.99022722,
+          "p_c": 0.00675814,
+          "log_records": 4.65891588,
+          "records": 45593.85931381,
+          "impact_inr": 294340104.4309328,
+          "expected_loss_inr": 930941.01411194
+        },
+        {
+          "category": "malware",
+          "intercept": -3.75749996,
+          "top_contributions": [
+            {
+              "feature": "asset_media",
+              "contribution": -3.09471579
+            },
+            {
+              "feature": "size_unknown",
+              "contribution": -0.36781711
+            }
+          ],
+          "z": -7.22003286,
+          "p_c": 0.00073124,
+          "log_records": 4.94320041,
+          "records": 87739.56162798,
+          "impact_inr": 566419954.8135487,
+          "expected_loss_inr": 193841.28349088
+        },
+        {
+          "category": "social",
+          "intercept": -4.34516383,
+          "top_contributions": [
+            {
+              "feature": "asset_media",
+              "contribution": -0.65106948
+            },
+            {
+              "feature": "size_unknown",
+              "contribution": 0.52148154
+            }
+          ],
+          "z": -4.47475177,
+          "p_c": 0.01126471,
+          "log_records": 3.73048397,
+          "records": 5375.30588575,
+          "impact_inr": 34701341.79407939,
+          "expected_loss_inr": 182941.46580586
+        },
+        {
+          "category": "error",
+          "intercept": -1.90617247,
+          "top_contributions": [
+            {
+              "feature": "asset_media",
+              "contribution": 1.978222
+            },
+            {
+              "feature": "size_unknown",
+              "contribution": -0.10720657
+            }
+          ],
+          "z": -0.03515704,
+          "p_c": 0.49121165,
+          "log_records": 3.60792363,
+          "records": 4053.37233681,
+          "impact_inr": 26167340.40219269,
+          "expected_loss_inr": 6015532.69012665
+        },
+        {
+          "category": "misuse",
+          "intercept": -1.53564444,
+          "top_contributions": [
+            {
+              "feature": "asset_media",
+              "contribution": -0.62235252
+            },
+            {
+              "feature": "size_unknown",
+              "contribution": 0.32686838
+            }
+          ],
+          "z": -1.83112858,
+          "p_c": 0.13810388,
+          "log_records": 2.79839869,
+          "records": 627.6351922,
+          "impact_inr": 4051822.12688336,
+          "expected_loss_inr": 261879.86689666
+        },
+        {
+          "category": "physical",
+          "intercept": -0.61884188,
+          "top_contributions": [
+            {
+              "feature": "size_unknown",
+              "contribution": -0.44612063
+            },
+            {
+              "feature": "asset_media",
+              "contribution": -0.2434049
+            }
+          ],
+          "z": -1.30836741,
+          "p_c": 0.21276016,
+          "log_records": 3.88681796,
+          "records": 7704.80402883,
+          "impact_inr": 49739874.11015562,
+          "expected_loss_inr": 4952686.63967771
+        }
+      ],
+      "persona": {
+        "distances": [
+          {
+            "persona": "Educational Services, large, server",
+            "distance": 4.73475189
+          },
+          {
+            "persona": "Mixed sector, large, server",
+            "distance": 3.77374985
+          },
+          {
+            "persona": "Public Administration, large, server",
+            "distance": 4.50502975
+          },
+          {
+            "persona": "Mixed sector, small, server",
+            "distance": 2.97554318
+          },
+          {
+            "persona": "Mixed sector, unknown size, server",
+            "distance": 1.85572865
+          },
+          {
+            "persona": "Health Care and Social Assistance, mixed size, user device",
+            "distance": 2.72675637
+          },
+          {
+            "persona": "Public Administration, large, media",
+            "distance": 2.3252497
+          },
+          {
+            "persona": "Health Care and Social Assistance, unknown size, media",
+            "distance": 0.52339167
+          }
+        ],
+        "chosen": "Health Care and Social Assistance, unknown size, media",
+        "index": 7
+      },
+      "plan": [
+        {
+          "control": "Endpoint protection",
+          "cost": 0.0,
+          "already_in_place": false
+        },
+        {
+          "control": "MFA",
+          "cost": 0.0,
+          "already_in_place": false
+        },
+        {
+          "control": "Offline or cloud backups",
+          "cost": 1560.0,
+          "already_in_place": false
+        },
+        {
+          "control": "Email filtering",
+          "cost": 32400.0,
+          "already_in_place": false
+        }
+      ],
+      "not_scored": [
+        {
+          "control": "Patch management",
+          "reason": "effectiveness MISSING"
+        },
+        {
+          "control": "Phishing awareness training",
+          "reason": "effectiveness MISSING"
+        },
+        {
+          "control": "Password manager",
+          "reason": "effectiveness MISSING"
+        },
+        {
+          "control": "Router and firewall hardening",
+          "reason": "effectiveness and cost MISSING"
+        },
+        {
+          "control": "Staff access reviews",
+          "reason": "effectiveness and cost MISSING"
+        },
+        {
+          "control": "Device encryption",
+          "reason": "effectiveness MISSING"
+        },
+        {
+          "control": "Payment and UPI fraud controls",
+          "reason": "effectiveness and cost MISSING"
+        },
+        {
+          "control": "Incident response plan",
+          "reason": "effectiveness and cost MISSING"
+        }
+      ],
+      "greedy_steps": [
+        {
+          "candidates": [
+            {
+              "control": "MFA",
+              "reduction": 270826.10376606,
+              "cost": 0.0,
+              "ratio": null
+            },
+            {
+              "control": "Offline or cloud backups",
+              "reduction": 387218.68457784,
+              "cost": 1560.0,
+              "ratio": 248.2171055
+            },
+            {
+              "control": "Endpoint protection",
+              "reduction": 638910.82955343,
+              "cost": 0.0,
+              "ratio": null
+            },
+            {
+              "control": "Email filtering",
+              "reduction": 253892.35672043,
+              "cost": 32400.0,
+              "ratio": 7.83618385
+            }
+          ],
+          "pick": "Endpoint protection",
+          "loss_after": 11898912.13055627
+        },
+        {
+          "candidates": [
+            {
+              "control": "MFA",
+              "reduction": 176284.56761128,
+              "cost": 0.0,
+              "ratio": null
+            },
+            {
+              "control": "Offline or cloud backups",
+              "reduction": 183179.75088672,
+              "cost": 1560.0,
+              "ratio": 117.42291724
+            },
+            {
+              "control": "Email filtering",
+              "reduction": 139054.4487075,
+              "cost": 32400.0,
+              "ratio": 4.29180397
+            }
+          ],
+          "pick": "MFA",
+          "loss_after": 11722627.56294499
+        },
+        {
+          "candidates": [
+            {
+              "control": "Offline or cloud backups",
+              "reduction": 154122.95310229,
+              "cost": 1560.0,
+              "ratio": 98.79676481
+            },
+            {
+              "control": "Email filtering",
+              "reduction": 105140.11633958,
+              "cost": 32400.0,
+              "ratio": 3.24506532
+            }
+          ],
+          "pick": "Offline or cloud backups",
+          "loss_after": 11568504.6098427
+        },
+        {
+          "candidates": [
+            {
+              "control": "Email filtering",
+              "reduction": 82705.83649316,
+              "cost": 32400.0,
+              "ratio": 2.55264927
+            }
+          ],
+          "pick": "Email filtering",
+          "loss_after": 11485798.77334954
+        }
+      ],
+      "totals": {
+        "loss_no_controls_inr": 12537822.9601097,
+        "loss_with_current_controls_inr": 12537822.9601097,
+        "loss_after_plan_inr": 11485798.77334954,
+        "spent_inr": 33960.0,
+        "budget_inr": 35000.0,
+        "residual_risk_pct": 91.60919571
+      },
+      "inputs": {
+        "annual_incident_prob": {
+          "value": 0.468,
+          "fallback_level": "1_india_msme"
+        },
+        "per_record_cost_inr": {
+          "value": 6455.69620253,
+          "fallback_level": "1_india"
+        },
+        "breach_total_cost_inr": {
+          "value": 255000000.0,
+          "fallback_level": "1_india"
+        },
+        "breach_avg_records": {
+          "value": 39500.0,
+          "fallback_level": "1_india"
+        },
+        "usd_inr": {
+          "value": 95.2477,
+          "fallback_level": ""
+        }
+      }
+    }
+  ]
+}
