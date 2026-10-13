@@ -29,3 +29,12 @@
 - Caveat: 857 incidents dated 2023, 91% ransomware, so the ransomware rise may be a VCDB collection effect.
 - Card ids referenced for later phases: attack-likelihood, breach-impact.
 - Pre-commit: gitleaks 8.30.1 via system install; gitleaks-system hook needs pass_filenames: false.
+
+## Phase 3 (2026-10-13)
+- Files: notebooks/03_regression.py, src/regression.py, src/nbutil.py (shared notebook helpers), tests/test_regression.py + fixtures/regression/linear.csv (78 pass), figures 03_*.png, outputs/{03_vif,03_model_comparison,mlr_coefficients}.csv, outputs/models/mlr_impact.json, cards slr, mlr-impact.
+- SLR log records ~ log10 employees (band geometric midpoint): slope -0.52 (x10 staff -> 30% records), R2 0.117, n 3693.
+- MLR target log10(1+records), n 5398, split 3778/1620 stratified on target quintiles. Max VIF 9.4 (actor_internal), none dropped. Breusch-Pagan p 8.6e-48 -> HC3 for all models; JB p 9e-31; DW 1.98.
+- Comparison (test RMSE / adj R2 / BIC): full 1.564 / 0.420 / 14515, backward (15 vars) 1.566 / 0.420 / 14424, business (sector, size, action) 1.657 / 0.351 / 14862.
+- Decision: business model is used live because only it needs pre-attack inputs; costs 0.093 RMSE vs best. Missing discovery handled with log days = 0 plus disc_known flag in the full model only.
+- Business multipliers: malware x5.92, hacking x3.08, misuse x0.04; Information sector x13.6, Public Administration x0.02; medium size x2.46.
+- Card id referenced for later phases: decision.
