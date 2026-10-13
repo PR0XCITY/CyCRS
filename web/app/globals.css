@@ -94,6 +94,19 @@ h3,
   letter-spacing: -0.01em;
 }
 
+p,
+li,
+dd,
+dt,
+td,
+th,
+figcaption,
+h1,
+h2,
+h3 {
+  overflow-wrap: break-word;
+}
+
 a {
   color: inherit;
   text-underline-offset: 3px;

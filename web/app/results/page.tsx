@@ -1,7 +1,11 @@
+import "katex/dist/katex.min.css";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Results from "@/components/Results";
+import Link from "next/link";
 import Tex from "@/components/Tex";
+import { num } from "@/lib/format";
+import { model } from "@/lib/modelData";
 
 export const metadata: Metadata = { title: "Your risk and plan" };
 
@@ -15,6 +19,34 @@ const F = {
   distance: String.raw`d_m = \sum_j \left(x_j-\mu_{mj}\right)^2`,
 };
 
+function prettyLevel(s: string) {
+  if (!s) return "direct value";
+  return s.replace(/^d+_/, "").replace(/_/g, " ");
+}
+
+function Disclaimer() {
+  return (
+    <aside className="wrap mb-6" aria-label="Estimates disclaimer">
+      <div className="panel px-4 py-3 text-sm border-l-4" style={{ borderLeftColor: "var(--risk)" }}>
+        <p>
+          <strong>These are estimates.</strong> They combine public breach records with published averages. Rupee amounts are likely too high for a small business,
+          because the record counts and the cost per record come mostly from large organisations; trust the ranking of risks and controls more than the rupee level.
+        </p>
+        <ul className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-muted">
+          {Object.entries(model.config).map(([k, v]) => (
+            <li key={k}>
+              {k.replace(/_/g, " ")}: <span className="num">{num(v.value, 4)}</span> ({prettyLevel(v.fallback_level)})
+            </li>
+          ))}
+        </ul>
+        <p className="mt-2">
+          <Link href="/data/">See every source and its fallback level</Link>
+        </p>
+      </div>
+    </aside>
+  );
+}
+
 export default function ResultsPage() {
   const tex = {
     logit: <Tex tex={F.logit} label="z equals intercept plus the sum of coefficient times feature" />,
@@ -26,8 +58,15 @@ export default function ResultsPage() {
     distance: <Tex tex={F.distance} label="distance equals sum of squared differences from the persona centre" />,
   };
   return (
-    <Suspense fallback={<section className="wrap py-10 min-h-[60vh]" aria-busy="true" />}>
-      <Results tex={tex} />
-    </Suspense>
+    <>
+      <header className="wrap pt-10 pb-4">
+        <p className="label">Your risk report</p>
+        <h1 className="text-4xl md:text-5xl mt-2">Action plan</h1>
+      </header>
+      <Disclaimer />
+      <Suspense fallback={<section className="wrap pb-10 min-h-[60vh]" aria-busy="true" />}>
+        <Results tex={tex} />
+      </Suspense>
+    </>
   );
 }
