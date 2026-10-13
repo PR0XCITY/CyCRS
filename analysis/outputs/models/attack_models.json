@@ -1,0 +1,156 @@
+{
+  "id": "attack-likelihood",
+  "feature_order": [
+    "sector_health_care_and_social_assistance",
+    "sector_public_administration",
+    "sector_educational_services",
+    "sector_finance_and_insurance",
+    "sector_information",
+    "sector_retail_trade",
+    "sector_professional__scientific__and_technical_services",
+    "sector_manufacturing",
+    "size_medium",
+    "size_large",
+    "size_unknown",
+    "asset_server",
+    "asset_user_device",
+    "asset_network",
+    "asset_media"
+  ],
+  "sectors": [
+    "Health Care and Social Assistance",
+    "Public Administration",
+    "Educational Services",
+    "Finance and Insurance",
+    "Information",
+    "Retail Trade",
+    "Professional, Scientific, and Technical Services",
+    "Manufacturing"
+  ],
+  "reference_levels": {
+    "sector": "Other",
+    "size": "small"
+  },
+  "models": {
+    "hacking": {
+      "intercept": -1.67213963,
+      "coefficients": {
+        "sector_health_care_and_social_assistance": -1.37021235,
+        "sector_public_administration": -0.95796426,
+        "sector_educational_services": 1.01115525,
+        "sector_finance_and_insurance": -0.28156608,
+        "sector_information": 0.43605568,
+        "sector_retail_trade": -0.31421915,
+        "sector_professional__scientific__and_technical_services": 0.08572462,
+        "sector_manufacturing": -0.13790048,
+        "size_medium": -0.0191648,
+        "size_large": -0.08020313,
+        "size_unknown": 0.3380276,
+        "asset_server": 2.19840622,
+        "asset_user_device": 0.03656782,
+        "asset_network": 1.69941745,
+        "asset_media": -3.65611519
+      }
+    },
+    "malware": {
+      "intercept": -3.75749996,
+      "coefficients": {
+        "sector_health_care_and_social_assistance": -0.53149155,
+        "sector_public_administration": -0.83774214,
+        "sector_educational_services": 1.88820345,
+        "sector_finance_and_insurance": 0.05091581,
+        "sector_information": -0.97260489,
+        "sector_retail_trade": 0.00036784,
+        "sector_professional__scientific__and_technical_services": 0.1895378,
+        "sector_manufacturing": -0.04824629,
+        "size_medium": 0.02545668,
+        "size_large": 0.3496229,
+        "size_unknown": -0.36781711,
+        "asset_server": 2.39278644,
+        "asset_user_device": 2.18181429,
+        "asset_network": 2.43956898,
+        "asset_media": -3.09471579
+      }
+    },
+    "social": {
+      "intercept": -4.34516383,
+      "coefficients": {
+        "sector_health_care_and_social_assistance": -0.02848141,
+        "sector_public_administration": -0.00445973,
+        "sector_educational_services": -0.33624911,
+        "sector_finance_and_insurance": 0.06328991,
+        "sector_information": -0.20792929,
+        "sector_retail_trade": -0.4636504,
+        "sector_professional__scientific__and_technical_services": 0.067995,
+        "sector_manufacturing": 0.53011893,
+        "size_medium": 0.48004799,
+        "size_large": 0.15373162,
+        "size_unknown": 0.52148154,
+        "asset_server": 1.38733799,
+        "asset_user_device": 1.90844188,
+        "asset_network": 2.20712722,
+        "asset_media": -0.65106948
+      }
+    },
+    "error": {
+      "intercept": -1.90617247,
+      "coefficients": {
+        "sector_health_care_and_social_assistance": 0.15318654,
+        "sector_public_administration": 1.11623506,
+        "sector_educational_services": -0.23652599,
+        "sector_finance_and_insurance": 0.21537826,
+        "sector_information": 0.537967,
+        "sector_retail_trade": -0.32913838,
+        "sector_professional__scientific__and_technical_services": 0.48776013,
+        "sector_manufacturing": -0.17407462,
+        "size_medium": 0.22881545,
+        "size_large": 0.20007338,
+        "size_unknown": -0.10720657,
+        "asset_server": -0.19168214,
+        "asset_user_device": -0.2142928,
+        "asset_network": -0.48527898,
+        "asset_media": 1.978222
+      }
+    },
+    "misuse": {
+      "intercept": -1.53564444,
+      "coefficients": {
+        "sector_health_care_and_social_assistance": 0.63262468,
+        "sector_public_administration": 0.25451025,
+        "sector_educational_services": -1.79568811,
+        "sector_finance_and_insurance": -0.3874536,
+        "sector_information": -1.18189977,
+        "sector_retail_trade": -0.91500849,
+        "sector_professional__scientific__and_technical_services": -0.38766939,
+        "sector_manufacturing": 0.06326166,
+        "size_medium": -0.03600545,
+        "size_large": 0.35565578,
+        "size_unknown": 0.32686838,
+        "asset_server": 0.12914279,
+        "asset_user_device": -1.15911669,
+        "asset_network": -2.39980354,
+        "asset_media": -0.62235252
+      }
+    },
+    "physical": {
+      "intercept": -0.61884188,
+      "coefficients": {
+        "sector_health_care_and_social_assistance": 0.47740353,
+        "sector_public_administration": -0.91210373,
+        "sector_educational_services": -0.17598475,
+        "sector_finance_and_insurance": 1.09268,
+        "sector_information": -1.23060832,
+        "sector_retail_trade": 1.62180096,
+        "sector_professional__scientific__and_technical_services": -1.00910319,
+        "sector_manufacturing": -0.3630812,
+        "size_medium": -0.25490679,
+        "size_large": -0.51870841,
+        "size_unknown": -0.44612063,
+        "asset_server": -3.4711779,
+        "asset_user_device": 1.22920275,
+        "asset_network": -0.4620847,
+        "asset_media": -0.2434049
+      }
+    }
+  }
+}

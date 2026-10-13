@@ -1,0 +1,2023 @@
+{
+  "id": "attack-likelihood",
+  "title": "Which attacks a business is most exposed to",
+  "module": "4: Logistic regression and ROC",
+  "stage": "likelihood",
+  "used_live": true,
+  "order": 9,
+  "question": "Given a business's sector, size and the kinds of IT assets it relies on, which attack categories are most likely if it has an incident?",
+  "data_in": {
+    "dataset": "VCDB incidents with at least one known action category",
+    "n_rows": 10360,
+    "variables": [
+      {
+        "name": "action_<category>",
+        "type": "binary",
+        "scale": "nominal",
+        "transform": "one target per model"
+      },
+      {
+        "name": "sector",
+        "type": "categorical",
+        "scale": "nominal",
+        "transform": "dummies, reference Other"
+      },
+      {
+        "name": "size",
+        "type": "categorical",
+        "scale": "ordinal",
+        "transform": "dummies, reference small"
+      },
+      {
+        "name": "asset_*",
+        "type": "binary",
+        "scale": "nominal",
+        "transform": "proxy for what the business runs"
+      }
+    ],
+    "prep_steps": [
+      "Dropped incidents with no known action category",
+      "One stratified 70/30 split shared by all categories (7252 train, 3108 test); test incident ids saved for Phase 6",
+      "Environmental attacks left out (too rare for a model)",
+      "asset_person left out of the inputs: VERIS codes the targeted person as an asset in every social attack, so it restates the label",
+      "Fixed feature order of 15 profile features saved with the coefficients"
+    ],
+    "sample_rows": [
+      {
+        "sector": "Health Care and Social Assistance",
+        "size": "large",
+        "asset_server": 0,
+        "asset_media": 0,
+        "action_hacking": 1,
+        "action_error": 1
+      },
+      {
+        "sector": "Health Care and Social Assistance",
+        "size": "large",
+        "asset_server": 1,
+        "asset_media": 0,
+        "action_hacking": 0,
+        "action_error": 1
+      },
+      {
+        "sector": "Health Care and Social Assistance",
+        "size": "medium",
+        "asset_server": 1,
+        "asset_media": 0,
+        "action_hacking": 1,
+        "action_error": 0
+      },
+      {
+        "sector": "Retail Trade",
+        "size": "small",
+        "asset_server": 0,
+        "asset_media": 0,
+        "action_hacking": 0,
+        "action_error": 0
+      },
+      {
+        "sector": "Finance and Insurance",
+        "size": "large",
+        "asset_server": 1,
+        "asset_media": 0,
+        "action_hacking": 0,
+        "action_error": 1
+      },
+      {
+        "sector": "Finance and Insurance",
+        "size": "large",
+        "asset_server": 1,
+        "asset_media": 0,
+        "action_hacking": 1,
+        "action_error": 0
+      },
+      {
+        "sector": "Information",
+        "size": "medium",
+        "asset_server": 1,
+        "asset_media": 0,
+        "action_hacking": 1,
+        "action_error": 0
+      },
+      {
+        "sector": "Health Care and Social Assistance",
+        "size": "large",
+        "asset_server": 1,
+        "asset_media": 0,
+        "action_hacking": 0,
+        "action_error": 0
+      }
+    ]
+  },
+  "why": "Each target is a binary flag and the inputs are a handful of 0/1 profile features, so logistic regression gives a calibrated probability per category and an odds ratio per feature that a business owner can read. Its formula is a weighted sum and a sigmoid, so the browser reproduces the exact same number from the saved coefficients with no server. Unweighted fits keep probabilities calibrated to the observed category shares (for example 17% for physical).",
+  "data_properties": [
+    {
+      "name": "Best category AUC (physical)",
+      "value": 0.89216971,
+      "implication": "Profile predicts this attack type well."
+    },
+    {
+      "name": "Weakest category AUC (misuse)",
+      "value": 0.68986135,
+      "implication": "Profile says little about this attack type; show with caution."
+    },
+    {
+      "name": "Profile features",
+      "value": 15,
+      "implication": "Small, fixed input set entered by the user."
+    }
+  ],
+  "alternatives": [
+    {
+      "model": "Decision tree",
+      "why_not": "Its probabilities are leaf shares that jump between profiles, and the breach tree needed depth 10; logistic odds ratios are smoother and easier to explain."
+    },
+    {
+      "model": "Naive Bayes",
+      "why_not": "Assumes sector, size and asset flags are independent given the attack, but sector and asset use are related, so its probabilities are poorly calibrated."
+    },
+    {
+      "model": "Best breach classifier (decision_tree)",
+      "why_not": "Built for a different target; logistic keeps exact browser reproduction and readable coefficients."
+    }
+  ],
+  "formula_tex": [
+    {
+      "label": "Probability of category c",
+      "tex": "P(c \\mid x)=\\frac{1}{1+e^{-(\\beta_{0c}+\\beta_c^\\top x)}}"
+    },
+    {
+      "label": "Odds ratio",
+      "tex": "\\mathrm{OR}_j = e^{\\beta_j}"
+    }
+  ],
+  "assumptions": [
+    {
+      "check": "Held-out AUC, hacking",
+      "statistic": 0.86517148,
+      "p_value": null,
+      "verdict": "useful",
+      "action_taken": "Shown with its AUC in the app."
+    },
+    {
+      "check": "Held-out AUC, malware",
+      "statistic": 0.83997651,
+      "p_value": null,
+      "verdict": "useful",
+      "action_taken": "Shown with its AUC in the app."
+    },
+    {
+      "check": "Held-out AUC, social",
+      "statistic": 0.73804587,
+      "p_value": null,
+      "verdict": "useful",
+      "action_taken": "Shown with its AUC in the app."
+    },
+    {
+      "check": "Held-out AUC, error",
+      "statistic": 0.74102137,
+      "p_value": null,
+      "verdict": "useful",
+      "action_taken": "Shown with its AUC in the app."
+    },
+    {
+      "check": "Held-out AUC, misuse",
+      "statistic": 0.68986135,
+      "p_value": null,
+      "verdict": "weak",
+      "action_taken": "Shown with its AUC in the app."
+    },
+    {
+      "check": "Held-out AUC, physical",
+      "statistic": 0.89216971,
+      "p_value": null,
+      "verdict": "useful",
+      "action_taken": "Shown with its AUC in the app."
+    }
+  ],
+  "results": {
+    "key_numbers": {
+      "auc_hacking": 0.86517148,
+      "auc_malware": 0.83997651,
+      "auc_social": 0.73804587,
+      "auc_error": 0.74102137,
+      "auc_misuse": 0.68986135,
+      "auc_physical": 0.89216971
+    },
+    "tables": [
+      {
+        "title": "Per-category AUC",
+        "columns": [
+          "category",
+          "prevalence_train",
+          "test_auc",
+          "cv_auc_mean",
+          "cv_auc_sd",
+          "pseudo_r2"
+        ],
+        "rows": [
+          [
+            "hacking",
+            0.3509,
+            0.8652,
+            0.8646,
+            0.0086,
+            0.3483
+          ],
+          [
+            "malware",
+            0.1715,
+            0.84,
+            0.8553,
+            0.0067,
+            0.3139
+          ],
+          [
+            "social",
+            0.0623,
+            0.738,
+            0.7029,
+            0.0321,
+            0.1596
+          ],
+          [
+            "error",
+            0.2679,
+            0.741,
+            0.7603,
+            0.0169,
+            0.1972
+          ],
+          [
+            "misuse",
+            0.1765,
+            0.6899,
+            0.7021,
+            0.0091,
+            0.0798
+          ],
+          [
+            "physical",
+            0.166,
+            0.8922,
+            0.9016,
+            0.0071,
+            0.3845
+          ]
+        ]
+      },
+      {
+        "title": "Strongest significant odds ratios per category",
+        "columns": [
+          "category",
+          "term",
+          "odds_ratio",
+          "or_low",
+          "or_high",
+          "p_value"
+        ],
+        "rows": [
+          [
+            "hacking",
+            "asset_media",
+            0.0258,
+            0.0114,
+            0.0586,
+            0.0
+          ],
+          [
+            "hacking",
+            "asset_server",
+            9.0106,
+            7.4386,
+            10.9149,
+            0.0
+          ],
+          [
+            "hacking",
+            "asset_network",
+            5.4708,
+            3.46,
+            8.6501,
+            0.0
+          ],
+          [
+            "hacking",
+            "sector_health_care_and_social_assistance",
+            0.2541,
+            0.2046,
+            0.3154,
+            0.0
+          ],
+          [
+            "hacking",
+            "sector_educational_services",
+            2.7488,
+            2.1464,
+            3.5202,
+            0.0
+          ],
+          [
+            "malware",
+            "asset_media",
+            0.0453,
+            0.0142,
+            0.1443,
+            0.0
+          ],
+          [
+            "malware",
+            "asset_network",
+            11.4681,
+            6.9911,
+            18.8121,
+            0.0
+          ],
+          [
+            "malware",
+            "asset_server",
+            10.9439,
+            8.1921,
+            14.6201,
+            0.0
+          ],
+          [
+            "malware",
+            "asset_user_device",
+            8.8624,
+            6.6577,
+            11.7971,
+            0.0
+          ],
+          [
+            "malware",
+            "sector_educational_services",
+            6.6075,
+            5.1102,
+            8.5435,
+            0.0
+          ],
+          [
+            "social",
+            "asset_network",
+            9.0896,
+            5.6307,
+            14.6731,
+            0.0
+          ],
+          [
+            "social",
+            "asset_user_device",
+            6.7426,
+            5.0365,
+            9.0265,
+            0.0
+          ],
+          [
+            "social",
+            "asset_server",
+            4.0042,
+            2.9531,
+            5.4293,
+            0.0
+          ],
+          [
+            "social",
+            "asset_media",
+            0.5215,
+            0.3072,
+            0.8853,
+            0.0159
+          ],
+          [
+            "social",
+            "size_unknown",
+            1.6845,
+            1.2029,
+            2.359,
+            0.0024
+          ],
+          [
+            "error",
+            "asset_media",
+            7.2299,
+            5.9732,
+            8.751,
+            0.0
+          ],
+          [
+            "error",
+            "sector_public_administration",
+            3.0533,
+            2.4551,
+            3.7973,
+            0.0
+          ],
+          [
+            "error",
+            "sector_information",
+            1.7125,
+            1.2969,
+            2.2613,
+            0.0001
+          ],
+          [
+            "error",
+            "sector_professional__scientific__and_technical_services",
+            1.6287,
+            1.1709,
+            2.2653,
+            0.0038
+          ],
+          [
+            "error",
+            "size_medium",
+            1.2571,
+            1.0043,
+            1.5736,
+            0.0458
+          ],
+          [
+            "misuse",
+            "asset_network",
+            0.0907,
+            0.0222,
+            0.3704,
+            0.0008
+          ],
+          [
+            "misuse",
+            "sector_educational_services",
+            0.166,
+            0.1137,
+            0.2424,
+            0.0
+          ],
+          [
+            "misuse",
+            "sector_information",
+            0.3067,
+            0.2178,
+            0.4318,
+            0.0
+          ],
+          [
+            "misuse",
+            "asset_user_device",
+            0.3138,
+            0.2418,
+            0.4072,
+            0.0
+          ],
+          [
+            "misuse",
+            "sector_retail_trade",
+            0.4005,
+            0.2682,
+            0.5981,
+            0.0
+          ],
+          [
+            "physical",
+            "asset_server",
+            0.0311,
+            0.0231,
+            0.0419,
+            0.0
+          ],
+          [
+            "physical",
+            "sector_retail_trade",
+            5.0622,
+            3.551,
+            7.2165,
+            0.0
+          ],
+          [
+            "physical",
+            "sector_information",
+            0.2921,
+            0.1519,
+            0.5618,
+            0.0002
+          ],
+          [
+            "physical",
+            "asset_user_device",
+            3.4185,
+            2.7603,
+            4.2336,
+            0.0
+          ],
+          [
+            "physical",
+            "sector_finance_and_insurance",
+            2.9823,
+            2.1927,
+            4.0562,
+            0.0
+          ]
+        ]
+      }
+    ],
+    "charts": [
+      {
+        "type": "line",
+        "title": "ROC hacking",
+        "x_label": "False positive rate",
+        "y_label": "True positive rate",
+        "data": [
+          {
+            "fpr": 0.0,
+            "tpr": 0.0
+          },
+          {
+            "fpr": 0.00049554,
+            "tpr": 0.00366972
+          },
+          {
+            "fpr": 0.00099108,
+            "tpr": 0.01192661
+          },
+          {
+            "fpr": 0.00445986,
+            "tpr": 0.04587156
+          },
+          {
+            "fpr": 0.01437066,
+            "tpr": 0.06330275
+          },
+          {
+            "fpr": 0.03518335,
+            "tpr": 0.32293578
+          },
+          {
+            "fpr": 0.04856293,
+            "tpr": 0.36055046
+          },
+          {
+            "fpr": 0.06937562,
+            "tpr": 0.44587156
+          },
+          {
+            "fpr": 0.06987116,
+            "tpr": 0.44770642
+          },
+          {
+            "fpr": 0.08225966,
+            "tpr": 0.47889908
+          },
+          {
+            "fpr": 0.0877106,
+            "tpr": 0.49082569
+          },
+          {
+            "fpr": 0.09613479,
+            "tpr": 0.51009174
+          },
+          {
+            "fpr": 0.12487611,
+            "tpr": 0.59633028
+          },
+          {
+            "fpr": 0.12884044,
+            "tpr": 0.6
+          },
+          {
+            "fpr": 0.13528246,
+            "tpr": 0.61926606
+          },
+          {
+            "fpr": 0.14519326,
+            "tpr": 0.65321101
+          },
+          {
+            "fpr": 0.16005946,
+            "tpr": 0.70733945
+          },
+          {
+            "fpr": 0.16352825,
+            "tpr": 0.74587156
+          },
+          {
+            "fpr": 0.19772052,
+            "tpr": 0.79082569
+          },
+          {
+            "fpr": 0.20069376,
+            "tpr": 0.79449541
+          },
+          {
+            "fpr": 0.21555996,
+            "tpr": 0.81100917
+          },
+          {
+            "fpr": 0.24975223,
+            "tpr": 0.83211009
+          },
+          {
+            "fpr": 0.31020813,
+            "tpr": 0.85963303
+          },
+          {
+            "fpr": 0.31764123,
+            "tpr": 0.86238532
+          },
+          {
+            "fpr": 0.33894945,
+            "tpr": 0.88440367
+          },
+          {
+            "fpr": 0.35084242,
+            "tpr": 0.89816514
+          },
+          {
+            "fpr": 0.39147671,
+            "tpr": 0.93027523
+          },
+          {
+            "fpr": 0.39494549,
+            "tpr": 0.93119266
+          },
+          {
+            "fpr": 0.40237859,
+            "tpr": 0.93853211
+          },
+          {
+            "fpr": 0.41129832,
+            "tpr": 0.94678899
+          },
+          {
+            "fpr": 0.4147671,
+            "tpr": 0.94678899
+          },
+          {
+            "fpr": 0.41774034,
+            "tpr": 0.95137615
+          },
+          {
+            "fpr": 0.43161546,
+            "tpr": 0.95504587
+          },
+          {
+            "fpr": 0.43904856,
+            "tpr": 0.95963303
+          },
+          {
+            "fpr": 0.44945491,
+            "tpr": 0.96330275
+          },
+          {
+            "fpr": 0.45688801,
+            "tpr": 0.96513761
+          },
+          {
+            "fpr": 0.46580773,
+            "tpr": 0.96788991
+          },
+          {
+            "fpr": 0.47423191,
+            "tpr": 0.96788991
+          },
+          {
+            "fpr": 0.50148662,
+            "tpr": 0.96972477
+          },
+          {
+            "fpr": 0.52180377,
+            "tpr": 0.97155963
+          },
+          {
+            "fpr": 0.53865213,
+            "tpr": 0.9733945
+          },
+          {
+            "fpr": 0.54806739,
+            "tpr": 0.97889908
+          },
+          {
+            "fpr": 0.59415263,
+            "tpr": 0.97981651
+          },
+          {
+            "fpr": 0.60901883,
+            "tpr": 0.9853211
+          },
+          {
+            "fpr": 0.64767096,
+            "tpr": 0.98899083
+          },
+          {
+            "fpr": 0.67789891,
+            "tpr": 0.99266055
+          },
+          {
+            "fpr": 0.67938553,
+            "tpr": 0.99357798
+          },
+          {
+            "fpr": 0.68483647,
+            "tpr": 0.99449541
+          },
+          {
+            "fpr": 0.69226957,
+            "tpr": 0.99541284
+          },
+          {
+            "fpr": 0.69821606,
+            "tpr": 0.99633028
+          },
+          {
+            "fpr": 0.70168484,
+            "tpr": 0.99633028
+          },
+          {
+            "fpr": 0.71555996,
+            "tpr": 0.99816514
+          },
+          {
+            "fpr": 0.71952428,
+            "tpr": 0.99816514
+          },
+          {
+            "fpr": 0.73488603,
+            "tpr": 0.99816514
+          },
+          {
+            "fpr": 0.74281467,
+            "tpr": 0.99816514
+          },
+          {
+            "fpr": 0.76015857,
+            "tpr": 0.99816514
+          },
+          {
+            "fpr": 0.7938553,
+            "tpr": 0.99816514
+          },
+          {
+            "fpr": 0.80574827,
+            "tpr": 0.99816514
+          },
+          {
+            "fpr": 0.96184341,
+            "tpr": 1.0
+          },
+          {
+            "fpr": 1.0,
+            "tpr": 1.0
+          }
+        ]
+      },
+      {
+        "type": "line",
+        "title": "ROC malware",
+        "x_label": "False positive rate",
+        "y_label": "True positive rate",
+        "data": [
+          {
+            "fpr": 0.0,
+            "tpr": 0.0
+          },
+          {
+            "fpr": 0.0003879,
+            "tpr": 0.00754717
+          },
+          {
+            "fpr": 0.0003879,
+            "tpr": 0.05849057
+          },
+          {
+            "fpr": 0.00155159,
+            "tpr": 0.06981132
+          },
+          {
+            "fpr": 0.00271528,
+            "tpr": 0.07735849
+          },
+          {
+            "fpr": 0.01823119,
+            "tpr": 0.42264151
+          },
+          {
+            "fpr": 0.02327386,
+            "tpr": 0.43207547
+          },
+          {
+            "fpr": 0.03568658,
+            "tpr": 0.44716981
+          },
+          {
+            "fpr": 0.03801396,
+            "tpr": 0.4490566
+          },
+          {
+            "fpr": 0.04150504,
+            "tpr": 0.45471698
+          },
+          {
+            "fpr": 0.0480993,
+            "tpr": 0.46792453
+          },
+          {
+            "fpr": 0.05236618,
+            "tpr": 0.47358491
+          },
+          {
+            "fpr": 0.05818464,
+            "tpr": 0.53018868
+          },
+          {
+            "fpr": 0.0799069,
+            "tpr": 0.57735849
+          },
+          {
+            "fpr": 0.10938712,
+            "tpr": 0.60566038
+          },
+          {
+            "fpr": 0.14197052,
+            "tpr": 0.63584906
+          },
+          {
+            "fpr": 0.1454616,
+            "tpr": 0.65283019
+          },
+          {
+            "fpr": 0.1613654,
+            "tpr": 0.66037736
+          },
+          {
+            "fpr": 0.17377812,
+            "tpr": 0.67735849
+          },
+          {
+            "fpr": 0.19860357,
+            "tpr": 0.69622642
+          },
+          {
+            "fpr": 0.20325834,
+            "tpr": 0.69811321
+          },
+          {
+            "fpr": 0.21644686,
+            "tpr": 0.7
+          },
+          {
+            "fpr": 0.25717611,
+            "tpr": 0.73018868
+          },
+          {
+            "fpr": 0.26299457,
+            "tpr": 0.73773585
+          },
+          {
+            "fpr": 0.30333592,
+            "tpr": 0.75283019
+          },
+          {
+            "fpr": 0.31962762,
+            "tpr": 0.76603774
+          },
+          {
+            "fpr": 0.37276959,
+            "tpr": 0.78301887
+          },
+          {
+            "fpr": 0.38440652,
+            "tpr": 0.79811321
+          },
+          {
+            "fpr": 0.40496509,
+            "tpr": 0.85849057
+          },
+          {
+            "fpr": 0.43638479,
+            "tpr": 0.8754717
+          },
+          {
+            "fpr": 0.46353763,
+            "tpr": 0.88113208
+          },
+          {
+            "fpr": 0.47788984,
+            "tpr": 0.90566038
+          },
+          {
+            "fpr": 0.52404965,
+            "tpr": 0.92830189
+          },
+          {
+            "fpr": 0.54383243,
+            "tpr": 0.94150943
+          },
+          {
+            "fpr": 0.57020946,
+            "tpr": 0.9490566
+          },
+          {
+            "fpr": 0.61132661,
+            "tpr": 0.96226415
+          },
+          {
+            "fpr": 0.64313421,
+            "tpr": 0.96603774
+          },
+          {
+            "fpr": 0.65709853,
+            "tpr": 0.97169811
+          },
+          {
+            "fpr": 0.67222653,
+            "tpr": 0.97169811
+          },
+          {
+            "fpr": 0.68425136,
+            "tpr": 0.97169811
+          },
+          {
+            "fpr": 0.69782777,
+            "tpr": 0.97924528
+          },
+          {
+            "fpr": 0.70364624,
+            "tpr": 0.98113208
+          },
+          {
+            "fpr": 0.70830101,
+            "tpr": 0.98301887
+          },
+          {
+            "fpr": 0.72032583,
+            "tpr": 0.98679245
+          },
+          {
+            "fpr": 0.72808379,
+            "tpr": 0.98867925
+          },
+          {
+            "fpr": 0.73506594,
+            "tpr": 0.99056604
+          },
+          {
+            "fpr": 0.74088441,
+            "tpr": 0.99245283
+          },
+          {
+            "fpr": 0.75329713,
+            "tpr": 0.99245283
+          },
+          {
+            "fpr": 0.75911559,
+            "tpr": 0.99433962
+          },
+          {
+            "fpr": 0.76144298,
+            "tpr": 0.99811321
+          },
+          {
+            "fpr": 0.76454616,
+            "tpr": 0.99811321
+          },
+          {
+            "fpr": 0.76803724,
+            "tpr": 0.99811321
+          },
+          {
+            "fpr": 0.78394104,
+            "tpr": 0.99811321
+          },
+          {
+            "fpr": 0.79131109,
+            "tpr": 1.0
+          },
+          {
+            "fpr": 0.79829325,
+            "tpr": 1.0
+          },
+          {
+            "fpr": 0.8064391,
+            "tpr": 1.0
+          },
+          {
+            "fpr": 0.83010085,
+            "tpr": 1.0
+          },
+          {
+            "fpr": 0.9359969,
+            "tpr": 1.0
+          },
+          {
+            "fpr": 0.94453064,
+            "tpr": 1.0
+          },
+          {
+            "fpr": 1.0,
+            "tpr": 1.0
+          }
+        ]
+      },
+      {
+        "type": "line",
+        "title": "ROC social",
+        "x_label": "False positive rate",
+        "y_label": "True positive rate",
+        "data": [
+          {
+            "fpr": 0.0,
+            "tpr": 0.0
+          },
+          {
+            "fpr": 0.0,
+            "tpr": 0.04366812
+          },
+          {
+            "fpr": 0.00173671,
+            "tpr": 0.13100437
+          },
+          {
+            "fpr": 0.00208406,
+            "tpr": 0.25327511
+          },
+          {
+            "fpr": 0.00347343,
+            "tpr": 0.26637555
+          },
+          {
+            "fpr": 0.00451546,
+            "tpr": 0.27510917
+          },
+          {
+            "fpr": 0.00521014,
+            "tpr": 0.29257642
+          },
+          {
+            "fpr": 0.00659951,
+            "tpr": 0.31441048
+          },
+          {
+            "fpr": 0.00903091,
+            "tpr": 0.32751092
+          },
+          {
+            "fpr": 0.01250434,
+            "tpr": 0.33624454
+          },
+          {
+            "fpr": 0.0145884,
+            "tpr": 0.34061135
+          },
+          {
+            "fpr": 0.01667246,
+            "tpr": 0.34497817
+          },
+          {
+            "fpr": 0.01979854,
+            "tpr": 0.34934498
+          },
+          {
+            "fpr": 0.03195554,
+            "tpr": 0.3930131
+          },
+          {
+            "fpr": 0.05626954,
+            "tpr": 0.40611354
+          },
+          {
+            "fpr": 0.06668982,
+            "tpr": 0.40611354
+          },
+          {
+            "fpr": 0.06738451,
+            "tpr": 0.41048035
+          },
+          {
+            "fpr": 0.06912122,
+            "tpr": 0.41921397
+          },
+          {
+            "fpr": 0.08475165,
+            "tpr": 0.44541485
+          },
+          {
+            "fpr": 0.09829802,
+            "tpr": 0.45851528
+          },
+          {
+            "fpr": 0.12191733,
+            "tpr": 0.47161572
+          },
+          {
+            "fpr": 0.1403265,
+            "tpr": 0.49344978
+          },
+          {
+            "fpr": 0.14727336,
+            "tpr": 0.51091703
+          },
+          {
+            "fpr": 0.21048975,
+            "tpr": 0.56768559
+          },
+          {
+            "fpr": 0.23897187,
+            "tpr": 0.62008734
+          },
+          {
+            "fpr": 0.27717958,
+            "tpr": 0.6419214
+          },
+          {
+            "fpr": 0.28864189,
+            "tpr": 0.65065502
+          },
+          {
+            "fpr": 0.31260854,
+            "tpr": 0.65938865
+          },
+          {
+            "fpr": 0.3584578,
+            "tpr": 0.6768559
+          },
+          {
+            "fpr": 0.36922543,
+            "tpr": 0.6768559
+          },
+          {
+            "fpr": 0.44598819,
+            "tpr": 0.70742358
+          },
+          {
+            "fpr": 0.48315387,
+            "tpr": 0.75545852
+          },
+          {
+            "fpr": 0.50712053,
+            "tpr": 0.75545852
+          },
+          {
+            "fpr": 0.52935047,
+            "tpr": 0.76419214
+          },
+          {
+            "fpr": 0.55540118,
+            "tpr": 0.78165939
+          },
+          {
+            "fpr": 0.57867315,
+            "tpr": 0.79912664
+          },
+          {
+            "fpr": 0.67141369,
+            "tpr": 0.81222707
+          },
+          {
+            "fpr": 0.68322334,
+            "tpr": 0.83842795
+          },
+          {
+            "fpr": 0.68947551,
+            "tpr": 0.83842795
+          },
+          {
+            "fpr": 0.69433831,
+            "tpr": 0.84716157
+          },
+          {
+            "fpr": 0.69920111,
+            "tpr": 0.85152838
+          },
+          {
+            "fpr": 0.71240014,
+            "tpr": 0.86462882
+          },
+          {
+            "fpr": 0.7242098,
+            "tpr": 0.88209607
+          },
+          {
+            "fpr": 0.72768322,
+            "tpr": 0.89082969
+          },
+          {
+            "fpr": 0.74088225,
+            "tpr": 0.89956332
+          },
+          {
+            "fpr": 0.74921848,
+            "tpr": 0.92576419
+          },
+          {
+            "fpr": 0.75651268,
+            "tpr": 0.93886463
+          },
+          {
+            "fpr": 0.76345953,
+            "tpr": 0.93886463
+          },
+          {
+            "fpr": 0.77075373,
+            "tpr": 0.94759825
+          },
+          {
+            "fpr": 0.77492185,
+            "tpr": 0.95196507
+          },
+          {
+            "fpr": 0.77770059,
+            "tpr": 0.95196507
+          },
+          {
+            "fpr": 0.83362279,
+            "tpr": 0.9650655
+          },
+          {
+            "fpr": 0.84612713,
+            "tpr": 0.97379913
+          },
+          {
+            "fpr": 0.8523793,
+            "tpr": 0.97379913
+          },
+          {
+            "fpr": 0.87078847,
+            "tpr": 0.98253275
+          },
+          {
+            "fpr": 0.94025703,
+            "tpr": 0.98689956
+          },
+          {
+            "fpr": 0.96422369,
+            "tpr": 0.99563319
+          },
+          {
+            "fpr": 0.99062174,
+            "tpr": 1.0
+          },
+          {
+            "fpr": 0.99478986,
+            "tpr": 1.0
+          },
+          {
+            "fpr": 1.0,
+            "tpr": 1.0
+          }
+        ]
+      },
+      {
+        "type": "line",
+        "title": "ROC error",
+        "x_label": "False positive rate",
+        "y_label": "True positive rate",
+        "data": [
+          {
+            "fpr": 0.0,
+            "tpr": 0.0
+          },
+          {
+            "fpr": 0.01141853,
+            "tpr": 0.20577617
+          },
+          {
+            "fpr": 0.02327624,
+            "tpr": 0.2599278
+          },
+          {
+            "fpr": 0.02591129,
+            "tpr": 0.26353791
+          },
+          {
+            "fpr": 0.02766798,
+            "tpr": 0.26955475
+          },
+          {
+            "fpr": 0.03205973,
+            "tpr": 0.27436823
+          },
+          {
+            "fpr": 0.03996487,
+            "tpr": 0.31287605
+          },
+          {
+            "fpr": 0.05050505,
+            "tpr": 0.35740072
+          },
+          {
+            "fpr": 0.05665349,
+            "tpr": 0.36702768
+          },
+          {
+            "fpr": 0.07114625,
+            "tpr": 0.3898917
+          },
+          {
+            "fpr": 0.07202459,
+            "tpr": 0.39350181
+          },
+          {
+            "fpr": 0.09310496,
+            "tpr": 0.45848375
+          },
+          {
+            "fpr": 0.09705753,
+            "tpr": 0.46931408
+          },
+          {
+            "fpr": 0.1045235,
+            "tpr": 0.47773767
+          },
+          {
+            "fpr": 0.10715854,
+            "tpr": 0.48255114
+          },
+          {
+            "fpr": 0.11198946,
+            "tpr": 0.48856799
+          },
+          {
+            "fpr": 0.11769873,
+            "tpr": 0.49097473
+          },
+          {
+            "fpr": 0.17039965,
+            "tpr": 0.55836342
+          },
+          {
+            "fpr": 0.18445323,
+            "tpr": 0.56799037
+          },
+          {
+            "fpr": 0.19279754,
+            "tpr": 0.57521059
+          },
+          {
+            "fpr": 0.23759332,
+            "tpr": 0.61612515
+          },
+          {
+            "fpr": 0.24242424,
+            "tpr": 0.61732852
+          },
+          {
+            "fpr": 0.26745718,
+            "tpr": 0.62575211
+          },
+          {
+            "fpr": 0.28985507,
+            "tpr": 0.64500602
+          },
+          {
+            "fpr": 0.30083443,
+            "tpr": 0.65222623
+          },
+          {
+            "fpr": 0.31049627,
+            "tpr": 0.65944645
+          },
+          {
+            "fpr": 0.33377251,
+            "tpr": 0.66064982
+          },
+          {
+            "fpr": 0.34036012,
+            "tpr": 0.66666667
+          },
+          {
+            "fpr": 0.3579271,
+            "tpr": 0.68832732
+          },
+          {
+            "fpr": 0.37022398,
+            "tpr": 0.6967509
+          },
+          {
+            "fpr": 0.40008783,
+            "tpr": 0.70998797
+          },
+          {
+            "fpr": 0.43302591,
+            "tpr": 0.72081829
+          },
+          {
+            "fpr": 0.45454545,
+            "tpr": 0.73766546
+          },
+          {
+            "fpr": 0.46991656,
+            "tpr": 0.7521059
+          },
+          {
+            "fpr": 0.52832675,
+            "tpr": 0.7954272
+          },
+          {
+            "fpr": 0.54150198,
+            "tpr": 0.79663057
+          },
+          {
+            "fpr": 0.55028546,
+            "tpr": 0.80505415
+          },
+          {
+            "fpr": 0.56521739,
+            "tpr": 0.81347774
+          },
+          {
+            "fpr": 0.57575758,
+            "tpr": 0.82310469
+          },
+          {
+            "fpr": 0.60166886,
+            "tpr": 0.84476534
+          },
+          {
+            "fpr": 0.609574,
+            "tpr": 0.84717208
+          },
+          {
+            "fpr": 0.65173474,
+            "tpr": 0.87364621
+          },
+          {
+            "fpr": 0.66139657,
+            "tpr": 0.87966306
+          },
+          {
+            "fpr": 0.67501098,
+            "tpr": 0.88327316
+          },
+          {
+            "fpr": 0.70926658,
+            "tpr": 0.90132371
+          },
+          {
+            "fpr": 0.75098814,
+            "tpr": 0.91215403
+          },
+          {
+            "fpr": 0.77206851,
+            "tpr": 0.9253911
+          },
+          {
+            "fpr": 0.78612209,
+            "tpr": 0.93742479
+          },
+          {
+            "fpr": 0.88317962,
+            "tpr": 0.95427196
+          },
+          {
+            "fpr": 0.91523935,
+            "tpr": 0.96750903
+          },
+          {
+            "fpr": 0.93280632,
+            "tpr": 0.9723225
+          },
+          {
+            "fpr": 0.9468599,
+            "tpr": 0.9723225
+          },
+          {
+            "fpr": 0.95256917,
+            "tpr": 0.97593261
+          },
+          {
+            "fpr": 0.96442688,
+            "tpr": 0.98315283
+          },
+          {
+            "fpr": 0.9675011,
+            "tpr": 0.9843562
+          },
+          {
+            "fpr": 0.97013614,
+            "tpr": 0.9843562
+          },
+          {
+            "fpr": 0.97628458,
+            "tpr": 0.98676294
+          },
+          {
+            "fpr": 0.98726394,
+            "tpr": 0.99879663
+          },
+          {
+            "fpr": 0.99604743,
+            "tpr": 1.0
+          },
+          {
+            "fpr": 1.0,
+            "tpr": 1.0
+          }
+        ]
+      },
+      {
+        "type": "line",
+        "title": "ROC misuse",
+        "x_label": "False positive rate",
+        "y_label": "True positive rate",
+        "data": [
+          {
+            "fpr": 0.0,
+            "tpr": 0.0
+          },
+          {
+            "fpr": 0.04533021,
+            "tpr": 0.17668488
+          },
+          {
+            "fpr": 0.10941774,
+            "tpr": 0.34790528
+          },
+          {
+            "fpr": 0.14380617,
+            "tpr": 0.42622951
+          },
+          {
+            "fpr": 0.1590465,
+            "tpr": 0.44626594
+          },
+          {
+            "fpr": 0.20711215,
+            "tpr": 0.47540984
+          },
+          {
+            "fpr": 0.23134037,
+            "tpr": 0.51001821
+          },
+          {
+            "fpr": 0.2692458,
+            "tpr": 0.55373406
+          },
+          {
+            "fpr": 0.27862446,
+            "tpr": 0.5701275
+          },
+          {
+            "fpr": 0.29816335,
+            "tpr": 0.58652095
+          },
+          {
+            "fpr": 0.32981633,
+            "tpr": 0.62112933
+          },
+          {
+            "fpr": 0.35599844,
+            "tpr": 0.64663024
+          },
+          {
+            "fpr": 0.37123877,
+            "tpr": 0.67213115
+          },
+          {
+            "fpr": 0.44939429,
+            "tpr": 0.69945355
+          },
+          {
+            "fpr": 0.48534584,
+            "tpr": 0.72131148
+          },
+          {
+            "fpr": 0.49081673,
+            "tpr": 0.72313297
+          },
+          {
+            "fpr": 0.50801094,
+            "tpr": 0.73406193
+          },
+          {
+            "fpr": 0.53536538,
+            "tpr": 0.73952641
+          },
+          {
+            "fpr": 0.56232903,
+            "tpr": 0.76320583
+          },
+          {
+            "fpr": 0.57796014,
+            "tpr": 0.78324226
+          },
+          {
+            "fpr": 0.58264947,
+            "tpr": 0.78688525
+          },
+          {
+            "fpr": 0.59554513,
+            "tpr": 0.78870674
+          },
+          {
+            "fpr": 0.61664713,
+            "tpr": 0.80510018
+          },
+          {
+            "fpr": 0.64243845,
+            "tpr": 0.8287796
+          },
+          {
+            "fpr": 0.66119578,
+            "tpr": 0.84517304
+          },
+          {
+            "fpr": 0.66588511,
+            "tpr": 0.85063752
+          },
+          {
+            "fpr": 0.67760844,
+            "tpr": 0.87249545
+          },
+          {
+            "fpr": 0.67956233,
+            "tpr": 0.8870674
+          },
+          {
+            "fpr": 0.72215709,
+            "tpr": 0.90710383
+          },
+          {
+            "fpr": 0.72958187,
+            "tpr": 0.91256831
+          },
+          {
+            "fpr": 0.7377882,
+            "tpr": 0.91621129
+          },
+          {
+            "fpr": 0.74716686,
+            "tpr": 0.91985428
+          },
+          {
+            "fpr": 0.75967175,
+            "tpr": 0.92349727
+          },
+          {
+            "fpr": 0.76553341,
+            "tpr": 0.92896175
+          },
+          {
+            "fpr": 0.76905041,
+            "tpr": 0.93260474
+          },
+          {
+            "fpr": 0.77217663,
+            "tpr": 0.93260474
+          },
+          {
+            "fpr": 0.79288785,
+            "tpr": 0.93624772
+          },
+          {
+            "fpr": 0.80851895,
+            "tpr": 0.93806922
+          },
+          {
+            "fpr": 0.81672528,
+            "tpr": 0.93989071
+          },
+          {
+            "fpr": 0.82493161,
+            "tpr": 0.9417122
+          },
+          {
+            "fpr": 0.82844861,
+            "tpr": 0.94535519
+          },
+          {
+            "fpr": 0.92223525,
+            "tpr": 0.95081967
+          },
+          {
+            "fpr": 0.92536147,
+            "tpr": 0.95446266
+          },
+          {
+            "fpr": 0.92809691,
+            "tpr": 0.96174863
+          },
+          {
+            "fpr": 0.93395858,
+            "tpr": 0.96174863
+          },
+          {
+            "fpr": 0.9406018,
+            "tpr": 0.96357013
+          },
+          {
+            "fpr": 0.95310668,
+            "tpr": 0.96903461
+          },
+          {
+            "fpr": 0.95427902,
+            "tpr": 0.9726776
+          },
+          {
+            "fpr": 0.95506057,
+            "tpr": 0.97632058
+          },
+          {
+            "fpr": 0.95857757,
+            "tpr": 0.98178506
+          },
+          {
+            "fpr": 0.96053146,
+            "tpr": 0.98360656
+          },
+          {
+            "fpr": 0.96639312,
+            "tpr": 0.98360656
+          },
+          {
+            "fpr": 0.96912857,
+            "tpr": 0.98542805
+          },
+          {
+            "fpr": 0.97069168,
+            "tpr": 0.98907104
+          },
+          {
+            "fpr": 0.97420868,
+            "tpr": 0.99271403
+          },
+          {
+            "fpr": 0.98202423,
+            "tpr": 0.99453552
+          },
+          {
+            "fpr": 0.99062134,
+            "tpr": 0.99453552
+          },
+          {
+            "fpr": 0.99452911,
+            "tpr": 0.99453552
+          },
+          {
+            "fpr": 0.99843689,
+            "tpr": 0.99635701
+          },
+          {
+            "fpr": 1.0,
+            "tpr": 1.0
+          }
+        ]
+      },
+      {
+        "type": "line",
+        "title": "ROC physical",
+        "x_label": "False positive rate",
+        "y_label": "True positive rate",
+        "data": [
+          {
+            "fpr": 0.0,
+            "tpr": 0.0
+          },
+          {
+            "fpr": 0.00115741,
+            "tpr": 0.00968992
+          },
+          {
+            "fpr": 0.00771605,
+            "tpr": 0.03875969
+          },
+          {
+            "fpr": 0.01466049,
+            "tpr": 0.15891473
+          },
+          {
+            "fpr": 0.01851852,
+            "tpr": 0.1879845
+          },
+          {
+            "fpr": 0.02662037,
+            "tpr": 0.31395349
+          },
+          {
+            "fpr": 0.03626543,
+            "tpr": 0.39341085
+          },
+          {
+            "fpr": 0.03819444,
+            "tpr": 0.4127907
+          },
+          {
+            "fpr": 0.04089506,
+            "tpr": 0.4244186
+          },
+          {
+            "fpr": 0.04475309,
+            "tpr": 0.46899225
+          },
+          {
+            "fpr": 0.05169753,
+            "tpr": 0.48062016
+          },
+          {
+            "fpr": 0.05825617,
+            "tpr": 0.50581395
+          },
+          {
+            "fpr": 0.0632716,
+            "tpr": 0.57945736
+          },
+          {
+            "fpr": 0.06867284,
+            "tpr": 0.58139535
+          },
+          {
+            "fpr": 0.07908951,
+            "tpr": 0.59883721
+          },
+          {
+            "fpr": 0.0933642,
+            "tpr": 0.63953488
+          },
+          {
+            "fpr": 0.09529321,
+            "tpr": 0.64534884
+          },
+          {
+            "fpr": 0.10609568,
+            "tpr": 0.65503876
+          },
+          {
+            "fpr": 0.12152778,
+            "tpr": 0.69186047
+          },
+          {
+            "fpr": 0.15162037,
+            "tpr": 0.75193798
+          },
+          {
+            "fpr": 0.15817901,
+            "tpr": 0.76356589
+          },
+          {
+            "fpr": 0.17708333,
+            "tpr": 0.79263566
+          },
+          {
+            "fpr": 0.17978395,
+            "tpr": 0.79844961
+          },
+          {
+            "fpr": 0.1878858,
+            "tpr": 0.80813953
+          },
+          {
+            "fpr": 0.19097222,
+            "tpr": 0.82170543
+          },
+          {
+            "fpr": 0.19560185,
+            "tpr": 0.82364341
+          },
+          {
+            "fpr": 0.20486111,
+            "tpr": 0.84108527
+          },
+          {
+            "fpr": 0.20949074,
+            "tpr": 0.85658915
+          },
+          {
+            "fpr": 0.21373457,
+            "tpr": 0.86434109
+          },
+          {
+            "fpr": 0.21682099,
+            "tpr": 0.86821705
+          },
+          {
+            "fpr": 0.22029321,
+            "tpr": 0.87790698
+          },
+          {
+            "fpr": 0.22299383,
+            "tpr": 0.88953488
+          },
+          {
+            "fpr": 0.23032407,
+            "tpr": 0.89728682
+          },
+          {
+            "fpr": 0.23765432,
+            "tpr": 0.89728682
+          },
+          {
+            "fpr": 0.25810185,
+            "tpr": 0.92248062
+          },
+          {
+            "fpr": 0.32716049,
+            "tpr": 0.94573643
+          },
+          {
+            "fpr": 0.33101852,
+            "tpr": 0.94767442
+          },
+          {
+            "fpr": 0.33641975,
+            "tpr": 0.95155039
+          },
+          {
+            "fpr": 0.34104938,
+            "tpr": 0.95542636
+          },
+          {
+            "fpr": 0.36689815,
+            "tpr": 0.95542636
+          },
+          {
+            "fpr": 0.375,
+            "tpr": 0.95542636
+          },
+          {
+            "fpr": 0.41435185,
+            "tpr": 0.95542636
+          },
+          {
+            "fpr": 0.4382716,
+            "tpr": 0.96317829
+          },
+          {
+            "fpr": 0.44174383,
+            "tpr": 0.96317829
+          },
+          {
+            "fpr": 0.45408951,
+            "tpr": 0.96705426
+          },
+          {
+            "fpr": 0.50733025,
+            "tpr": 0.97286822
+          },
+          {
+            "fpr": 0.56635802,
+            "tpr": 0.97286822
+          },
+          {
+            "fpr": 0.5787037,
+            "tpr": 0.97674419
+          },
+          {
+            "fpr": 0.58217593,
+            "tpr": 0.97674419
+          },
+          {
+            "fpr": 0.61921296,
+            "tpr": 0.97868217
+          },
+          {
+            "fpr": 0.65316358,
+            "tpr": 0.98062016
+          },
+          {
+            "fpr": 0.66396605,
+            "tpr": 0.98062016
+          },
+          {
+            "fpr": 0.7507716,
+            "tpr": 0.98449612
+          },
+          {
+            "fpr": 0.76350309,
+            "tpr": 0.98837209
+          },
+          {
+            "fpr": 0.7820216,
+            "tpr": 0.99224806
+          },
+          {
+            "fpr": 0.82214506,
+            "tpr": 0.99224806
+          },
+          {
+            "fpr": 0.92746914,
+            "tpr": 0.99806202
+          },
+          {
+            "fpr": 0.95023148,
+            "tpr": 0.99806202
+          },
+          {
+            "fpr": 0.97453704,
+            "tpr": 0.99806202
+          },
+          {
+            "fpr": 1.0,
+            "tpr": 1.0
+          }
+        ]
+      }
+    ]
+  },
+  "yields": "A business's profile predicts some attack types much better than others: physical reaches AUC 0.89 while misuse is only 0.69. CyCRS runs these models on the user's profile to rank attack categories by probability, then sends each category to the impact model to price it.",
+  "feeds": [
+    "decision"
+  ],
+  "limitations": [
+    "Asset flags record what was hit in past incidents and are used as a proxy for what a business runs.",
+    "Probabilities are conditional on an incident happening; the chance of having an incident at all comes from annual_incident_prob.",
+    "VCDB over represents large and US organisations."
+  ]
+}
