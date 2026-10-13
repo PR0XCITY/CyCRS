@@ -1,0 +1,30 @@
+values_file: data/sources/values.csv
+controls_file: data/raw/controls.csv
+cases_file: data/raw/cases.csv
+
+inputs:
+  breach_total_cost_inr:
+    key: breach_total_cost_inr
+  breach_avg_records:
+    key: breach_avg_records
+  per_record_cost_inr:
+    derive: divide
+    of: [breach_total_cost_inr, breach_avg_records]
+  annual_incident_prob:
+    key: annual_incident_prob
+  usd_inr:
+    key: usd_inr
+
+effectiveness:
+  mfa: eff_mfa
+  offline_backups: eff_offline_backups
+  patch_management: eff_patch_management
+  endpoint_protection: eff_endpoint_protection
+  phishing_training: eff_phishing_training
+  email_filtering: eff_email_filtering
+  password_manager: eff_password_manager
+  router_firewall_hardening: eff_router_firewall_hardening
+  access_reviews: eff_access_reviews
+  device_encryption: eff_device_encryption
+  upi_fraud_controls: eff_upi_fraud_controls
+  incident_response_plan: eff_incident_response_plan
