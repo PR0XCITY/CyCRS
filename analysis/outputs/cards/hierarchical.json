@@ -1,0 +1,321 @@
+{
+  "id": "hierarchical",
+  "title": "Checking the personas another way",
+  "module": "5: Hierarchical clustering",
+  "stage": "segment",
+  "used_live": false,
+  "order": 12,
+  "question": "Does a different clustering method find the same business personas?",
+  "data_in": {
+    "dataset": "500 random VCDB incidents (seed 42)",
+    "n_rows": 500,
+    "variables": [
+      {
+        "name": "profile features",
+        "type": "binary",
+        "scale": "nominal",
+        "transform": "same as K-means"
+      }
+    ],
+    "prep_steps": [
+      "Random sample of 500 incidents because Ward linkage needs all pairwise distances",
+      "Tree cut at k = 8"
+    ],
+    "sample_rows": [
+      {
+        "sector_health_care_and_social_assistance": 1.0,
+        "sector_public_administration": 0.0,
+        "sector_educational_services": 0.0,
+        "sector_finance_and_insurance": 0.0,
+        "sector_information": 0.0,
+        "sector_retail_trade": 0.0,
+        "sector_professional__scientific__and_technical_services": 0.0,
+        "sector_manufacturing": 0.0
+      },
+      {
+        "sector_health_care_and_social_assistance": 1.0,
+        "sector_public_administration": 0.0,
+        "sector_educational_services": 0.0,
+        "sector_finance_and_insurance": 0.0,
+        "sector_information": 0.0,
+        "sector_retail_trade": 0.0,
+        "sector_professional__scientific__and_technical_services": 0.0,
+        "sector_manufacturing": 0.0
+      },
+      {
+        "sector_health_care_and_social_assistance": 0.0,
+        "sector_public_administration": 0.0,
+        "sector_educational_services": 1.0,
+        "sector_finance_and_insurance": 0.0,
+        "sector_information": 0.0,
+        "sector_retail_trade": 0.0,
+        "sector_professional__scientific__and_technical_services": 0.0,
+        "sector_manufacturing": 0.0
+      },
+      {
+        "sector_health_care_and_social_assistance": 1.0,
+        "sector_public_administration": 0.0,
+        "sector_educational_services": 0.0,
+        "sector_finance_and_insurance": 0.0,
+        "sector_information": 0.0,
+        "sector_retail_trade": 0.0,
+        "sector_professional__scientific__and_technical_services": 0.0,
+        "sector_manufacturing": 0.0
+      },
+      {
+        "sector_health_care_and_social_assistance": 0.0,
+        "sector_public_administration": 0.0,
+        "sector_educational_services": 0.0,
+        "sector_finance_and_insurance": 0.0,
+        "sector_information": 0.0,
+        "sector_retail_trade": 0.0,
+        "sector_professional__scientific__and_technical_services": 0.0,
+        "sector_manufacturing": 0.0
+      },
+      {
+        "sector_health_care_and_social_assistance": 0.0,
+        "sector_public_administration": 0.0,
+        "sector_educational_services": 0.0,
+        "sector_finance_and_insurance": 1.0,
+        "sector_information": 0.0,
+        "sector_retail_trade": 0.0,
+        "sector_professional__scientific__and_technical_services": 0.0,
+        "sector_manufacturing": 0.0
+      },
+      {
+        "sector_health_care_and_social_assistance": 1.0,
+        "sector_public_administration": 0.0,
+        "sector_educational_services": 0.0,
+        "sector_finance_and_insurance": 0.0,
+        "sector_information": 0.0,
+        "sector_retail_trade": 0.0,
+        "sector_professional__scientific__and_technical_services": 0.0,
+        "sector_manufacturing": 0.0
+      },
+      {
+        "sector_health_care_and_social_assistance": 0.0,
+        "sector_public_administration": 0.0,
+        "sector_educational_services": 0.0,
+        "sector_finance_and_insurance": 0.0,
+        "sector_information": 0.0,
+        "sector_retail_trade": 0.0,
+        "sector_professional__scientific__and_technical_services": 0.0,
+        "sector_manufacturing": 0.0
+      }
+    ]
+  },
+  "why": "Ward linkage merges the pair of groups that least increases within-group variance, the same quantity K-means minimises, so agreement between the two is a fair test of persona stability. The adjusted Rand index between the two labelings is 0.44, where 1 is identical and 0 is chance.",
+  "data_properties": [
+    {
+      "name": "Adjusted Rand index vs K-means",
+      "value": 0.43919997,
+      "implication": "Personas are partly stable."
+    }
+  ],
+  "alternatives": [
+    {
+      "model": "Single or complete linkage",
+      "why_not": "On 0/1 data with many tied distances they chain or produce one giant cluster; Ward matches the K-means objective."
+    },
+    {
+      "model": "Full-data hierarchy",
+      "why_not": "10596 incidents need about 56,137,608 distances; a 500-row sample is enough to test stability."
+    }
+  ],
+  "formula_tex": [
+    {
+      "label": "Ward merge cost",
+      "tex": "\\Delta(A,B)=\\frac{n_A n_B}{n_A+n_B}\\lVert \\mu_A-\\mu_B\\rVert^2"
+    }
+  ],
+  "assumptions": [
+    {
+      "check": "Agreement with K-means (ARI)",
+      "statistic": 0.43919997,
+      "p_value": null,
+      "verdict": "partly stable",
+      "action_taken": "Reported with the personas."
+    }
+  ],
+  "results": {
+    "key_numbers": {
+      "ari": 0.43919997,
+      "k": 8,
+      "sample": 500
+    },
+    "tables": [
+      {
+        "title": "K-means (rows) vs Ward (columns)",
+        "columns": [
+          "kmeans",
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7"
+        ],
+        "rows": [
+          [
+            0,
+            0,
+            2,
+            0,
+            0,
+            37,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            4,
+            5,
+            0,
+            49,
+            0,
+            22,
+            0
+          ],
+          [
+            2,
+            29,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            5,
+            1,
+            8,
+            62,
+            6,
+            0,
+            0,
+            19
+          ],
+          [
+            4,
+            0,
+            0,
+            0,
+            0,
+            0,
+            77,
+            0,
+            9
+          ],
+          [
+            5,
+            0,
+            26,
+            0,
+            0,
+            0,
+            11,
+            5,
+            23
+          ],
+          [
+            6,
+            25,
+            0,
+            5,
+            0,
+            3,
+            0,
+            10,
+            0
+          ],
+          [
+            7,
+            0,
+            0,
+            14,
+            0,
+            0,
+            10,
+            0,
+            33
+          ]
+        ]
+      }
+    ],
+    "charts": [
+      {
+        "type": "bar",
+        "title": "Last 10 merges",
+        "x_label": "Merge",
+        "y_label": "Ward distance",
+        "data": [
+          {
+            "x": 1,
+            "y": 7.14250264,
+            "size": 84
+          },
+          {
+            "x": 2,
+            "y": 7.17072509,
+            "size": 95
+          },
+          {
+            "x": 3,
+            "y": 7.36290452,
+            "size": 59
+          },
+          {
+            "x": 4,
+            "y": 7.50418881,
+            "size": 65
+          },
+          {
+            "x": 5,
+            "y": 8.11462568,
+            "size": 121
+          },
+          {
+            "x": 6,
+            "y": 9.7507284,
+            "size": 124
+          },
+          {
+            "x": 7,
+            "y": 10.04193224,
+            "size": 157
+          },
+          {
+            "x": 8,
+            "y": 11.13430174,
+            "size": 281
+          },
+          {
+            "x": 9,
+            "y": 14.40604268,
+            "size": 219
+          },
+          {
+            "x": 10,
+            "y": 15.32765043,
+            "size": 500
+          }
+        ]
+      }
+    ]
+  },
+  "yields": "An independent method only partly recovers the personas (adjusted Rand index 0.44), so their broad shape is real but the exact boundaries depend on the algorithm. CyCRS uses them for instant assignment and presents them as rough groupings.",
+  "feeds": [
+    "personas-kmeans"
+  ],
+  "limitations": [
+    "Based on a 500-row sample.",
+    "Many identical 0/1 profiles create tied distances."
+  ]
+}
