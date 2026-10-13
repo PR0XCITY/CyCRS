@@ -1,0 +1,414 @@
+{
+  "id": "hypothesis-tests",
+  "title": "Testing what really differs",
+  "module": "2: Hypothesis testing",
+  "stage": "explore",
+  "used_live": false,
+  "order": 5,
+  "question": "Which differences in attack type, breach size, detection time and regional crime are real rather than chance?",
+  "data_in": {
+    "dataset": "VCDB validated incidents and NCRB Crime in India 2024 state tables",
+    "n_rows": 10596,
+    "variables": [
+      {
+        "name": "action_primary",
+        "type": "categorical",
+        "scale": "nominal",
+        "transform": "none"
+      },
+      {
+        "name": "size",
+        "type": "categorical",
+        "scale": "ordinal",
+        "transform": "none"
+      },
+      {
+        "name": "sector",
+        "type": "categorical",
+        "scale": "nominal",
+        "transform": "none"
+      },
+      {
+        "name": "data_total",
+        "type": "numeric",
+        "scale": "ratio",
+        "transform": "none"
+      },
+      {
+        "name": "discovery_days",
+        "type": "numeric",
+        "scale": "ratio",
+        "transform": "log10(1 + x)"
+      },
+      {
+        "name": "v_ransomware",
+        "type": "binary",
+        "scale": "nominal",
+        "transform": "none"
+      },
+      {
+        "name": "crime_rate_2024",
+        "type": "numeric",
+        "scale": "ratio",
+        "transform": "none"
+      }
+    ],
+    "prep_steps": [
+      "Primary action is the single action category, or multiple; unknown dropped for chi-square tests",
+      "Action rows with fewer than 5 incidents dropped from contingency tables",
+      "Internal vs external compares incidents with only one actor class",
+      "States and UTs grouped into five regions by CyCRS (Chhattisgarh in East, Madhya Pradesh in West)",
+      "Holm correction applied across all tests in the table"
+    ],
+    "sample_rows": [
+      {
+        "action_primary": "error",
+        "size": "large",
+        "sector": "Public Administration",
+        "actor_type": "internal",
+        "data_total": 1.0,
+        "v_ransomware": 0
+      },
+      {
+        "action_primary": "misuse",
+        "size": "medium",
+        "sector": "Public Administration",
+        "actor_type": "internal",
+        "data_total": 1.0,
+        "v_ransomware": 0
+      },
+      {
+        "action_primary": "error",
+        "size": "small",
+        "sector": "Arts, Entertainment, and Recreation",
+        "actor_type": "external",
+        "data_total": 1.0,
+        "v_ransomware": 0
+      },
+      {
+        "action_primary": "misuse",
+        "size": "unknown",
+        "sector": "Health Care and Social Assistance",
+        "actor_type": "internal",
+        "data_total": 1.0,
+        "v_ransomware": 0
+      },
+      {
+        "action_primary": "error",
+        "size": "large",
+        "sector": "Public Administration",
+        "actor_type": "internal",
+        "data_total": 1.0,
+        "v_ransomware": 0
+      },
+      {
+        "action_primary": "hacking",
+        "size": "unknown",
+        "sector": "Professional, Scientific, and Technical Services",
+        "actor_type": "external",
+        "data_total": 3550.0,
+        "v_ransomware": 0
+      },
+      {
+        "action_primary": "unknown",
+        "size": "large",
+        "sector": "Public Administration",
+        "actor_type": "unknown",
+        "data_total": 1298.0,
+        "v_ransomware": 0
+      },
+      {
+        "action_primary": "misuse",
+        "size": "large",
+        "sector": "Public Administration",
+        "actor_type": "internal",
+        "data_total": 1.0,
+        "v_ransomware": 0
+      }
+    ]
+  },
+  "why": "Normality checks fail for breach size (internal p 2.1e-42) and for log discovery time (p 3.6e-15), so rank-based tests (Mann-Whitney, Kruskal-Wallis) are primary. Attack type, size and sector are categorical, so association is tested with chi-square and sized with Cramer's V, and ransomware share is a proportion, so a two-proportion z-test fits. Running 8 tests raises the chance of a false alarm, so Holm-adjusted p-values decide.",
+  "data_properties": [
+    {
+      "name": "Shapiro-Wilk p, log records lost, internal",
+      "value": 0.0,
+      "implication": "Not normal: use a rank test."
+    },
+    {
+      "name": "Shapiro-Wilk p, log discovery days",
+      "value": 0.0,
+      "implication": "Not normal: Kruskal-Wallis is primary."
+    },
+    {
+      "name": "Levene p, discovery days by sector",
+      "value": 0.0,
+      "implication": "Unequal spreads also weaken ANOVA."
+    },
+    {
+      "name": "Tests rejected after Holm",
+      "value": "6 of 8",
+      "implication": "Number of differences treated as real."
+    }
+  ],
+  "alternatives": [
+    {
+      "model": "Two-sample t-test for breach size",
+      "why_not": "Assumes normal data; Shapiro-Wilk rejects normality even after the log transform."
+    },
+    {
+      "model": "One-way ANOVA as primary test for discovery time",
+      "why_not": "Normality and equal variance fail (Levene p 1.5e-09); ANOVA is kept only as a comparison row."
+    },
+    {
+      "model": "Fisher exact test",
+      "why_not": "Expected counts are large (minimum 0.2), so chi-square is accurate and Fisher is unnecessary."
+    }
+  ],
+  "formula_tex": [
+    {
+      "label": "Chi-square",
+      "tex": "\\chi^2 = \\sum \\frac{(O-E)^2}{E}"
+    },
+    {
+      "label": "Cramer's V",
+      "tex": "V = \\sqrt{\\frac{\\chi^2}{n\\,(\\min(r,c)-1)}}"
+    },
+    {
+      "label": "Mann-Whitney U",
+      "tex": "U = n_1 n_2 + \\frac{n_1(n_1+1)}{2} - R_1"
+    },
+    {
+      "label": "Kruskal-Wallis H",
+      "tex": "H = \\frac{12}{N(N+1)}\\sum \\frac{R_j^2}{n_j} - 3(N+1)"
+    },
+    {
+      "label": "Two-proportion z",
+      "tex": "z = \\frac{\\hat p_1-\\hat p_2}{\\sqrt{\\hat p(1-\\hat p)(1/n_1+1/n_2)}}"
+    },
+    {
+      "label": "Holm adjustment",
+      "tex": "p_{(i)}^{adj} = \\max_{j \\le i}\\min\\left(1, (m-j+1)\\,p_{(j)}\\right)"
+    }
+  ],
+  "assumptions": [
+    {
+      "check": "Shapiro-Wilk on log records lost, internal actors",
+      "statistic": 0.86896307,
+      "p_value": 0.0,
+      "verdict": "not normal",
+      "action_taken": "Mann-Whitney U instead of t-test."
+    },
+    {
+      "check": "Shapiro-Wilk on log records lost, external actors",
+      "statistic": 0.98299201,
+      "p_value": 0.0,
+      "verdict": "not normal",
+      "action_taken": "Mann-Whitney U instead of t-test."
+    },
+    {
+      "check": "Shapiro-Wilk on log discovery days",
+      "statistic": 0.97136964,
+      "p_value": 0.0,
+      "verdict": "not normal",
+      "action_taken": "Kruskal-Wallis primary, ANOVA for comparison."
+    },
+    {
+      "check": "Levene equal variance, discovery by sector",
+      "statistic": 8.01647514,
+      "p_value": 0.0,
+      "verdict": "unequal",
+      "action_taken": "Rank-based test preferred."
+    },
+    {
+      "check": "Chi-square minimum expected count (size, sector)",
+      "statistic": 0.23485267,
+      "p_value": null,
+      "verdict": "some cells below 5",
+      "action_taken": "Rare action rows dropped before testing."
+    }
+  ],
+  "results": {
+    "key_numbers": {
+      "tests": 8,
+      "rejected_holm": 6,
+      "ransomware_share_2020_on": 0.55174353,
+      "ransomware_share_before_2020": 0.02438195
+    },
+    "tables": [
+      {
+        "title": "Hypothesis tests",
+        "columns": [
+          "question",
+          "h0",
+          "test",
+          "why_this_test",
+          "statistic",
+          "p_value",
+          "p_holm",
+          "effect",
+          "decision",
+          "meaning"
+        ],
+        "rows": [
+          [
+            "Does the kind of attack depend on business size?",
+            "Action category is independent of victim size",
+            "Chi-square test of independence",
+            "Both variables are categorical (nominal action, size band); 7540 incidents, minimum expected count 1.2",
+            498.6099,
+            0.0,
+            0.0,
+            "Cramer's V 0.182 (small)",
+            "reject H0",
+            "Small, medium and large organisations face a different attack mix, so CyCRS weights threats by size."
+          ],
+          [
+            "Does the kind of attack depend on the sector?",
+            "Action category is independent of sector",
+            "Chi-square test of independence",
+            "Both variables are categorical; top 8 sectors, 9061 incidents, minimum expected count 0.2",
+            3910.1484,
+            0.0,
+            0.0,
+            "Cramer's V 0.248 (small)",
+            "reject H0",
+            "Each sector has its own attack mix, so CyCRS starts from the sector's own threat profile."
+          ],
+          [
+            "Do insiders or outsiders cause bigger breaches?",
+            "Records lost has the same distribution for internal and external actors",
+            "Mann-Whitney U",
+            "Shapiro-Wilk rejects normality even on the log scale (internal p 2.1e-42, external p 7.1e-16), so a rank test replaces the t-test",
+            1448179.5,
+            0.0,
+            0.0,
+            "rank-biserial r 0.516 (large)",
+            "reject H0",
+            "Breach size differs by who caused it, so insider and outsider threats get different loss estimates."
+          ],
+          [
+            "Do some sectors take longer to notice a breach?",
+            "Discovery time has the same distribution in every sector",
+            "Kruskal-Wallis H with Dunn post-hoc (Holm)",
+            "Shapiro-Wilk rejects normality of log discovery days (p 3.6e-15) and Levene p is 1.5e-09, so the rank-based test is primary",
+            15.3844,
+            0.03137528,
+            0.06275056,
+            "epsilon squared 0.007 (negligible)",
+            "do not reject H0",
+            "Sectors detect breaches at similar speeds."
+          ],
+          [
+            "Same question, parametric comparison",
+            "Mean log discovery time is equal across sectors",
+            "One-way ANOVA (comparison only)",
+            "Shown to compare with Kruskal-Wallis; its normality assumption fails here",
+            2.6204,
+            0.01090424,
+            0.03271271,
+            "eta squared 0.014 (small)",
+            "reject H0",
+            "The parametric test agrees that sectors differ."
+          ],
+          [
+            "Has ransomware become more common since 2020?",
+            "The share of incidents involving ransomware is the same before and from 2020",
+            "Two-proportion z-test",
+            "The outcome is binary (ransomware or not) with large samples (1778 and 8818 incidents)",
+            64.1063,
+            0.0,
+            0.0,
+            "Cohen's h 1.361 (large)",
+            "reject H0",
+            "Ransomware share moved from 2.4% before 2020 to 55.2% from 2020, so backups and endpoint protection rank higher."
+          ],
+          [
+            "Is cyber crime more common in some regions of India?",
+            "Mean cyber crime rate per lakh is equal across the five regions",
+            "One-way ANOVA with Tukey HSD",
+            "Requested parametric comparison of a ratio-scale rate over 36 states and UTs; Shapiro p 9.3e-11 is reported as a caution",
+            2.4629,
+            0.06576056,
+            0.06576056,
+            "eta squared 0.241 (large)",
+            "do not reject H0",
+            "Regional rate differences are within chance, so region is a weak signal."
+          ],
+          [
+            "Do regions differ in the type of cyber crime?",
+            "Crime-type mix is independent of region",
+            "Chi-square test of independence",
+            "Counts of 101928 cases in 5 crime types by 5 regions",
+            29880.0478,
+            0.0,
+            0.0,
+            "Cramer's V 0.271 (small)",
+            "reject H0",
+            "The crime mix differs by region, so local crime types are shown to the user."
+          ]
+        ]
+      }
+    ],
+    "charts": [
+      {
+        "type": "bar",
+        "title": "Effect size by test",
+        "x_label": "Test",
+        "y_label": "Effect size",
+        "data": [
+          {
+            "x": "Does the kind of attack depend on business size?",
+            "y": 0.18183596,
+            "effect": "Cramer's V"
+          },
+          {
+            "x": "Does the kind of attack depend on the sector?",
+            "y": 0.24829017,
+            "effect": "Cramer's V"
+          },
+          {
+            "x": "Do insiders or outsiders cause bigger breaches?",
+            "y": 0.51627582,
+            "effect": "rank-biserial r"
+          },
+          {
+            "x": "Do some sectors take longer to notice a breach?",
+            "y": 0.00663852,
+            "effect": "epsilon squared"
+          },
+          {
+            "x": "Same question, parametric comparison",
+            "y": 0.01431535,
+            "effect": "eta squared"
+          },
+          {
+            "x": "Has ransomware become more common since 2020?",
+            "y": 1.36089143,
+            "effect": "Cohen's h"
+          },
+          {
+            "x": "Is cyber crime more common in some regions of India?",
+            "y": 0.2411541,
+            "effect": "eta squared"
+          },
+          {
+            "x": "Do regions differ in the type of cyber crime?",
+            "y": 0.27071598,
+            "effect": "Cramer's V"
+          }
+        ]
+      }
+    ]
+  },
+  "yields": "6 of 8 tested differences hold up after correcting for multiple tests: attack mix by business size, attack mix by sector, breach size by insider or outsider, detection time by sector (ANOVA), the rise in ransomware share, crime type mix by Indian region, while detection time by sector (Kruskal-Wallis), crime rate by Indian region could be chance. CyCRS uses only the differences that survive as inputs for tailoring its advice, and shows the effect size so a statistically real but tiny difference is not oversold.",
+  "feeds": [
+    "attack-likelihood",
+    "breach-impact"
+  ],
+  "limitations": [
+    "VCDB is not a random sample of businesses, so tests describe reported incidents.",
+    "With thousands of incidents even negligible differences can be significant; read the effect size.",
+    "The five-region grouping of states is a CyCRS choice and affects the regional tests.",
+    "857 incidents are dated 2023 and 91% of them involve ransomware, so the rise in ransomware share may partly reflect how VCDB collected recent cases."
+  ]
+}

@@ -1,0 +1,572 @@
+{
+  "id": "conditional-probability",
+  "title": "Attack chances by sector",
+  "module": "2: Probability",
+  "stage": "explore",
+  "used_live": true,
+  "order": 4,
+  "question": "Given a business's sector, what share of past incidents involved each kind of attack?",
+  "data_in": {
+    "dataset": "VCDB validated incidents in the top 8 sectors",
+    "n_rows": 9266,
+    "variables": [
+      {
+        "name": "sector",
+        "type": "categorical",
+        "scale": "nominal",
+        "transform": "none"
+      },
+      {
+        "name": "action_*",
+        "type": "binary",
+        "scale": "nominal",
+        "transform": "none"
+      }
+    ],
+    "prep_steps": [
+      "Kept incidents in the 8 most common known sectors",
+      "Each probability is the share of that sector's incidents with the action flag set"
+    ],
+    "sample_rows": [
+      {
+        "sector": "Health Care and Social Assistance",
+        "action_hacking": 1,
+        "action_malware": 0,
+        "action_social": 0,
+        "action_error": 0,
+        "action_misuse": 0,
+        "action_physical": 0,
+        "action_environmental": 0
+      },
+      {
+        "sector": "Information",
+        "action_hacking": 1,
+        "action_malware": 0,
+        "action_social": 1,
+        "action_error": 0,
+        "action_misuse": 0,
+        "action_physical": 0,
+        "action_environmental": 0
+      },
+      {
+        "sector": "Retail Trade",
+        "action_hacking": 0,
+        "action_malware": 1,
+        "action_social": 0,
+        "action_error": 0,
+        "action_misuse": 0,
+        "action_physical": 0,
+        "action_environmental": 0
+      },
+      {
+        "sector": "Real Estate and Rental and Leasing",
+        "action_hacking": 0,
+        "action_malware": 0,
+        "action_social": 0,
+        "action_error": 1,
+        "action_misuse": 1,
+        "action_physical": 0,
+        "action_environmental": 0
+      },
+      {
+        "sector": "Public Administration",
+        "action_hacking": 0,
+        "action_malware": 0,
+        "action_social": 0,
+        "action_error": 1,
+        "action_misuse": 0,
+        "action_physical": 0,
+        "action_environmental": 0
+      },
+      {
+        "sector": "Health Care and Social Assistance",
+        "action_hacking": 1,
+        "action_malware": 0,
+        "action_social": 0,
+        "action_error": 0,
+        "action_misuse": 0,
+        "action_physical": 0,
+        "action_environmental": 0
+      },
+      {
+        "sector": "Arts, Entertainment, and Recreation",
+        "action_hacking": 0,
+        "action_malware": 1,
+        "action_social": 0,
+        "action_error": 0,
+        "action_misuse": 0,
+        "action_physical": 0,
+        "action_environmental": 0
+      },
+      {
+        "sector": "Educational Services",
+        "action_hacking": 0,
+        "action_malware": 0,
+        "action_social": 0,
+        "action_error": 1,
+        "action_misuse": 0,
+        "action_physical": 0,
+        "action_environmental": 0
+      }
+    ]
+  },
+  "why": "Sector and action category are both categorical, so the simplest honest estimate of P(action | sector) is the observed share within each sector. Every top sector has at least 271 incidents, enough for stable shares, and the chi-square test finds attack mix depends on sector (Cramer's V 0.25).",
+  "data_properties": [
+    {
+      "name": "Smallest sector sample",
+      "value": 271,
+      "implication": "Shares are estimated from at least this many incidents."
+    },
+    {
+      "name": "Top attack in Health Care and Social Assistance",
+      "value": "physical (0.27)",
+      "implication": "Leading threat for the largest sector."
+    },
+    {
+      "name": "Cramer's V, action vs sector",
+      "value": 0.2483,
+      "implication": "Sector changes the attack mix."
+    }
+  ],
+  "alternatives": [
+    {
+      "model": "One overall attack mix for everyone",
+      "why_not": "The chi-square test rejects independence (p 0), so ignoring sector loses information."
+    },
+    {
+      "model": "Logistic regression per action",
+      "why_not": "Used later for the live model; this table is the transparent reference it must beat."
+    }
+  ],
+  "formula_tex": [
+    {
+      "label": "Conditional probability",
+      "tex": "P(A \\mid S) = \\frac{P(A \\cap S)}{P(S)} \\approx \\frac{n_{A,S}}{n_S}"
+    }
+  ],
+  "assumptions": [
+    {
+      "check": "Smallest sector sample size",
+      "statistic": 271.0,
+      "p_value": null,
+      "verdict": "adequate",
+      "action_taken": "No smoothing needed for the top 8 sectors."
+    }
+  ],
+  "results": {
+    "key_numbers": {
+      "n_Health Care and Social Assistance": 2564,
+      "n_Public Administration": 2403,
+      "n_Educational Services": 1155,
+      "n_Finance and Insurance": 980,
+      "n_Information": 876,
+      "n_Retail Trade": 529,
+      "n_Professional, Scientific, and Technical Services": 488,
+      "n_Manufacturing": 271
+    },
+    "tables": [
+      {
+        "title": "P(action category | sector)",
+        "columns": [
+          "sector",
+          "hacking",
+          "malware",
+          "social",
+          "error",
+          "misuse",
+          "physical",
+          "environmental",
+          "n"
+        ],
+        "rows": [
+          [
+            "Health Care and Social Assistance",
+            0.14,
+            0.0885,
+            0.0566,
+            0.2672,
+            0.2523,
+            0.2722,
+            0.0012,
+            2564
+          ],
+          [
+            "Public Administration",
+            0.2147,
+            0.0957,
+            0.0807,
+            0.4648,
+            0.2156,
+            0.0774,
+            0.0008,
+            2403
+          ],
+          [
+            "Educational Services",
+            0.7022,
+            0.5939,
+            0.0424,
+            0.1316,
+            0.0424,
+            0.0649,
+            0.0,
+            1155
+          ],
+          [
+            "Finance and Insurance",
+            0.3133,
+            0.1347,
+            0.0531,
+            0.2143,
+            0.1337,
+            0.2755,
+            0.0,
+            980
+          ],
+          [
+            "Information",
+            0.6575,
+            0.097,
+            0.0605,
+            0.1929,
+            0.0776,
+            0.0194,
+            0.0046,
+            876
+          ],
+          [
+            "Retail Trade",
+            0.3081,
+            0.1153,
+            0.0321,
+            0.121,
+            0.1021,
+            0.397,
+            0.0,
+            529
+          ],
+          [
+            "Professional, Scientific, and Technical Services",
+            0.4734,
+            0.1844,
+            0.0697,
+            0.2295,
+            0.1352,
+            0.0738,
+            0.0,
+            488
+          ],
+          [
+            "Manufacturing",
+            0.4096,
+            0.1808,
+            0.1181,
+            0.1328,
+            0.2103,
+            0.1255,
+            0.0,
+            271
+          ]
+        ]
+      }
+    ],
+    "charts": [
+      {
+        "type": "heatmap",
+        "title": "P(action | sector)",
+        "x_label": "Action category",
+        "y_label": "Sector",
+        "data": [
+          {
+            "x": "hacking",
+            "y": "Health Care and Social Assistance",
+            "value": 0.1400156
+          },
+          {
+            "x": "malware",
+            "y": "Health Care and Social Assistance",
+            "value": 0.08853354
+          },
+          {
+            "x": "social",
+            "y": "Health Care and Social Assistance",
+            "value": 0.05655226
+          },
+          {
+            "x": "error",
+            "y": "Health Care and Social Assistance",
+            "value": 0.26716069
+          },
+          {
+            "x": "misuse",
+            "y": "Health Care and Social Assistance",
+            "value": 0.25234009
+          },
+          {
+            "x": "physical",
+            "y": "Health Care and Social Assistance",
+            "value": 0.27223089
+          },
+          {
+            "x": "environmental",
+            "y": "Health Care and Social Assistance",
+            "value": 0.00117005
+          },
+          {
+            "x": "hacking",
+            "y": "Public Administration",
+            "value": 0.21473159
+          },
+          {
+            "x": "malware",
+            "y": "Public Administration",
+            "value": 0.09571369
+          },
+          {
+            "x": "social",
+            "y": "Public Administration",
+            "value": 0.08073242
+          },
+          {
+            "x": "error",
+            "y": "Public Administration",
+            "value": 0.46483562
+          },
+          {
+            "x": "misuse",
+            "y": "Public Administration",
+            "value": 0.21556388
+          },
+          {
+            "x": "physical",
+            "y": "Public Administration",
+            "value": 0.07740325
+          },
+          {
+            "x": "environmental",
+            "y": "Public Administration",
+            "value": 0.00083229
+          },
+          {
+            "x": "hacking",
+            "y": "Educational Services",
+            "value": 0.7021645
+          },
+          {
+            "x": "malware",
+            "y": "Educational Services",
+            "value": 0.59393939
+          },
+          {
+            "x": "social",
+            "y": "Educational Services",
+            "value": 0.04242424
+          },
+          {
+            "x": "error",
+            "y": "Educational Services",
+            "value": 0.13160173
+          },
+          {
+            "x": "misuse",
+            "y": "Educational Services",
+            "value": 0.04242424
+          },
+          {
+            "x": "physical",
+            "y": "Educational Services",
+            "value": 0.06493506
+          },
+          {
+            "x": "environmental",
+            "y": "Educational Services",
+            "value": 0.0
+          },
+          {
+            "x": "hacking",
+            "y": "Finance and Insurance",
+            "value": 0.31326531
+          },
+          {
+            "x": "malware",
+            "y": "Finance and Insurance",
+            "value": 0.13469388
+          },
+          {
+            "x": "social",
+            "y": "Finance and Insurance",
+            "value": 0.05306122
+          },
+          {
+            "x": "error",
+            "y": "Finance and Insurance",
+            "value": 0.21428571
+          },
+          {
+            "x": "misuse",
+            "y": "Finance and Insurance",
+            "value": 0.13367347
+          },
+          {
+            "x": "physical",
+            "y": "Finance and Insurance",
+            "value": 0.2755102
+          },
+          {
+            "x": "environmental",
+            "y": "Finance and Insurance",
+            "value": 0.0
+          },
+          {
+            "x": "hacking",
+            "y": "Information",
+            "value": 0.65753425
+          },
+          {
+            "x": "malware",
+            "y": "Information",
+            "value": 0.09703196
+          },
+          {
+            "x": "social",
+            "y": "Information",
+            "value": 0.06050228
+          },
+          {
+            "x": "error",
+            "y": "Information",
+            "value": 0.19292237
+          },
+          {
+            "x": "misuse",
+            "y": "Information",
+            "value": 0.07762557
+          },
+          {
+            "x": "physical",
+            "y": "Information",
+            "value": 0.01940639
+          },
+          {
+            "x": "environmental",
+            "y": "Information",
+            "value": 0.00456621
+          },
+          {
+            "x": "hacking",
+            "y": "Retail Trade",
+            "value": 0.30812854
+          },
+          {
+            "x": "malware",
+            "y": "Retail Trade",
+            "value": 0.11531191
+          },
+          {
+            "x": "social",
+            "y": "Retail Trade",
+            "value": 0.03213611
+          },
+          {
+            "x": "error",
+            "y": "Retail Trade",
+            "value": 0.12098299
+          },
+          {
+            "x": "misuse",
+            "y": "Retail Trade",
+            "value": 0.1020794
+          },
+          {
+            "x": "physical",
+            "y": "Retail Trade",
+            "value": 0.39697543
+          },
+          {
+            "x": "environmental",
+            "y": "Retail Trade",
+            "value": 0.0
+          },
+          {
+            "x": "hacking",
+            "y": "Professional, Scientific, and Technical Services",
+            "value": 0.47336066
+          },
+          {
+            "x": "malware",
+            "y": "Professional, Scientific, and Technical Services",
+            "value": 0.18442623
+          },
+          {
+            "x": "social",
+            "y": "Professional, Scientific, and Technical Services",
+            "value": 0.06967213
+          },
+          {
+            "x": "error",
+            "y": "Professional, Scientific, and Technical Services",
+            "value": 0.2295082
+          },
+          {
+            "x": "misuse",
+            "y": "Professional, Scientific, and Technical Services",
+            "value": 0.1352459
+          },
+          {
+            "x": "physical",
+            "y": "Professional, Scientific, and Technical Services",
+            "value": 0.07377049
+          },
+          {
+            "x": "environmental",
+            "y": "Professional, Scientific, and Technical Services",
+            "value": 0.0
+          },
+          {
+            "x": "hacking",
+            "y": "Manufacturing",
+            "value": 0.4095941
+          },
+          {
+            "x": "malware",
+            "y": "Manufacturing",
+            "value": 0.18081181
+          },
+          {
+            "x": "social",
+            "y": "Manufacturing",
+            "value": 0.11808118
+          },
+          {
+            "x": "error",
+            "y": "Manufacturing",
+            "value": 0.13284133
+          },
+          {
+            "x": "misuse",
+            "y": "Manufacturing",
+            "value": 0.2103321
+          },
+          {
+            "x": "physical",
+            "y": "Manufacturing",
+            "value": 0.12546125
+          },
+          {
+            "x": "environmental",
+            "y": "Manufacturing",
+            "value": 0.0
+          }
+        ]
+      }
+    ]
+  },
+  "yields": "In Health Care and Social Assistance, 27% of past incidents involved physical, and each sector has its own leading threat. CyCRS shows these shares as the simple baseline for a user's sector, and its attack likelihood model must do better than this table to be used.",
+  "feeds": [
+    "attack-likelihood"
+  ],
+  "limitations": [
+    "An incident can have several action categories, so a sector's shares can add up to more than 1.",
+    "Shares describe reported incidents, not the chance that a given business is attacked."
+  ]
+}

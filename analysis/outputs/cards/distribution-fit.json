@@ -1,0 +1,173 @@
+{
+  "id": "distribution-fit",
+  "title": "Which curve fits breach size",
+  "module": "2: Probability distributions",
+  "stage": "explore",
+  "used_live": false,
+  "order": 3,
+  "question": "Is the number of records lost in a breach closer to a normal or a lognormal distribution?",
+  "data_in": {
+    "dataset": "VCDB validated incidents with a known record count",
+    "n_rows": 5398,
+    "variables": [
+      {
+        "name": "data_total",
+        "type": "numeric",
+        "scale": "ratio",
+        "transform": "none for the fit, ln for the QQ plot"
+      }
+    ],
+    "prep_steps": [
+      "Kept incidents with data_total known (all values are at least 1)",
+      "Fitted both distributions by maximum likelihood, lognormal location fixed at 0"
+    ],
+    "sample_rows": [
+      {
+        "data_total": 1.0
+      },
+      {
+        "data_total": 1.0
+      },
+      {
+        "data_total": 1.0
+      },
+      {
+        "data_total": 1.0
+      },
+      {
+        "data_total": 1.0
+      },
+      {
+        "data_total": 3550.0
+      },
+      {
+        "data_total": 1298.0
+      },
+      {
+        "data_total": 1.0
+      }
+    ]
+  },
+  "why": "Records lost is strictly positive with skewness 50.6, the typical shape of a lognormal variable, while a normal curve allows negative values and is symmetric. The Kolmogorov-Smirnov distance is 0.486 for the normal fit and 0.091 for the lognormal fit, so the lognormal curve is much closer to the data.",
+  "data_properties": [
+    {
+      "name": "KS D, normal fit",
+      "value": 0.48580107,
+      "implication": "Large gap between data and normal curve."
+    },
+    {
+      "name": "KS D, lognormal fit",
+      "value": 0.09139524,
+      "implication": "Much smaller gap; log scale is appropriate."
+    },
+    {
+      "name": "Lognormal sigma (shape)",
+      "value": 5.03153505,
+      "implication": "Wide spread on the log scale."
+    },
+    {
+      "name": "Lognormal median (scale)",
+      "value": 1328.85714456,
+      "implication": "Typical breach size implied by the fit."
+    }
+  ],
+  "alternatives": [
+    {
+      "model": "Normal distribution",
+      "why_not": "KS D 0.486; it predicts negative record counts and misses the long tail."
+    },
+    {
+      "model": "Pareto (power law) tail only",
+      "why_not": "Describes only the largest breaches; CyCRS needs the whole range, including small breaches."
+    }
+  ],
+  "formula_tex": [
+    {
+      "label": "Lognormal density",
+      "tex": "f(x)=\\frac{1}{x\\sigma\\sqrt{2\\pi}}\\exp\\left(-\\frac{(\\ln x-\\mu)^2}{2\\sigma^2}\\right)"
+    },
+    {
+      "label": "KS statistic",
+      "tex": "D = \\sup_x |F_n(x) - F(x)|"
+    }
+  ],
+  "assumptions": [
+    {
+      "check": "KS test against fitted normal",
+      "statistic": 0.48580107,
+      "p_value": 0.0,
+      "verdict": "rejected",
+      "action_taken": "Normal model not used for breach size."
+    },
+    {
+      "check": "KS test against fitted lognormal",
+      "statistic": 0.09139524,
+      "p_value": 0.0,
+      "verdict": "rejected",
+      "action_taken": "With n this large even small gaps are significant; D is used to compare fits and the log scale is adopted."
+    }
+  ],
+  "results": {
+    "key_numbers": {
+      "n": 5398,
+      "ks_d_normal": 0.48580107,
+      "ks_d_lognormal": 0.09139524,
+      "lognormal_sigma": 5.03153505,
+      "lognormal_scale": 1328.85714456
+    },
+    "tables": [
+      {
+        "title": "Fit comparison",
+        "columns": [
+          "distribution",
+          "param_1",
+          "param_2",
+          "ks_d",
+          "ks_p"
+        ],
+        "rows": [
+          [
+            "normal",
+            22774208.49814746,
+            639743558.481141,
+            0.48580107,
+            0.0
+          ],
+          [
+            "lognormal",
+            5.03153505,
+            1328.85714456,
+            0.09139524,
+            0.0
+          ]
+        ]
+      }
+    ],
+    "charts": [
+      {
+        "type": "bar",
+        "title": "KS distance by fitted distribution",
+        "x_label": "Distribution",
+        "y_label": "KS D (lower is better)",
+        "data": [
+          {
+            "x": "normal",
+            "y": 0.48580107
+          },
+          {
+            "x": "lognormal",
+            "y": 0.09139524
+          }
+        ]
+      }
+    ]
+  },
+  "yields": "Breach sizes follow a lognormal pattern far better than a bell curve (distance 0.091 vs 0.486). That is why every later model of breach size in CyCRS works on the log of records lost and converts back to records and rupees at the end.",
+  "feeds": [
+    "breach-impact"
+  ],
+  "limitations": [
+    "KS p-values are optimistic because parameters were estimated from the same data.",
+    "Even the lognormal fit is rejected at this sample size; it is an approximation, not an exact law."
+  ]
+}
