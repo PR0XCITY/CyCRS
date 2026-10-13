@@ -199,6 +199,7 @@ def load_vcdb(src=VALIDATED, sm=None):
     sm = sm or load_sectors()
     fs = list_incident_files(src)
     df = pd.DataFrame([flatten_incident(read_incident(f), sm) for f in fs])
+    df.insert(1, "source_file", [f.name for f in fs])
     df["breach"] = df["breach"].astype("Int64")
     df["year"] = df["year"].astype("Int64")
     return df
