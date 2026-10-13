@@ -71,3 +71,11 @@
 - Tests: vitest 31 pass (model, plan edges, zod tamper); Playwright 3 pass (wizard + every panel + budget + sensitivity; tampered storage; no profile).
 - Compat: eslint 10 + eslint-plugin-react need settings.react.version (auto-detect calls removed API).
 - Local node is v25; engines says 22.x (Vercel/CI use 22).
+
+## Phase 8 (2026-10-14)
+- Files: components/{ModelPage,LazyCardChart,CardChart,TableCharts,Pipeline,FunnelChart}.tsx, app/models/{page,[id]/page}.tsx (16 static ids, dynamicParams false), app/data, app/cases, lib/{modelData,profileSchema}.ts, tests/unit/modelpage.test.tsx, tests/e2e/pages.spec.ts. Python export now adds lineage.datasets and sources.cases.
+- Tests: vitest 48 pass (every card renders 7 sections, formulas, feeds links); Playwright 26 pass (22 pages at 1440 and 390 px, no console errors, no horizontal scroll; 7 sections on all model pages; pipeline links every card).
+- Screenshots: 44 PNGs in web/screenshots/ (gitignored, 17 MB): home, assess, results, models, model-<16 ids>, data, cases, each -1440 and -390.
+- Lighthouse 13.5 local (mobile, gzip test server, 2 runs): / perf 88-97, /results 86, /models/mlr-impact 85-90; accessibility 100 and CLS 0 on all. Target 90 not consistently met for /results and model pages; re-measure on Vercel.
+- Perf changes: client imports model.json only (no client zod parse; validated in build and tests), profile validation on zod/mini named imports (results chunk 377 KB -> 70 KB), Recharts lazy with fixed-height frames, KaTeX CSS only on /results and /models/[id], fonts display optional, results heading and disclaimer server-rendered.
+- Fix: Next 16 static export on Windows writes RSC segment files as __next.x/__PAGE__.txt (backslash bug); local serve.mjs maps it, Linux builds unaffected.
