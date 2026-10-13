@@ -46,3 +46,11 @@
 - CV AUC: tree 0.766 (depth 10, leaf 50), NB 0.743, logistic 0.730, LDA 0.723, KNN 0.563 (k 2). KNN, NB, LDA predict all Yes at 0.5 (specificity 0-0.08). Best = tree; Youden t 0.552, J 0.498 (spec 0.69 -> 0.81, recall 0.74 -> 0.69).
 - Logit significant ORs: health care 5.35, large size 3.14, social 10.1; max |coef| 2.31 after fixes.
 - Attack models (test AUC): physical 0.892, hacking 0.865, malware 0.840, error 0.741, social 0.738, misuse 0.690. Shared split 7252/3108 (stratified on first action); test incident ids saved for Phase 6.
+
+## Phase 5 (2026-10-14)
+- Files: notebooks/05_clustering_pca_fa.py, src/segment.py, tests/test_segment.py (90 pass), figures 05_*.png, outputs/05_*.csv, models/personas.json, cards pca, personas-kmeans, hierarchical, factor-analysis.
+- PCA on 37 binary incident flags (standardised): Kaiser 12, 80% needs 14; PC1 17.9% (+hacking/+external), PC2 10.7%. Flags overlap but are not low-dimensional.
+- K-means on the 13 profile features (unscaled 0/1, identity scaler saved): silhouette best at k 8 (0.29, moderate). Personas from 645 to 2003 incidents, e.g. Educational Services large server (hacking 0.83, malware 0.75), Public Administration large media (error 0.74).
+- Ward on 500-row sample, cut k 8: ARI 0.44 vs K-means, partly stable; card says rough groupings.
+- FA on NCRB: 8 crime heads as log10(1 + per lakh), 36 states. Bartlett p 1.3e-19, KMO 0.73 (middling). 2 factors (varimax): F1 stalking, fraud, cheating, blackmail (0.84 to 0.93); F2 cheating by personation, privacy, identity theft. Telangana highest on F1.
+- Compat: factor_analyzer 0.5.1 passes force_all_finite to sklearn 1.9; src/segment.py patches its check_array to ensure_all_finite.
