@@ -45,4 +45,4 @@
 - Leakage: asset_person dropped everywhere (VERIS codes a person asset in every social attack; social AUC was 0.999 with it, 0.738 without).
 - CV AUC: tree 0.766 (depth 10, leaf 50), NB 0.743, logistic 0.730, LDA 0.723, KNN 0.563 (k 2). KNN, NB, LDA predict all Yes at 0.5 (specificity 0-0.08). Best = tree; Youden t 0.552, J 0.498 (spec 0.69 -> 0.81, recall 0.74 -> 0.69).
 - Logit significant ORs: health care 5.35, large size 3.14, social 10.1; max |coef| 2.31 after fixes.
-- Attack models (test AUC): physical 0.892, hacking 0.865, malware 0.840, error 0.741, social 0.738, misuse 0.690. Shared split 6944/2976 (stratified on first action); test incident ids saved for Phase 6.
+- Attack models (test AUC): physical 0.892, hacking 0.865, malware 0.840, error 0.741, social 0.738, misuse 0.690. Shared split 7252/3108 (stratified on first action); test incident ids saved for Phase 6.
