@@ -1,0 +1,60 @@
+{
+  "id": "mlr-impact",
+  "target": "log10(1 + records lost)",
+  "features": [
+    "action_hacking",
+    "action_malware",
+    "action_social",
+    "action_error",
+    "action_misuse",
+    "action_physical",
+    "sector_health_care_and_social_assistance",
+    "sector_public_administration",
+    "sector_educational_services",
+    "sector_finance_and_insurance",
+    "sector_information",
+    "sector_retail_trade",
+    "sector_professional__scientific__and_technical_services",
+    "sector_manufacturing",
+    "size_medium",
+    "size_large",
+    "size_unknown"
+  ],
+  "intercept": 4.08471499,
+  "coefficients": {
+    "action_hacking": 0.48800867,
+    "action_malware": 0.7722932,
+    "action_social": -0.44042324,
+    "action_error": -0.56298358,
+    "action_misuse": -1.37250852,
+    "action_physical": -0.28408925,
+    "sector_health_care_and_social_assistance": -0.57266981,
+    "sector_public_administration": -1.64578691,
+    "sector_educational_services": -0.65280536,
+    "sector_finance_and_insurance": 0.15754803,
+    "sector_information": 1.1337141,
+    "sector_retail_trade": -0.00722054,
+    "sector_professional__scientific__and_technical_services": 0.6346067,
+    "sector_manufacturing": 0.12374175,
+    "size_medium": 0.39160105,
+    "size_large": -0.08007038,
+    "size_unknown": 0.08619222
+  },
+  "residual_sd": 1.7000903,
+  "reference_levels": {
+    "sector": "Other",
+    "size": "small"
+  },
+  "sectors": [
+    "Health Care and Social Assistance",
+    "Public Administration",
+    "Educational Services",
+    "Finance and Insurance",
+    "Information",
+    "Retail Trade",
+    "Professional, Scientific, and Technical Services",
+    "Manufacturing"
+  ],
+  "per_record_cost_key": "per_record_cost_inr",
+  "robust_se": true
+}
