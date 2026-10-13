@@ -62,3 +62,12 @@
 - Greedy vs exhaustive on 5 reference profiles: gap 0.00%.
 - Hit rate on 3105 test incidents: 0.209 vs baseline 0.209 (Endpoint, MFA, backups), p 1.0; 100% of plans equal the baseline, so the test cannot show personalisation with 4 controls.
 - ISSUE: rupee levels implausible for small businesses (small retail L0 INR 21.8 crore/yr; one malware incident priced 7.9x IBM India average breach). Cause: VCDB record counts and IBM per-record cost come from large organisations. Card says use rankings, not rupee level. Needs a decision before the web UI shows INR.
+
+## Phase 7 (2026-10-14)
+- Files: web/ Next 16.3.6 static export (TS 6.0.3 strict, Tailwind 4.3.3, Recharts 3.10.1, KaTeX 0.18.9, zod 4.6.5; all pinned exact, published before 2026-09-29), vercel.json headers, lib/{model,plan,schema,tex,profile,data,format,labels,budget,useStored,events}.ts, pages /, /assess, /results, error, not-found; CI web job.
+- model.ts reproduces recommend() and full trace for 5 reference profiles to 1e-6 (relative); reference.json now built from the exported, rounded model.json.
+- Answers to inputs: employees <=100 small, <=1000 medium, else large; devices>0 -> user_device, website or cloud -> server, UPI/online payments -> network, customer data -> media. City is display only.
+- KaTeX only via server component Tex (throws in browser); results formulas with user numbers are plain mono text. localStorage read via useSyncExternalStore, every read zod-validated, invalid profile removed and redirected to /assess.
+- Tests: vitest 31 pass (model, plan edges, zod tamper); Playwright 3 pass (wizard + every panel + budget + sensitivity; tampered storage; no profile).
+- Compat: eslint 10 + eslint-plugin-react need settings.react.version (auto-detect calls removed API).
+- Local node is v25; engines says 22.x (Vercel/CI use 22).
