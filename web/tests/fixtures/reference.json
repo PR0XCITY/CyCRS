@@ -1,5 +1,6 @@
 {
   "generated_by": "notebooks/06_recommendation_engine.py",
+  "bundle": "web/public/model/model.json",
   "profiles": [
     {
       "estimate": true,
@@ -98,8 +99,8 @@
           "p_c": 0.56183564,
           "log_records": 4.56550312,
           "records": 36769.80350073,
-          "impact_inr": 237374680.8275177,
-          "expected_loss_inr": 62415080.06514207
+          "impact_inr": 237374680.8274572,
+          "expected_loss_inr": 62415080.06512617
         },
         {
           "category": "malware",
@@ -122,8 +123,8 @@
           "p_c": 0.69369873,
           "log_records": 4.84978765,
           "records": 70758.9716113,
-          "impact_inr": 456798424.32610863,
-          "expected_loss_inr": 148300068.30760446
+          "impact_inr": 456798424.3259922,
+          "expected_loss_inr": 148300068.30756667
         },
         {
           "category": "social",
@@ -146,8 +147,8 @@
           "p_c": 0.18048954,
           "log_records": 3.63707121,
           "records": 4334.8196573,
-          "impact_inr": 27984278.80030264,
-          "expected_loss_inr": 2363806.93005793
+          "impact_inr": 27984278.80029551,
+          "expected_loss_inr": 2363806.93005732
         },
         {
           "category": "error",
@@ -170,8 +171,8 @@
           "p_c": 0.06652814,
           "log_records": 3.51451087,
           "records": 3268.72230553,
-          "impact_inr": 21101878.17491031,
-          "expected_loss_inr": 657010.5614399
+          "impact_inr": 21101878.17490494,
+          "expected_loss_inr": 657010.56143974
         },
         {
           "category": "misuse",
@@ -194,8 +195,8 @@
           "p_c": 0.02986851,
           "log_records": 2.70498593,
           "records": 505.97428337,
-          "impact_inr": 3266416.25975659,
-          "expected_loss_inr": 45659.47959397
+          "impact_inr": 3266416.25975576,
+          "expected_loss_inr": 45659.47959396
         },
         {
           "category": "physical",
@@ -218,8 +219,8 @@
           "p_c": 0.2246073,
           "log_records": 3.7934052,
           "records": 6213.48580001,
-          "impact_inr": 40112376.68361731,
-          "expected_loss_inr": 4216461.25698616
+          "impact_inr": 40112376.68360709,
+          "expected_loss_inr": 4216461.25698509
         }
       ],
       "persona": {
@@ -321,94 +322,94 @@
           "candidates": [
             {
               "control": "MFA",
-              "reduction": 24195494.36788231,
+              "reduction": 24195494.94242436,
               "cost": 0.0,
               "ratio": null
             },
             {
               "control": "Offline or cloud backups",
-              "reduction": 102740902.30623165,
+              "reduction": 102740902.34631711,
               "cost": 1560.0,
-              "ratio": 65859.5527604
+              "ratio": 65859.5527861
             },
             {
               "control": "Endpoint protection",
-              "reduction": 169522488.80528226,
+              "reduction": 169522488.87142324,
               "cost": 0.0,
               "ratio": null
             },
             {
               "control": "Email filtering",
-              "reduction": 29731706.05925435,
+              "reduction": 29731706.17378289,
               "cost": 32400.0,
-              "ratio": 917.64524874
+              "ratio": 917.64525228
             }
           ],
           "pick": "Endpoint protection",
-          "loss_after": 48475597.79554221
+          "loss_after": 48475597.72934568
         },
         {
           "candidates": [
             {
               "control": "MFA",
-              "reduction": 6842301.65513827,
+              "reduction": 6842301.726382,
               "cost": 0.0,
               "ratio": null
             },
             {
               "control": "Offline or cloud backups",
-              "reduction": 9826771.84376203,
+              "reduction": 9826771.8581031,
               "cost": 1560.0,
-              "ratio": 6299.21272036
+              "ratio": 6299.21272955
             },
             {
               "control": "Email filtering",
-              "reduction": 4640899.36604021,
+              "reduction": 4640899.19480505,
               "cost": 32400.0,
-              "ratio": 143.23763475
+              "ratio": 143.23762947
             }
           ],
           "pick": "MFA",
-          "loss_after": 41633296.14040394
+          "loss_after": 41633296.00296368
         },
         {
           "candidates": [
             {
               "control": "Offline or cloud backups",
-              "reduction": 8316596.2439461,
+              "reduction": 8316596.23471772,
               "cost": 1560.0,
-              "ratio": 5331.15143843
+              "ratio": 5331.15143251
             },
             {
               "control": "Email filtering",
-              "reduction": 3761334.75427202,
+              "reduction": 3761334.60625018,
               "cost": 32400.0,
-              "ratio": 116.09057884
+              "ratio": 116.09057427
             }
           ],
           "pick": "Offline or cloud backups",
-          "loss_after": 33316699.89645784
+          "loss_after": 33316699.76824596
         },
         {
           "candidates": [
             {
               "control": "Email filtering",
-              "reduction": 2857555.15716526,
+              "reduction": 2857555.03751558,
               "cost": 32400.0,
-              "ratio": 88.19614683
+              "ratio": 88.19614313
             }
           ],
           "pick": "Email filtering",
-          "loss_after": 30459144.73929258
+          "loss_after": 30459144.73073038
         }
       ],
       "totals": {
-        "loss_no_controls_inr": 217998086.60082448,
-        "loss_with_current_controls_inr": 217998086.60082448,
-        "loss_after_plan_inr": 30459144.73929258,
+        "loss_no_controls_inr": 217998086.60076892,
+        "loss_with_current_controls_inr": 217998086.60076892,
+        "loss_after_plan_inr": 30459144.73073038,
         "spent_inr": 33960.0,
         "budget_inr": 50000.0,
-        "residual_risk_pct": 13.97220738
+        "residual_risk_pct": 13.97220737
       },
       "inputs": {
         "annual_incident_prob": {
@@ -536,8 +537,8 @@
           "p_c": 0.01077998,
           "log_records": 4.3916549,
           "records": 24639.80546191,
-          "impact_inr": 159067098.551601,
-          "expected_loss_inr": 802498.63513996
+          "impact_inr": 159067098.55156046,
+          "expected_loss_inr": 802498.63513975
         },
         {
           "category": "malware",
@@ -564,8 +565,8 @@
           "p_c": 0.0069264,
           "log_records": 4.67593943,
           "records": 47416.58484907,
-          "impact_inr": 306107066.7471843,
-          "expected_loss_inr": 992263.35051655
+          "impact_inr": 306107066.74710625,
+          "expected_loss_inr": 992263.35051629
         },
         {
           "category": "social",
@@ -592,8 +593,8 @@
           "p_c": 0.04080347,
           "log_records": 3.46322299,
           "records": 2904.51411778,
-          "impact_inr": 18750660.76035617,
-          "expected_loss_inr": 358063.10811798
+          "impact_inr": 18750660.76035139,
+          "expected_loss_inr": 358063.10811788
         },
         {
           "category": "error",
@@ -620,8 +621,8 @@
           "p_c": 0.56521865,
           "log_records": 3.34066265,
           "records": 2190.10227611,
-          "impact_inr": 14138634.94705377,
-          "expected_loss_inr": 3739984.62337022
+          "impact_inr": 14138634.94705016,
+          "expected_loss_inr": 3739984.62336926
         },
         {
           "category": "misuse",
@@ -648,8 +649,8 @@
           "p_c": 0.19275069,
           "log_records": 2.53113771,
           "records": 338.7329811,
-          "impact_inr": 2186757.21977133,
-          "expected_loss_inr": 197261.5182832
+          "impact_inr": 2186757.21977078,
+          "expected_loss_inr": 197261.51828315
         },
         {
           "category": "physical",
@@ -676,8 +677,8 @@
           "p_c": 0.01612817,
           "log_records": 3.61955698,
           "records": 4163.44355481,
-          "impact_inr": 26877926.74625878,
-          "expected_loss_inr": 202874.2015025
+          "impact_inr": 26877926.74625193,
+          "expected_loss_inr": 202874.20150245
         }
       ],
       "persona": {
@@ -769,22 +770,22 @@
           "candidates": [
             {
               "control": "Endpoint protection",
-              "reduction": 1242558.20645386,
+              "reduction": 1242558.21136729,
               "cost": 0.0,
               "ratio": null
             }
           ],
           "pick": "Endpoint protection",
-          "loss_after": 4703929.92677051
+          "loss_after": 4703929.93402836
         }
       ],
       "totals": {
-        "loss_no_controls_inr": 6292945.4369304,
-        "loss_with_current_controls_inr": 5946488.13322437,
-        "loss_after_plan_inr": 4703929.92677051,
+        "loss_no_controls_inr": 6292945.4369288,
+        "loss_with_current_controls_inr": 5946488.14539565,
+        "loss_after_plan_inr": 4703929.93402836,
         "spent_inr": 0.0,
         "budget_inr": 0.0,
-        "residual_risk_pct": 74.74925651
+        "residual_risk_pct": 74.74925663
       },
       "inputs": {
         "annual_incident_prob": {
@@ -901,8 +902,8 @@
           "p_c": 0.64839489,
           "log_records": 5.20733036,
           "records": 161186.12904474,
-          "impact_inr": 1040568681.1749178,
-          "expected_loss_inr": 315759326.52722377
+          "impact_inr": 1040568681.1746526,
+          "expected_loss_inr": 315759326.5271433
         },
         {
           "category": "malware",
@@ -921,8 +922,8 @@
           "p_c": 0.23592072,
           "log_records": 5.49161489,
           "records": 310179.78446628,
-          "impact_inr": 2002426456.681037,
-          "expected_loss_inr": 221089704.05580044
+          "impact_inr": 2002426456.6805265,
+          "expected_loss_inr": 221089704.05574408
         },
         {
           "category": "social",
@@ -941,8 +942,8 @@
           "p_c": 0.05265856,
           "log_records": 4.27889845,
           "records": 19005.33807478,
-          "impact_inr": 122692688.83718632,
-          "expected_loss_inr": 3023663.70439527
+          "impact_inr": 122692688.83715506,
+          "expected_loss_inr": 3023663.7043945
         },
         {
           "category": "error",
@@ -961,8 +962,8 @@
           "p_c": 0.1665755,
           "log_records": 4.15633811,
           "records": 14332.03330428,
-          "impact_inr": 92523252.97700433,
-          "expected_loss_inr": 7212865.99147957
+          "impact_inr": 92523252.97698075,
+          "expected_loss_inr": 7212865.99147774
         },
         {
           "category": "misuse",
@@ -981,8 +982,8 @@
           "p_c": 0.1425621,
           "log_records": 3.34681317,
           "records": 2221.35364628,
-          "impact_inr": 14340384.29878379,
-          "expected_loss_inr": 956777.01893296
+          "impact_inr": 14340384.29878013,
+          "expected_loss_inr": 956777.01893272
         },
         {
           "category": "physical",
@@ -1001,8 +1002,8 @@
           "p_c": 0.00606509,
           "log_records": 4.43523244,
           "records": 27240.58922916,
-          "impact_inr": 175856968.44141462,
-          "expected_loss_inr": 499163.03093696
+          "impact_inr": 175856968.4413698,
+          "expected_loss_inr": 499163.03093684
         }
       ],
       "persona": {
@@ -1094,40 +1095,40 @@
           "candidates": [
             {
               "control": "MFA",
-              "reduction": 69823111.25706857,
+              "reduction": 69823112.63699538,
               "cost": 0.0,
               "ratio": null
             },
             {
               "control": "Endpoint protection",
-              "reduction": 329785404.22142655,
+              "reduction": 329785404.5127611,
               "cost": 0.0,
               "ratio": null
             }
           ],
           "pick": "Endpoint protection",
-          "loss_after": 218756096.1073423
+          "loss_after": 218756095.81586802
         },
         {
           "candidates": [
             {
               "control": "MFA",
-              "reduction": 32247123.24112746,
+              "reduction": 32247123.65765184,
               "cost": 0.0,
               "ratio": null
             }
           ],
           "pick": "MFA",
-          "loss_after": 186508972.86621484
+          "loss_after": 186508972.15821618
         }
       ],
       "totals": {
-        "loss_no_controls_inr": 548541500.3287688,
-        "loss_with_current_controls_inr": 548541500.3287688,
-        "loss_after_plan_inr": 186508972.86621484,
+        "loss_no_controls_inr": 548541500.3286291,
+        "loss_with_current_controls_inr": 548541500.3286291,
+        "loss_after_plan_inr": 186508972.15821618,
         "spent_inr": 0.0,
         "budget_inr": 1000.0,
-        "residual_risk_pct": 34.00088649
+        "residual_risk_pct": 34.00088636
       },
       "inputs": {
         "annual_incident_prob": {
@@ -1258,8 +1259,8 @@
           "p_c": 0.86994614,
           "log_records": 4.65020131,
           "records": 44688.06929128,
-          "impact_inr": 288492599.22217077,
-          "expected_loss_inr": 117455375.1319572
+          "impact_inr": 288492599.2220973,
+          "expected_loss_inr": 117455375.13192728
         },
         {
           "category": "malware",
@@ -1290,8 +1291,8 @@
           "p_c": 0.97484467,
           "log_records": 4.93448584,
           "records": 85996.50272857,
-          "impact_inr": 555167296.0958617,
-          "expected_loss_inr": 253282480.37852818
+          "impact_inr": 555167296.0957202,
+          "expected_loss_inr": 253282480.37846363
         },
         {
           "category": "social",
@@ -1322,8 +1323,8 @@
           "p_c": 0.79814889,
           "log_records": 3.7217694,
           "records": 5268.49989265,
-          "impact_inr": 34011834.74999704,
-          "expected_loss_inr": 12704565.7575082
+          "impact_inr": 34011834.74998838,
+          "expected_loss_inr": 12704565.75750496
         },
         {
           "category": "error",
@@ -1354,8 +1355,8 @@
           "p_c": 0.08455758,
           "log_records": 3.59920906,
           "records": 3972.82794945,
-          "impact_inr": 25647370.30656009,
-          "expected_loss_inr": 1014942.03258468
+          "impact_inr": 25647370.30655355,
+          "expected_loss_inr": 1014942.03258442
         },
         {
           "category": "misuse",
@@ -1386,7 +1387,7 @@
           "p_c": 0.00671136,
           "log_records": 2.78968412,
           "records": 615.14669035,
-          "impact_inr": 3971200.15291211,
+          "impact_inr": 3971200.15291109,
           "expected_loss_inr": 12473.20780149
         },
         {
@@ -1418,8 +1419,8 @@
           "p_c": 0.0601471,
           "log_records": 3.87810339,
           "records": 7551.72009546,
-          "impact_inr": 48751610.74287246,
-          "expected_loss_inr": 1372301.43375406
+          "impact_inr": 48751610.74286004,
+          "expected_loss_inr": 1372301.43375371
         }
       ],
       "persona": {
@@ -1521,91 +1522,91 @@
           "candidates": [
             {
               "control": "MFA",
-              "reduction": 45902629.49726015,
+              "reduction": 45902630.49353576,
               "cost": 0.0,
               "ratio": null
             },
             {
               "control": "Offline or cloud backups",
-              "reduction": 180014931.5392752,
+              "reduction": 180014931.62252825,
               "cost": 1560.0,
-              "ratio": 115394.18688415
+              "ratio": 115394.18693752
             },
             {
               "control": "Endpoint protection",
-              "reduction": 297024637.03980404,
+              "reduction": 297024637.1771717,
               "cost": 0.0,
               "ratio": null
             },
             {
               "control": "Email filtering",
-              "reduction": 58041025.80018538,
+              "reduction": 58041025.9120484,
               "cost": 32400.0,
-              "ratio": 1791.38968519
+              "ratio": 1791.38968864
             }
           ],
           "pick": "Endpoint protection",
-          "loss_after": 88817500.90232985
+          "loss_after": 88817500.76486373
         },
         {
           "candidates": [
             {
               "control": "MFA",
-              "reduction": 14403837.97486375,
+              "reduction": 14403838.10588717,
               "cost": 0.0,
               "ratio": null
             },
             {
               "control": "Offline or cloud backups",
-              "reduction": 19546363.33677194,
+              "reduction": 19546363.36021948,
               "cost": 1560.0,
-              "ratio": 12529.72008767
+              "ratio": 12529.7201027
             },
             {
               "control": "Email filtering",
-              "reduction": 12113774.94321446,
+              "reduction": 12113774.58091572,
               "cost": 32400.0,
-              "ratio": 373.88194269
+              "ratio": 373.88193151
             }
           ],
           "pick": "MFA",
-          "loss_after": 74413662.9274661
+          "loss_after": 74413662.65897655
         },
         {
           "candidates": [
             {
               "control": "Offline or cloud backups",
-              "reduction": 16298203.90829398,
+              "reduction": 16298203.89133668,
               "cost": 1560.0,
-              "ratio": 10447.56660788
+              "ratio": 10447.56659701
             },
             {
               "control": "Email filtering",
-              "reduction": 9287445.67939369,
+              "reduction": 9287445.38478406,
               "cost": 32400.0,
-              "ratio": 286.64955801
+              "ratio": 286.64954891
             }
           ],
           "pick": "Offline or cloud backups",
-          "loss_after": 58115459.01917212
+          "loss_after": 58115458.76763988
         },
         {
           "candidates": [
             {
               "control": "Email filtering",
-              "reduction": 7015266.72755366,
+              "reduction": 7015266.48628347,
               "cost": 32400.0,
-              "ratio": 216.52057801
+              "ratio": 216.52057056
             }
           ],
           "pick": "Email filtering",
-          "loss_after": 51100192.29161846
+          "loss_after": 51100192.2813564
         }
       ],
       "totals": {
-        "loss_no_controls_inr": 385842137.9421339,
-        "loss_with_current_controls_inr": 385842137.9421339,
-        "loss_after_plan_inr": 51100192.29161846,
+        "loss_no_controls_inr": 385842137.94203544,
+        "loss_with_current_controls_inr": 385842137.94203544,
+        "loss_after_plan_inr": 51100192.2813564,
         "spent_inr": 33960.0,
         "budget_inr": 1000000.0,
         "residual_risk_pct": 13.24380809
@@ -1725,8 +1726,8 @@
           "p_c": 0.00675814,
           "log_records": 4.65891588,
           "records": 45593.85931381,
-          "impact_inr": 294340104.4309328,
-          "expected_loss_inr": 930941.01411194
+          "impact_inr": 294340104.4308578,
+          "expected_loss_inr": 930941.0141117
         },
         {
           "category": "malware",
@@ -1745,8 +1746,8 @@
           "p_c": 0.00073124,
           "log_records": 4.94320041,
           "records": 87739.56162798,
-          "impact_inr": 566419954.8135487,
-          "expected_loss_inr": 193841.28349088
+          "impact_inr": 566419954.8134043,
+          "expected_loss_inr": 193841.28349083
         },
         {
           "category": "social",
@@ -1765,8 +1766,8 @@
           "p_c": 0.01126471,
           "log_records": 3.73048397,
           "records": 5375.30588575,
-          "impact_inr": 34701341.79407939,
-          "expected_loss_inr": 182941.46580586
+          "impact_inr": 34701341.79407055,
+          "expected_loss_inr": 182941.46580582
         },
         {
           "category": "error",
@@ -1785,8 +1786,8 @@
           "p_c": 0.49121165,
           "log_records": 3.60792363,
           "records": 4053.37233681,
-          "impact_inr": 26167340.40219269,
-          "expected_loss_inr": 6015532.69012665
+          "impact_inr": 26167340.40218602,
+          "expected_loss_inr": 6015532.69012512
         },
         {
           "category": "misuse",
@@ -1805,8 +1806,8 @@
           "p_c": 0.13810388,
           "log_records": 2.79839869,
           "records": 627.6351922,
-          "impact_inr": 4051822.12688336,
-          "expected_loss_inr": 261879.86689666
+          "impact_inr": 4051822.12688232,
+          "expected_loss_inr": 261879.86689659
         },
         {
           "category": "physical",
@@ -1825,8 +1826,8 @@
           "p_c": 0.21276016,
           "log_records": 3.88681796,
           "records": 7704.80402883,
-          "impact_inr": 49739874.11015562,
-          "expected_loss_inr": 4952686.63967771
+          "impact_inr": 49739874.11014295,
+          "expected_loss_inr": 4952686.63967645
         }
       ],
       "persona": {
@@ -1928,94 +1929,94 @@
           "candidates": [
             {
               "control": "MFA",
-              "reduction": 270826.10376606,
+              "reduction": 270826.06636249,
               "cost": 0.0,
               "ratio": null
             },
             {
               "control": "Offline or cloud backups",
-              "reduction": 387218.68457784,
+              "reduction": 387218.69557383,
               "cost": 1560.0,
-              "ratio": 248.2171055
+              "ratio": 248.21711255
             },
             {
               "control": "Endpoint protection",
-              "reduction": 638910.82955343,
+              "reduction": 638910.84769682,
               "cost": 0.0,
               "ratio": null
             },
             {
               "control": "Email filtering",
-              "reduction": 253892.35672043,
+              "reduction": 253892.36660707,
               "cost": 32400.0,
-              "ratio": 7.83618385
+              "ratio": 7.83618415
             }
           ],
           "pick": "Endpoint protection",
-          "loss_after": 11898912.13055627
+          "loss_after": 11898912.11240969
         },
         {
           "candidates": [
             {
               "control": "MFA",
-              "reduction": 176284.56761128,
+              "reduction": 176284.52892252,
               "cost": 0.0,
               "ratio": null
             },
             {
               "control": "Offline or cloud backups",
-              "reduction": 183179.75088672,
+              "reduction": 183179.76121799,
               "cost": 1560.0,
-              "ratio": 117.42291724
+              "ratio": 117.42292386
             },
             {
               "control": "Email filtering",
-              "reduction": 139054.4487075,
+              "reduction": 139054.45926811,
               "cost": 32400.0,
-              "ratio": 4.29180397
+              "ratio": 4.2918043
             }
           ],
           "pick": "MFA",
-          "loss_after": 11722627.56294499
+          "loss_after": 11722627.58348717
         },
         {
           "candidates": [
             {
               "control": "Offline or cloud backups",
-              "reduction": 154122.95310229,
+              "reduction": 154122.9632332,
               "cost": 1560.0,
-              "ratio": 98.79676481
+              "ratio": 98.7967713
             },
             {
               "control": "Email filtering",
-              "reduction": 105140.11633958,
+              "reduction": 105140.12769052,
               "cost": 32400.0,
-              "ratio": 3.24506532
+              "ratio": 3.24506567
             }
           ],
           "pick": "Offline or cloud backups",
-          "loss_after": 11568504.6098427
+          "loss_after": 11568504.62025397
         },
         {
           "candidates": [
             {
               "control": "Email filtering",
-              "reduction": 82705.83649316,
+              "reduction": 82705.84824543,
               "cost": 32400.0,
-              "ratio": 2.55264927
+              "ratio": 2.55264964
             }
           ],
           "pick": "Email filtering",
-          "loss_after": 11485798.77334954
+          "loss_after": 11485798.77200854
         }
       ],
       "totals": {
-        "loss_no_controls_inr": 12537822.9601097,
-        "loss_with_current_controls_inr": 12537822.9601097,
-        "loss_after_plan_inr": 11485798.77334954,
+        "loss_no_controls_inr": 12537822.96010651,
+        "loss_with_current_controls_inr": 12537822.96010651,
+        "loss_after_plan_inr": 11485798.77200854,
         "spent_inr": 33960.0,
         "budget_inr": 35000.0,
-        "residual_risk_pct": 91.60919571
+        "residual_risk_pct": 91.6091957
       },
       "inputs": {
         "annual_incident_prob": {

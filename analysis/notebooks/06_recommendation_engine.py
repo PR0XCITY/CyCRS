@@ -644,3 +644,19 @@ write_card(card_h)
 bundle["version"] = f"vcdb-{pd.Timestamp.today().date().isoformat()}"
 fs = export_all(bundle, WEB)
 log_event(lg, "exported", files=[str(f.name) for f in fs], sizes={f.name: f.stat().st_size for f in fs})
+
+# %% [markdown]
+# ## Reference fixtures from the exported bundle
+# Recomputed from web/public/model/model.json (parameters rounded to 8 decimals) so the browser engine can be
+# checked against exactly the numbers it will load.
+
+# %%
+exported = json.loads((WEB / "model.json").read_text(encoding="utf-8"))
+fx = {
+    "generated_by": "notebooks/06_recommendation_engine.py",
+    "bundle": "web/public/model/model.json",
+    "profiles": [recommend(p, exported) for p in REF],
+}
+write_json(fx, A / "tests" / "fixtures" / "reference.json")
+shutil.copy(A / "tests" / "fixtures" / "reference.json", wf / "reference.json")
+log_event(lg, "reference fixtures", profiles=len(REF))
