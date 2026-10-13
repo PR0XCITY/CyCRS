@@ -1,0 +1,9 @@
+variable,encoding,levels_or_columns
+sector,"one-hot, sectors under 1% merged to Other",21
+size,"ordinal small < medium < large, plus unknown dummy",4
+country,"one-hot top 10, rest Other",11
+motive,one-hot,9
+"action_*, v_*, vec_*, asset_*",binary 0/1 as is,38
+data_total,"log10(1 + x), missing left missing",1
+discovery_days,"log10(1 + x) where used, missing left missing",1
+year,numeric,1

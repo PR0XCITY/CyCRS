@@ -1,0 +1,54 @@
+variable,type,scale,transform
+incident_id,identifier,nominal,dropped before modelling
+sector_code,categorical,nominal,"one-hot, Unknown kept as level"
+sector,categorical,nominal,"one-hot, Unknown kept as level"
+employee_count,categorical,ordinal,"ordered levels, Unknown kept as level"
+size,categorical,ordinal,"ordered levels, Unknown kept as level"
+country,categorical,nominal,"one-hot, Unknown kept as level"
+actor_external,binary flag,nominal,0/1 as is
+actor_internal,binary flag,nominal,0/1 as is
+actor_partner,binary flag,nominal,0/1 as is
+motive,categorical,nominal,"one-hot, Unknown kept as level"
+action_hacking,binary flag,nominal,0/1 as is
+action_malware,binary flag,nominal,0/1 as is
+action_social,binary flag,nominal,0/1 as is
+action_error,binary flag,nominal,0/1 as is
+action_misuse,binary flag,nominal,0/1 as is
+action_physical,binary flag,nominal,0/1 as is
+action_environmental,binary flag,nominal,0/1 as is
+v_ransomware,binary flag,nominal,0/1 as is
+v_phishing,binary flag,nominal,0/1 as is
+v_pretexting,binary flag,nominal,0/1 as is
+v_stolen_creds,binary flag,nominal,0/1 as is
+v_brute_force,binary flag,nominal,0/1 as is
+v_exploit_vuln,binary flag,nominal,0/1 as is
+v_backdoor_c2,binary flag,nominal,0/1 as is
+v_dos,binary flag,nominal,0/1 as is
+v_privilege_abuse,binary flag,nominal,0/1 as is
+v_theft,binary flag,nominal,0/1 as is
+v_skimmer,binary flag,nominal,0/1 as is
+v_misdelivery,binary flag,nominal,0/1 as is
+v_misconfiguration,binary flag,nominal,0/1 as is
+v_publishing_error,binary flag,nominal,0/1 as is
+v_loss,binary flag,nominal,0/1 as is
+vec_web_app,binary flag,nominal,0/1 as is
+vec_email,binary flag,nominal,0/1 as is
+vec_remote_access,binary flag,nominal,0/1 as is
+vec_partner,binary flag,nominal,0/1 as is
+vec_direct_install,binary flag,nominal,0/1 as is
+vec_lan_access,binary flag,nominal,0/1 as is
+vec_physical_access,binary flag,nominal,0/1 as is
+vec_carelessness,binary flag,nominal,0/1 as is
+asset_server,binary flag,nominal,0/1 as is
+asset_user_device,binary flag,nominal,0/1 as is
+asset_person,binary flag,nominal,0/1 as is
+asset_network,binary flag,nominal,0/1 as is
+asset_media,binary flag,nominal,0/1 as is
+data_disclosure,categorical,nominal,"one-hot, Unknown kept as level"
+data_total,numeric continuous,ratio,log10(1 + x)
+integrity,binary flag,nominal,0/1 as is
+availability,binary flag,nominal,0/1 as is
+discovery_unit,categorical,nominal,"one-hot, Unknown kept as level"
+discovery_days,numeric continuous,ratio,none
+year,numeric discrete,interval,none
+breach,binary target,nominal,"1 Yes, 0 No, else missing"
