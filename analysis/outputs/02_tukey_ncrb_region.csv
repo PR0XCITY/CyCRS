@@ -1,0 +1,11 @@
+group1,group2,meandiff,p-adj,lower,upper,reject
+East,North,0.15,1.0,-18.0459,18.3459,False
+East,North-East,-1.1725,0.9998,-20.1114,17.7664,False
+East,South,14.115,0.2225,-4.8239,33.0539,False
+East,West,0.04,1.0,-20.9709,21.0509,False
+North,North-East,-1.3225,0.9992,-17.0806,14.4356,False
+North,South,13.965,0.1021,-1.7931,29.7231,False
+North,West,-0.11,1.0,-18.3059,18.0859,False
+North-East,South,15.2875,0.083,-1.323,31.898,False
+North-East,West,1.2125,0.9997,-17.7264,20.1514,False
+South,West,-14.075,0.2249,-33.0139,4.8639,False

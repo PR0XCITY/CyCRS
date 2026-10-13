@@ -1,0 +1,685 @@
+{
+  "id": "descriptive",
+  "title": "What the incident records look like",
+  "module": "2: Descriptive statistics and probability",
+  "stage": "explore",
+  "used_live": false,
+  "order": 2,
+  "question": "How big are typical breaches, how long do they go unnoticed, and which attacks and attackers are most common?",
+  "data_in": {
+    "dataset": "VCDB validated incidents (vcdb_clean.parquet)",
+    "n_rows": 10596,
+    "variables": [
+      {
+        "name": "data_total",
+        "type": "numeric",
+        "scale": "ratio",
+        "transform": "log10(1 + x) for charts"
+      },
+      {
+        "name": "discovery_days",
+        "type": "numeric",
+        "scale": "ratio",
+        "transform": "log10(1 + x) for the scatter"
+      },
+      {
+        "name": "employee_count",
+        "type": "categorical",
+        "scale": "ordinal",
+        "transform": "band code 1 to 8"
+      },
+      {
+        "name": "action_*",
+        "type": "binary",
+        "scale": "nominal",
+        "transform": "none"
+      },
+      {
+        "name": "actor_type",
+        "type": "categorical",
+        "scale": "nominal",
+        "transform": "none"
+      },
+      {
+        "name": "sector",
+        "type": "categorical",
+        "scale": "nominal",
+        "transform": "none"
+      },
+      {
+        "name": "year",
+        "type": "numeric",
+        "scale": "interval",
+        "transform": "none"
+      }
+    ],
+    "prep_steps": [
+      "Coded employee bands 1 (1 to 10) to 8 (over 100000); coarse Small, Large and Unknown left out of band stats",
+      "Actor type is the single actor class, or multiple, or unknown",
+      "Top 8 sectors by incident count, Unknown sector excluded"
+    ],
+    "sample_rows": [
+      {
+        "sector": "Information",
+        "size": "small",
+        "actor_type": "internal",
+        "action_primary": "error",
+        "data_total": 198000000.0,
+        "discovery_days": 1.0
+      },
+      {
+        "sector": "Retail Trade",
+        "size": "small",
+        "actor_type": "external",
+        "action_primary": "hacking",
+        "data_total": 25000.0,
+        "discovery_days": 304.375
+      },
+      {
+        "sector": "Information",
+        "size": "unknown",
+        "actor_type": "external",
+        "action_primary": "hacking",
+        "data_total": 860000.0,
+        "discovery_days": 1.0
+      },
+      {
+        "sector": "Public Administration",
+        "size": "medium",
+        "actor_type": "unknown",
+        "action_primary": "unknown",
+        "data_total": 344579.0,
+        "discovery_days": 182.625
+      },
+      {
+        "sector": "Information",
+        "size": "medium",
+        "actor_type": "external",
+        "action_primary": "hacking",
+        "data_total": 1000000.0,
+        "discovery_days": 730.5
+      },
+      {
+        "sector": "Professional, Scientific, and Technical Services",
+        "size": "small",
+        "actor_type": "internal",
+        "action_primary": "error",
+        "data_total": 49000000.0,
+        "discovery_days": 3.0
+      },
+      {
+        "sector": "Retail Trade",
+        "size": "large",
+        "actor_type": "partner",
+        "action_primary": "error",
+        "data_total": 27393.0,
+        "discovery_days": 5.0
+      },
+      {
+        "sector": "Arts, Entertainment, and Recreation",
+        "size": "medium",
+        "actor_type": "internal",
+        "action_primary": "misuse",
+        "data_total": 1.0,
+        "discovery_days": 1.0
+      }
+    ]
+  },
+  "why": "Records lost has mean 22,774,208 but median 1,364 and skewness 50.6, so medians, IQRs and log-scale histograms describe it better than means. Action category and actor type are nominal, so counts are shown as bars and shares as a pie (external actors are 55% of incidents). Discovery time and records lost are both skewed ratio variables, so their link is shown on log axes and measured with Spearman rho (-0.04), which does not assume normality.",
+  "data_properties": [
+    {
+      "name": "Skewness of records lost",
+      "value": 50.56625329,
+      "implication": "Use medians and log scale."
+    },
+    {
+      "name": "Kurtosis of records lost",
+      "value": 2935.68185454,
+      "implication": "Extremely heavy tail of mega breaches."
+    },
+    {
+      "name": "Skewness of log records lost",
+      "value": 0.36008094,
+      "implication": "Near symmetric after the log."
+    },
+    {
+      "name": "Median discovery days",
+      "value": 91.3125,
+      "implication": "Half of breaches take over 91 days to notice."
+    },
+    {
+      "name": "Most common action category",
+      "value": "hacking (3635 incidents)",
+      "implication": "First threat to defend against."
+    },
+    {
+      "name": "Share of incidents with an external actor only",
+      "value": 0.5464,
+      "implication": "Outsiders dominate, but insiders are not rare."
+    }
+  ],
+  "alternatives": [
+    {
+      "model": "Mean and SD only",
+      "why_not": "With skewness 50.6 the mean (22,774,208) is far above what a typical incident loses (1,364)."
+    },
+    {
+      "model": "Pearson correlation",
+      "why_not": "Both variables are heavily skewed with outliers; Pearson would be driven by a few mega breaches."
+    },
+    {
+      "model": "Pie charts for action categories",
+      "why_not": "An incident can have several categories, so shares do not add up to 100%; a bar chart is honest."
+    }
+  ],
+  "formula_tex": [
+    {
+      "label": "Sample variance",
+      "tex": "s^2 = \\frac{1}{n-1}\\sum_{i=1}^{n}(x_i-\\bar{x})^2"
+    },
+    {
+      "label": "Interquartile range",
+      "tex": "\\mathrm{IQR} = Q_3 - Q_1"
+    },
+    {
+      "label": "Excess kurtosis",
+      "tex": "g_2 = \\frac{\\frac{1}{n}\\sum (x_i-\\bar{x})^4}{\\left(\\frac{1}{n}\\sum (x_i-\\bar{x})^2\\right)^2} - 3"
+    },
+    {
+      "label": "Spearman rho",
+      "tex": "\\rho = 1 - \\frac{6\\sum d_i^2}{n(n^2-1)}"
+    }
+  ],
+  "assumptions": [
+    {
+      "check": "Spearman: monotonic relation, paired observations",
+      "statistic": -0.0352,
+      "p_value": 0.27502634,
+      "verdict": "not significant",
+      "action_taken": "Computed on 965 incidents with both values known."
+    }
+  ],
+  "results": {
+    "key_numbers": {
+      "incidents": 10596,
+      "median_records_lost": 1364.0,
+      "median_discovery_days": 91.3125,
+      "spearman_discovery_records": -0.03517329
+    },
+    "tables": [
+      {
+        "title": "Summary statistics",
+        "columns": [
+          "variable",
+          "unit",
+          "n",
+          "mean",
+          "median",
+          "mode",
+          "sd",
+          "variance",
+          "iqr",
+          "skewness",
+          "kurtosis"
+        ],
+        "rows": [
+          [
+            "records_lost",
+            "records",
+            5398,
+            22774208.4981,
+            1364.0,
+            1.0,
+            639802824.1775,
+            4.09347653825565e+17,
+            28252.25,
+            50.5663,
+            2935.6819
+          ],
+          [
+            "log10_records_lost",
+            "log10(1 + records)",
+            5398,
+            3.1815,
+            3.1351,
+            0.301,
+            2.1062,
+            4.4361,
+            3.0365,
+            0.3601,
+            -0.503
+          ],
+          [
+            "discovery_days",
+            "days",
+            1436,
+            329.1576,
+            91.3125,
+            91.3125,
+            726.5032,
+            527806.8344,
+            222.5,
+            5.4657,
+            48.4719
+          ],
+          [
+            "employee_band",
+            "ordinal band 1 to 8",
+            6248,
+            4.2524,
+            4.0,
+            4.0,
+            2.1928,
+            4.8085,
+            3.0,
+            0.5449,
+            -0.819
+          ]
+        ]
+      }
+    ],
+    "charts": [
+      {
+        "type": "histogram",
+        "title": "Records lost per incident (log scale)",
+        "x_label": "log10(1 + records lost)",
+        "y_label": "Incidents",
+        "data": [
+          {
+            "x0": 0.30103,
+            "x1": 0.64439766,
+            "y": 1057
+          },
+          {
+            "x0": 0.64439766,
+            "x1": 0.98776533,
+            "y": 100
+          },
+          {
+            "x0": 0.98776533,
+            "x1": 1.331133,
+            "y": 149
+          },
+          {
+            "x0": 1.331133,
+            "x1": 1.67450066,
+            "y": 151
+          },
+          {
+            "x0": 1.67450066,
+            "x1": 2.01786833,
+            "y": 199
+          },
+          {
+            "x0": 2.01786833,
+            "x1": 2.36123599,
+            "y": 176
+          },
+          {
+            "x0": 2.36123599,
+            "x1": 2.70460366,
+            "y": 202
+          },
+          {
+            "x0": 2.70460366,
+            "x1": 3.04797133,
+            "y": 554
+          },
+          {
+            "x0": 3.04797133,
+            "x1": 3.39133899,
+            "y": 462
+          },
+          {
+            "x0": 3.39133899,
+            "x1": 3.73470666,
+            "y": 413
+          },
+          {
+            "x0": 3.73470666,
+            "x1": 4.07807433,
+            "y": 308
+          },
+          {
+            "x0": 4.07807433,
+            "x1": 4.42144199,
+            "y": 263
+          },
+          {
+            "x0": 4.42144199,
+            "x1": 4.76480966,
+            "y": 186
+          },
+          {
+            "x0": 4.76480966,
+            "x1": 5.10817733,
+            "y": 151
+          },
+          {
+            "x0": 5.10817733,
+            "x1": 5.45154499,
+            "y": 159
+          },
+          {
+            "x0": 5.45154499,
+            "x1": 5.79491266,
+            "y": 131
+          },
+          {
+            "x0": 5.79491266,
+            "x1": 6.13828033,
+            "y": 171
+          },
+          {
+            "x0": 6.13828033,
+            "x1": 6.48164799,
+            "y": 152
+          },
+          {
+            "x0": 6.48164799,
+            "x1": 6.82501566,
+            "y": 98
+          },
+          {
+            "x0": 6.82501566,
+            "x1": 7.16838333,
+            "y": 94
+          },
+          {
+            "x0": 7.16838333,
+            "x1": 7.51175099,
+            "y": 76
+          },
+          {
+            "x0": 7.51175099,
+            "x1": 7.85511866,
+            "y": 61
+          },
+          {
+            "x0": 7.85511866,
+            "x1": 8.19848633,
+            "y": 39
+          },
+          {
+            "x0": 8.19848633,
+            "x1": 8.54185399,
+            "y": 17
+          },
+          {
+            "x0": 8.54185399,
+            "x1": 8.88522166,
+            "y": 13
+          },
+          {
+            "x0": 8.88522166,
+            "x1": 9.22858933,
+            "y": 9
+          },
+          {
+            "x0": 9.22858933,
+            "x1": 9.57195699,
+            "y": 1
+          },
+          {
+            "x0": 9.57195699,
+            "x1": 9.91532466,
+            "y": 2
+          },
+          {
+            "x0": 9.91532466,
+            "x1": 10.25869232,
+            "y": 3
+          },
+          {
+            "x0": 10.25869232,
+            "x1": 10.60205999,
+            "y": 1
+          }
+        ]
+      },
+      {
+        "type": "bar",
+        "title": "Incidents involving each action category",
+        "x_label": "Action category",
+        "y_label": "Incidents",
+        "data": [
+          {
+            "x": "hacking",
+            "y": 3635
+          },
+          {
+            "x": "error",
+            "y": 2774
+          },
+          {
+            "x": "misuse",
+            "y": 1829
+          },
+          {
+            "x": "malware",
+            "y": 1774
+          },
+          {
+            "x": "physical",
+            "y": 1720
+          },
+          {
+            "x": "social",
+            "y": 681
+          },
+          {
+            "x": "environmental",
+            "y": 10
+          }
+        ]
+      },
+      {
+        "type": "pie",
+        "title": "Actor type",
+        "x_label": "Actor type",
+        "y_label": "Incidents",
+        "data": [
+          {
+            "x": "external",
+            "y": 5790
+          },
+          {
+            "x": "internal",
+            "y": 4012
+          },
+          {
+            "x": "partner",
+            "y": 307
+          },
+          {
+            "x": "multiple",
+            "y": 270
+          },
+          {
+            "x": "unknown",
+            "y": 217
+          }
+        ]
+      },
+      {
+        "type": "line",
+        "title": "Incidents per action category by year",
+        "x_label": "Year",
+        "y_label": "Incidents",
+        "data": [
+          {
+            "x": 2010,
+            "hacking": 41,
+            "malware": 13,
+            "social": 13,
+            "error": 304,
+            "misuse": 74,
+            "physical": 151,
+            "environmental": 0
+          },
+          {
+            "x": 2011,
+            "hacking": 70,
+            "malware": 13,
+            "social": 15,
+            "error": 172,
+            "misuse": 160,
+            "physical": 110,
+            "environmental": 1
+          },
+          {
+            "x": 2012,
+            "hacking": 434,
+            "malware": 135,
+            "social": 112,
+            "error": 327,
+            "misuse": 245,
+            "physical": 224,
+            "environmental": 1
+          },
+          {
+            "x": 2013,
+            "hacking": 671,
+            "malware": 178,
+            "social": 139,
+            "error": 496,
+            "misuse": 335,
+            "physical": 328,
+            "environmental": 2
+          },
+          {
+            "x": 2014,
+            "hacking": 283,
+            "malware": 54,
+            "social": 38,
+            "error": 274,
+            "misuse": 197,
+            "physical": 212,
+            "environmental": 3
+          },
+          {
+            "x": 2015,
+            "hacking": 189,
+            "malware": 69,
+            "social": 53,
+            "error": 302,
+            "misuse": 242,
+            "physical": 166,
+            "environmental": 1
+          },
+          {
+            "x": 2016,
+            "hacking": 256,
+            "malware": 109,
+            "social": 82,
+            "error": 232,
+            "misuse": 165,
+            "physical": 187,
+            "environmental": 0
+          },
+          {
+            "x": 2017,
+            "hacking": 133,
+            "malware": 73,
+            "social": 67,
+            "error": 158,
+            "misuse": 103,
+            "physical": 154,
+            "environmental": 0
+          },
+          {
+            "x": 2018,
+            "hacking": 105,
+            "malware": 38,
+            "social": 37,
+            "error": 103,
+            "misuse": 49,
+            "physical": 67,
+            "environmental": 0
+          },
+          {
+            "x": 2019,
+            "hacking": 90,
+            "malware": 69,
+            "social": 29,
+            "error": 113,
+            "misuse": 47,
+            "physical": 43,
+            "environmental": 1
+          },
+          {
+            "x": 2020,
+            "hacking": 114,
+            "malware": 74,
+            "social": 21,
+            "error": 122,
+            "misuse": 26,
+            "physical": 22,
+            "environmental": 0
+          },
+          {
+            "x": 2021,
+            "hacking": 97,
+            "malware": 64,
+            "social": 9,
+            "error": 42,
+            "misuse": 8,
+            "physical": 4,
+            "environmental": 0
+          },
+          {
+            "x": 2022,
+            "hacking": 61,
+            "malware": 36,
+            "social": 8,
+            "error": 21,
+            "misuse": 11,
+            "physical": 3,
+            "environmental": 0
+          },
+          {
+            "x": 2023,
+            "hacking": 819,
+            "malware": 781,
+            "social": 7,
+            "error": 19,
+            "misuse": 8,
+            "physical": 2,
+            "environmental": 0
+          },
+          {
+            "x": 2024,
+            "hacking": 73,
+            "malware": 28,
+            "social": 7,
+            "error": 14,
+            "misuse": 3,
+            "physical": 0,
+            "environmental": 0
+          },
+          {
+            "x": 2025,
+            "hacking": 133,
+            "malware": 17,
+            "social": 11,
+            "error": 17,
+            "misuse": 2,
+            "physical": 1,
+            "environmental": 0
+          }
+        ]
+      }
+    ]
+  },
+  "yields": "A typical breach in the data exposes about 1,364 records and goes unnoticed for about 91 days, while a few huge breaches pull the average up to 22,774,208. Hacking is the most common kind of attack and outsiders cause most incidents, so CyCRS starts its threat list there.",
+  "feeds": [
+    "distribution-fit",
+    "conditional-probability",
+    "hypothesis-tests"
+  ],
+  "limitations": [
+    "VCDB comes from public reports, so large organisations and the USA are over represented.",
+    "Discovery time is known for only 1436 incidents.",
+    "Employee count is banded, so its mean and SD are on band codes, not people."
+  ]
+}
