@@ -54,3 +54,11 @@
 - Ward on 500-row sample, cut k 8: ARI 0.44 vs K-means, partly stable; card says rough groupings.
 - FA on NCRB: 8 crime heads as log10(1 + per lakh), 36 states. Bartlett p 1.3e-19, KMO 0.73 (middling). 2 factors (varimax): F1 stalking, fraud, cheating, blackmail (0.84 to 0.93); F2 cheating by personation, privacy, identity theft. Telangana highest on F1.
 - Compat: factor_analyzer 0.5.1 passes force_all_finite to sklearn 1.9; src/segment.py patches its check_array to ensure_all_finite.
+
+## Phase 6 (2026-10-14)
+- Files: src/recommender.py, src/export_web.py, notebooks/06_recommendation_engine.py, tests/test_recommender.py (106 pass), fixtures/reference.json (copied to web/tests/fixtures), web/public/model/{model,sources,lineage,cards}.json + SCHEMA.md (largest 183 KB), figures 06_*.png, outputs/06_*.csv, cards expected-loss, budget-optimiser, coverage-hit-rate.
+- Fix: VCDB incident_id is not unique (36 ids shared by 241 rows); added source_file key, re-ran 01/04; test split keyed on source_file (7246 train / 3105 test rows, no overlap). vcdb_clean now 55 cols.
+- Engine: L_c = pi x p_c x I_c; control effect e_k scaled by coverage share s_kc (share of category-c training incidents with a mitigated token), L_c(S) = L_c x prod(1 - e_k s_kc). Only 4 of 12 controls scorable (MFA, backups, endpoint, email filtering); 8 listed as not scored with reason.
+- Greedy vs exhaustive on 5 reference profiles: gap 0.00%.
+- Hit rate on 3105 test incidents: 0.209 vs baseline 0.209 (Endpoint, MFA, backups), p 1.0; 100% of plans equal the baseline, so the test cannot show personalisation with 4 controls.
+- ISSUE: rupee levels implausible for small businesses (small retail L0 INR 21.8 crore/yr; one malware incident priced 7.9x IBM India average breach). Cause: VCDB record counts and IBM per-record cost come from large organisations. Card says use rankings, not rupee level. Needs a decision before the web UI shows INR.
