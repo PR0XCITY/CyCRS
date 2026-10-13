@@ -1,0 +1,469 @@
+{
+  "id": "personas-kmeans",
+  "title": "Business personas",
+  "module": "5: K-means clustering",
+  "stage": "segment",
+  "used_live": true,
+  "order": 11,
+  "question": "Which groups of similar businesses appear in the incident data, and what attacks hit each group?",
+  "data_in": {
+    "dataset": "VCDB validated incidents",
+    "n_rows": 10596,
+    "variables": [
+      {
+        "name": "sector",
+        "type": "categorical",
+        "scale": "nominal",
+        "transform": "dummies, top 8"
+      },
+      {
+        "name": "size",
+        "type": "categorical",
+        "scale": "ordinal",
+        "transform": "dummies"
+      },
+      {
+        "name": "asset_*",
+        "type": "binary",
+        "scale": "nominal",
+        "transform": "asset_person excluded"
+      }
+    ],
+    "prep_steps": [
+      "Used the same 15 profile features as the attack models",
+      "No scaling: every feature is already 0/1",
+      "k chosen by the highest mean silhouette over k = 2 to 10"
+    ],
+    "sample_rows": [
+      {
+        "sector_health_care_and_social_assistance": 1.0,
+        "sector_public_administration": 0.0,
+        "sector_educational_services": 0.0,
+        "sector_finance_and_insurance": 0.0,
+        "sector_information": 0.0,
+        "sector_retail_trade": 0.0,
+        "sector_professional__scientific__and_technical_services": 0.0,
+        "sector_manufacturing": 0.0
+      },
+      {
+        "sector_health_care_and_social_assistance": 0.0,
+        "sector_public_administration": 0.0,
+        "sector_educational_services": 0.0,
+        "sector_finance_and_insurance": 0.0,
+        "sector_information": 1.0,
+        "sector_retail_trade": 0.0,
+        "sector_professional__scientific__and_technical_services": 0.0,
+        "sector_manufacturing": 0.0
+      },
+      {
+        "sector_health_care_and_social_assistance": 0.0,
+        "sector_public_administration": 0.0,
+        "sector_educational_services": 0.0,
+        "sector_finance_and_insurance": 0.0,
+        "sector_information": 0.0,
+        "sector_retail_trade": 1.0,
+        "sector_professional__scientific__and_technical_services": 0.0,
+        "sector_manufacturing": 0.0
+      },
+      {
+        "sector_health_care_and_social_assistance": 0.0,
+        "sector_public_administration": 0.0,
+        "sector_educational_services": 0.0,
+        "sector_finance_and_insurance": 0.0,
+        "sector_information": 0.0,
+        "sector_retail_trade": 0.0,
+        "sector_professional__scientific__and_technical_services": 0.0,
+        "sector_manufacturing": 0.0
+      },
+      {
+        "sector_health_care_and_social_assistance": 0.0,
+        "sector_public_administration": 1.0,
+        "sector_educational_services": 0.0,
+        "sector_finance_and_insurance": 0.0,
+        "sector_information": 0.0,
+        "sector_retail_trade": 0.0,
+        "sector_professional__scientific__and_technical_services": 0.0,
+        "sector_manufacturing": 0.0
+      },
+      {
+        "sector_health_care_and_social_assistance": 1.0,
+        "sector_public_administration": 0.0,
+        "sector_educational_services": 0.0,
+        "sector_finance_and_insurance": 0.0,
+        "sector_information": 0.0,
+        "sector_retail_trade": 0.0,
+        "sector_professional__scientific__and_technical_services": 0.0,
+        "sector_manufacturing": 0.0
+      },
+      {
+        "sector_health_care_and_social_assistance": 0.0,
+        "sector_public_administration": 0.0,
+        "sector_educational_services": 0.0,
+        "sector_finance_and_insurance": 0.0,
+        "sector_information": 0.0,
+        "sector_retail_trade": 0.0,
+        "sector_professional__scientific__and_technical_services": 0.0,
+        "sector_manufacturing": 0.0
+      },
+      {
+        "sector_health_care_and_social_assistance": 0.0,
+        "sector_public_administration": 0.0,
+        "sector_educational_services": 1.0,
+        "sector_finance_and_insurance": 0.0,
+        "sector_information": 0.0,
+        "sector_retail_trade": 0.0,
+        "sector_professional__scientific__and_technical_services": 0.0,
+        "sector_manufacturing": 0.0
+      }
+    ]
+  },
+  "why": "Personas are built only from what a business can tell CyCRS about itself (sector, size, the IT it relies on), so a new user can be placed in one instantly by finding the nearest centroid in the browser. K-means suits this because assignment is a simple distance to 8 saved centres, and the silhouette peaks at k = 8 (0.29).",
+  "data_properties": [
+    {
+      "name": "Chosen k",
+      "value": 8,
+      "implication": "Number of personas."
+    },
+    {
+      "name": "Best mean silhouette",
+      "value": 0.29153792,
+      "implication": "Separation of personas; above 0.5 is strong, below 0.25 weak."
+    },
+    {
+      "name": "Largest persona",
+      "value": "Mixed sector, small, server (2003 incidents)",
+      "implication": "Its leading attack is hacking."
+    }
+  ],
+  "alternatives": [
+    {
+      "model": "Hierarchical clustering",
+      "why_not": "Cannot place a new business without refitting the tree; K-means needs only the saved centroids."
+    },
+    {
+      "model": "DBSCAN",
+      "why_not": "Not in the syllabus, and on 0/1 profile data the density of points varies hugely between common and rare profiles."
+    }
+  ],
+  "formula_tex": [
+    {
+      "label": "K-means objective",
+      "tex": "\\min \\sum_{i}\\lVert x_i-\\mu_{c(i)}\\rVert^2"
+    },
+    {
+      "label": "Silhouette",
+      "tex": "s_i=\\frac{b_i-a_i}{\\max(a_i,b_i)}"
+    },
+    {
+      "label": "Assignment",
+      "tex": "c(x)=\\arg\\min_k \\lVert x-\\mu_k\\rVert^2"
+    }
+  ],
+  "assumptions": [
+    {
+      "check": "Silhouette at chosen k",
+      "statistic": 0.29153792,
+      "p_value": null,
+      "verdict": "moderate",
+      "action_taken": "Personas shown with their actual attack mix, not as hard categories."
+    }
+  ],
+  "results": {
+    "key_numbers": {
+      "k": 8,
+      "silhouette": 0.29153792,
+      "n_persona_0": 861,
+      "n_persona_1": 1734,
+      "n_persona_2": 645,
+      "n_persona_3": 2003,
+      "n_persona_4": 1798,
+      "n_persona_5": 1267,
+      "n_persona_6": 1149,
+      "n_persona_7": 1139
+    },
+    "tables": [
+      {
+        "title": "Personas and their attack mix",
+        "columns": [
+          "persona",
+          "name",
+          "n",
+          "hacking",
+          "malware",
+          "social",
+          "error",
+          "misuse",
+          "physical"
+        ],
+        "rows": [
+          [
+            0,
+            "Educational Services, large, server",
+            861,
+            0.8258,
+            0.7468,
+            0.029,
+            0.0674,
+            0.0267,
+            0.0337
+          ],
+          [
+            1,
+            "Mixed sector, large, server",
+            1734,
+            0.4441,
+            0.177,
+            0.0894,
+            0.1471,
+            0.222,
+            0.1159
+          ],
+          [
+            2,
+            "Public Administration, large, server",
+            645,
+            0.2295,
+            0.0713,
+            0.0372,
+            0.2977,
+            0.4124,
+            0.0171
+          ],
+          [
+            3,
+            "Mixed sector, small, server",
+            2003,
+            0.4643,
+            0.1593,
+            0.0634,
+            0.1747,
+            0.1338,
+            0.1153
+          ],
+          [
+            4,
+            "Mixed sector, unknown size, server",
+            1798,
+            0.5323,
+            0.1557,
+            0.1296,
+            0.1357,
+            0.2147,
+            0.0534
+          ],
+          [
+            5,
+            "Health Care and Social Assistance, mixed size, user device",
+            1267,
+            0.0813,
+            0.1373,
+            0.071,
+            0.191,
+            0.105,
+            0.532
+          ],
+          [
+            6,
+            "Public Administration, large, media",
+            1149,
+            0.0017,
+            0.0009,
+            0.007,
+            0.7415,
+            0.1027,
+            0.1549
+          ],
+          [
+            7,
+            "Health Care and Social Assistance, unknown size, media",
+            1139,
+            0.0123,
+            0.0035,
+            0.0167,
+            0.5101,
+            0.2195,
+            0.2634
+          ]
+        ]
+      }
+    ],
+    "charts": [
+      {
+        "type": "line",
+        "title": "Elbow",
+        "x_label": "k",
+        "y_label": "Inertia",
+        "data": [
+          {
+            "x": 2,
+            "y": 16060.74648151
+          },
+          {
+            "x": 3,
+            "y": 13998.1205299
+          },
+          {
+            "x": 4,
+            "y": 12507.57738892
+          },
+          {
+            "x": 5,
+            "y": 11515.98008386
+          },
+          {
+            "x": 6,
+            "y": 10746.06851117
+          },
+          {
+            "x": 7,
+            "y": 10150.43566497
+          },
+          {
+            "x": 8,
+            "y": 9246.68376698
+          },
+          {
+            "x": 9,
+            "y": 9037.61759087
+          },
+          {
+            "x": 10,
+            "y": 8611.00191202
+          }
+        ]
+      },
+      {
+        "type": "line",
+        "title": "Silhouette",
+        "x_label": "k",
+        "y_label": "Mean silhouette",
+        "data": [
+          {
+            "x": 2,
+            "y": 0.19184344
+          },
+          {
+            "x": 3,
+            "y": 0.20490193
+          },
+          {
+            "x": 4,
+            "y": 0.23057107
+          },
+          {
+            "x": 5,
+            "y": 0.23262033
+          },
+          {
+            "x": 6,
+            "y": 0.24390792
+          },
+          {
+            "x": 7,
+            "y": 0.26090198
+          },
+          {
+            "x": 8,
+            "y": 0.29153792
+          },
+          {
+            "x": 9,
+            "y": 0.27667746
+          },
+          {
+            "x": 10,
+            "y": 0.28767625
+          }
+        ]
+      },
+      {
+        "type": "bar",
+        "title": "Attack mix by persona",
+        "x_label": "Persona",
+        "y_label": "Share of incidents",
+        "data": [
+          {
+            "x": "Educational Services, large, server",
+            "hacking": 0.82578397,
+            "malware": 0.74680604,
+            "social": 0.029036,
+            "error": 0.06736353,
+            "misuse": 0.02671312,
+            "physical": 0.03368177
+          },
+          {
+            "x": "Mixed sector, large, server",
+            "hacking": 0.44405998,
+            "malware": 0.17704729,
+            "social": 0.0893887,
+            "error": 0.14705882,
+            "misuse": 0.22202999,
+            "physical": 0.11591696
+          },
+          {
+            "x": "Public Administration, large, server",
+            "hacking": 0.22945736,
+            "malware": 0.07131783,
+            "social": 0.0372093,
+            "error": 0.29767442,
+            "misuse": 0.4124031,
+            "physical": 0.01705426
+          },
+          {
+            "x": "Mixed sector, small, server",
+            "hacking": 0.46430354,
+            "malware": 0.15926111,
+            "social": 0.06340489,
+            "error": 0.17473789,
+            "misuse": 0.1337993,
+            "physical": 0.11532701
+          },
+          {
+            "x": "Mixed sector, unknown size, server",
+            "hacking": 0.53225806,
+            "malware": 0.15572859,
+            "social": 0.12958843,
+            "error": 0.13570634,
+            "misuse": 0.21468298,
+            "physical": 0.05339266
+          },
+          {
+            "x": "Health Care and Social Assistance, mixed size, user device",
+            "hacking": 0.0812944,
+            "malware": 0.13733228,
+            "social": 0.07103394,
+            "error": 0.19100237,
+            "misuse": 0.10497238,
+            "physical": 0.53196527
+          },
+          {
+            "x": "Public Administration, large, media",
+            "hacking": 0.00174064,
+            "malware": 0.00087032,
+            "social": 0.00696258,
+            "error": 0.74151436,
+            "misuse": 0.102698,
+            "physical": 0.15491732
+          },
+          {
+            "x": "Health Care and Social Assistance, unknown size, media",
+            "hacking": 0.01229148,
+            "malware": 0.00351185,
+            "social": 0.0166813,
+            "error": 0.51009658,
+            "misuse": 0.21949078,
+            "physical": 0.26338894
+          }
+        ]
+      }
+    ]
+  },
+  "yields": "The data splits into 8 personas, such as Mixed sector, small, server, whose incidents most often involve hacking. CyCRS places each user in the nearest persona from their sector, size and IT, and shows what actually happened to similar businesses.",
+  "feeds": [
+    "decision"
+  ],
+  "limitations": [
+    "Personas describe reported incidents, not all businesses.",
+    "Asset flags are a proxy for what a business runs."
+  ]
+}

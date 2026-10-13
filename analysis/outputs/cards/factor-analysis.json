@@ -1,0 +1,505 @@
+{
+  "id": "factor-analysis",
+  "title": "Which cyber crimes move together across India",
+  "module": "5: Factor analysis",
+  "stage": "segment",
+  "used_live": false,
+  "order": 13,
+  "question": "Across Indian states, which kinds of cyber crime tend to rise and fall together?",
+  "data_in": {
+    "dataset": "NCRB Crime in India 2024, Table 9A.2 (state-wise crime heads)",
+    "n_rows": 36,
+    "variables": [
+      {
+        "name": "identity_theft",
+        "type": "numeric",
+        "scale": "ratio",
+        "transform": "log10(1 + cases per lakh)"
+      },
+      {
+        "name": "cheating_by_personation",
+        "type": "numeric",
+        "scale": "ratio",
+        "transform": "log10(1 + cases per lakh)"
+      },
+      {
+        "name": "privacy_violation",
+        "type": "numeric",
+        "scale": "ratio",
+        "transform": "log10(1 + cases per lakh)"
+      },
+      {
+        "name": "obscene_content",
+        "type": "numeric",
+        "scale": "ratio",
+        "transform": "log10(1 + cases per lakh)"
+      },
+      {
+        "name": "cyber_stalking",
+        "type": "numeric",
+        "scale": "ratio",
+        "transform": "log10(1 + cases per lakh)"
+      },
+      {
+        "name": "fraud",
+        "type": "numeric",
+        "scale": "ratio",
+        "transform": "log10(1 + cases per lakh)"
+      },
+      {
+        "name": "cheating",
+        "type": "numeric",
+        "scale": "ratio",
+        "transform": "log10(1 + cases per lakh)"
+      },
+      {
+        "name": "blackmail",
+        "type": "numeric",
+        "scale": "ratio",
+        "transform": "log10(1 + cases per lakh)"
+      }
+    ],
+    "prep_steps": [
+      "Eight non-overlapping crime heads reported by at least 20 states",
+      "Divided by 2024 projected population (lakh) and log-transformed"
+    ],
+    "sample_rows": [
+      {
+        "state": "Puducherry",
+        "identity_theft": 0.02482358,
+        "cheating_by_personation": 0.58909501,
+        "privacy_violation": 0.02482358,
+        "obscene_content": 0.21670911,
+        "cyber_stalking": 0.0
+      },
+      {
+        "state": "Maharashtra",
+        "identity_theft": 0.15413937,
+        "cheating_by_personation": 0.10145764,
+        "privacy_violation": 0.00338818,
+        "obscene_content": 0.04641007,
+        "cyber_stalking": 0.1191347
+      },
+      {
+        "state": "Uttarakhand",
+        "identity_theft": 0.05522279,
+        "cheating_by_personation": 0.61653781,
+        "privacy_violation": 0.01447782,
+        "obscene_content": 0.26657449,
+        "cyber_stalking": 0.00729924
+      },
+      {
+        "state": "D&N Haveli and Daman & Diu",
+        "identity_theft": 0.0,
+        "cheating_by_personation": 0.0848719,
+        "privacy_violation": 0.0,
+        "obscene_content": 0.03017147,
+        "cyber_stalking": 0.0
+      },
+      {
+        "state": "Mizoram",
+        "identity_theft": 0.0,
+        "cheating_by_personation": 0.372912,
+        "privacy_violation": 0.03342376,
+        "obscene_content": 0.38738983,
+        "cyber_stalking": 0.0
+      },
+      {
+        "state": "Delhi",
+        "identity_theft": 0.05405398,
+        "cheating_by_personation": 0.00591422,
+        "privacy_violation": 0.01367662,
+        "obscene_content": 0.266119,
+        "cyber_stalking": 0.03433438
+      },
+      {
+        "state": "Sikkim",
+        "identity_theft": 0.0,
+        "cheating_by_personation": 0.43365556,
+        "privacy_violation": 0.0,
+        "obscene_content": 0.15490196,
+        "cyber_stalking": 0.0
+      },
+      {
+        "state": "Madhya Pradesh",
+        "identity_theft": 0.01694787,
+        "cheating_by_personation": 0.14760691,
+        "privacy_violation": 0.00197071,
+        "obscene_content": 0.03690294,
+        "cyber_stalking": 0.02819843
+      }
+    ]
+  },
+  "why": "Crime rates per lakh are continuous and correlated across states, which is what factor analysis models, and Bartlett's test (p 1.3e-19) checks that the correlations are not all zero. KMO is 0.73 (middling) with only 36 states and UTs, so the factors are usable but based on few cases.",
+  "data_properties": [
+    {
+      "name": "Bartlett chi-square p",
+      "value": 0.0,
+      "implication": "Correlations exist to factor."
+    },
+    {
+      "name": "KMO",
+      "value": 0.73314152,
+      "implication": "middling"
+    },
+    {
+      "name": "Factors with eigenvalue above 1",
+      "value": 2,
+      "implication": "Number of factors kept."
+    },
+    {
+      "name": "Cases per variable",
+      "value": 4.5,
+      "implication": "Well below the usual 10; treat factors as exploratory."
+    }
+  ],
+  "alternatives": [
+    {
+      "model": "PCA on the same rates",
+      "why_not": "PCA explains total variance; FA separates shared variance from crime-specific noise, which is the question here."
+    },
+    {
+      "model": "Factor analysis on all 58 crime heads",
+      "why_not": "More variables than the 36 states makes the correlation matrix singular."
+    }
+  ],
+  "formula_tex": [
+    {
+      "label": "Factor model",
+      "tex": "x = \\Lambda f + \\varepsilon"
+    },
+    {
+      "label": "KMO",
+      "tex": "\\mathrm{KMO}=\\frac{\\sum r_{ij}^2}{\\sum r_{ij}^2+\\sum p_{ij}^2}"
+    }
+  ],
+  "assumptions": [
+    {
+      "check": "Bartlett sphericity",
+      "statistic": 155.38384348,
+      "p_value": 0.0,
+      "verdict": "correlated",
+      "action_taken": "Proceeded with FA."
+    },
+    {
+      "check": "KMO sampling adequacy",
+      "statistic": 0.73314152,
+      "p_value": null,
+      "verdict": "middling",
+      "action_taken": "Factors interpreted."
+    }
+  ],
+  "results": {
+    "key_numbers": {
+      "kmo": 0.73314152,
+      "bartlett_p": 0.0,
+      "factors": 2,
+      "states": 36
+    },
+    "tables": [
+      {
+        "title": "Loadings",
+        "columns": [
+          "crime_head",
+          "F1",
+          "F2"
+        ],
+        "rows": [
+          [
+            "identity_theft",
+            0.0703,
+            0.4202
+          ],
+          [
+            "cheating_by_personation",
+            -0.1223,
+            0.994
+          ],
+          [
+            "privacy_violation",
+            -0.0931,
+            0.5555
+          ],
+          [
+            "obscene_content",
+            -0.091,
+            0.1557
+          ],
+          [
+            "cyber_stalking",
+            0.9265,
+            -0.0866
+          ],
+          [
+            "fraud",
+            0.8944,
+            -0.1543
+          ],
+          [
+            "cheating",
+            0.8446,
+            -0.0366
+          ],
+          [
+            "blackmail",
+            0.8939,
+            -0.1097
+          ]
+        ]
+      },
+      {
+        "title": "Factor names",
+        "columns": [
+          "factor",
+          "name"
+        ],
+        "rows": [
+          [
+            "F1",
+            "cyber_stalking + fraud + cheating + blackmail"
+          ],
+          [
+            "F2",
+            "cheating_by_personation + privacy_violation"
+          ]
+        ]
+      }
+    ],
+    "charts": [
+      {
+        "type": "line",
+        "title": "FA scree",
+        "x_label": "Factor",
+        "y_label": "Eigenvalue",
+        "data": [
+          {
+            "x": 1,
+            "y": 3.5491125
+          },
+          {
+            "x": 2,
+            "y": 1.75408746
+          },
+          {
+            "x": 3,
+            "y": 0.96741091
+          },
+          {
+            "x": 4,
+            "y": 0.7846411
+          },
+          {
+            "x": 5,
+            "y": 0.37374547
+          },
+          {
+            "x": 6,
+            "y": 0.35447924
+          },
+          {
+            "x": 7,
+            "y": 0.12276577
+          },
+          {
+            "x": 8,
+            "y": 0.09375755
+          }
+        ]
+      },
+      {
+        "type": "bar",
+        "title": "State scores on F1",
+        "x_label": "State or UT",
+        "y_label": "Factor score",
+        "data": [
+          {
+            "x": "Telangana",
+            "F1": 4.8878425,
+            "F2": -0.11506356
+          },
+          {
+            "x": "Chandigarh",
+            "F1": 1.43896812,
+            "F2": -0.80016201
+          },
+          {
+            "x": "Maharashtra",
+            "F1": 1.31652637,
+            "F2": -0.0580032
+          },
+          {
+            "x": "Andhra Pradesh",
+            "F1": 0.97100442,
+            "F2": 0.08566439
+          },
+          {
+            "x": "A&N Islands",
+            "F1": 0.47178698,
+            "F2": -0.58411077
+          },
+          {
+            "x": "Kerala",
+            "F1": 0.41313217,
+            "F2": 1.17350352
+          },
+          {
+            "x": "Bihar",
+            "F1": 0.40996424,
+            "F2": -0.68806526
+          },
+          {
+            "x": "Tamil Nadu",
+            "F1": 0.30451224,
+            "F2": 1.02663285
+          },
+          {
+            "x": "Haryana",
+            "F1": 0.09665714,
+            "F2": -0.86679876
+          },
+          {
+            "x": "Punjab",
+            "F1": -0.04158123,
+            "F2": 0.29104569
+          },
+          {
+            "x": "Odisha",
+            "F1": -0.07009606,
+            "F2": -0.77213913
+          },
+          {
+            "x": "Karnataka",
+            "F1": -0.07371794,
+            "F2": 4.03421528
+          },
+          {
+            "x": "Delhi",
+            "F1": -0.1086041,
+            "F2": -0.69279306
+          },
+          {
+            "x": "Rajasthan",
+            "F1": -0.1195193,
+            "F2": -0.7516746
+          },
+          {
+            "x": "Madhya Pradesh",
+            "F1": -0.15587408,
+            "F2": -0.23308399
+          },
+          {
+            "x": "Gujarat",
+            "F1": -0.19120562,
+            "F2": -0.86137308
+          },
+          {
+            "x": "Uttarakhand",
+            "F1": -0.25671709,
+            "F2": 1.22475922
+          },
+          {
+            "x": "Uttar Pradesh",
+            "F1": -0.30704942,
+            "F2": 0.49668367
+          },
+          {
+            "x": "Goa",
+            "F1": -0.36254147,
+            "F2": 1.27020967
+          },
+          {
+            "x": "Arunachal Pradesh",
+            "F1": -0.38409444,
+            "F2": 1.4466246
+          },
+          {
+            "x": "Puducherry",
+            "F1": -0.39356292,
+            "F2": 1.12155213
+          },
+          {
+            "x": "Himachal Pradesh",
+            "F1": -0.419264,
+            "F2": 0.35647645
+          },
+          {
+            "x": "Sikkim",
+            "F1": -0.43089798,
+            "F2": 0.63708896
+          },
+          {
+            "x": "Jharkhand",
+            "F1": -0.4363587,
+            "F2": -0.43453984
+          },
+          {
+            "x": "Chhattisgarh",
+            "F1": -0.45217787,
+            "F2": -0.83671769
+          },
+          {
+            "x": "Meghalaya",
+            "F1": -0.45615171,
+            "F2": 0.40858435
+          },
+          {
+            "x": "Mizoram",
+            "F1": -0.49668472,
+            "F2": 0.35637278
+          },
+          {
+            "x": "Jammu & Kashmir",
+            "F1": -0.50882508,
+            "F2": -0.4379985
+          },
+          {
+            "x": "West Bengal",
+            "F1": -0.51550797,
+            "F2": -0.8158562
+          },
+          {
+            "x": "D&N Haveli and Daman & Diu",
+            "F1": -0.56202517,
+            "F2": -0.54721612
+          },
+          {
+            "x": "Tripura",
+            "F1": -0.58157053,
+            "F2": -0.56818736
+          },
+          {
+            "x": "Nagaland",
+            "F1": -0.58620668,
+            "F2": -0.55151525
+          },
+          {
+            "x": "Lakshadweep",
+            "F1": -0.59394533,
+            "F2": -0.83542076
+          },
+          {
+            "x": "Manipur",
+            "F1": -0.59810319,
+            "F2": -0.84217395
+          },
+          {
+            "x": "Ladakh",
+            "F1": -0.60126787,
+            "F2": -0.87534336
+          },
+          {
+            "x": "Assam",
+            "F1": -0.60684369,
+            "F2": -0.7611771
+          }
+        ]
+      }
+    ]
+  },
+  "yields": "Across 36 states and UTs, 2 factors summarise the eight crime rates; F1 groups cyber_stalking + fraud + cheating + blackmail, and Telangana scores highest on it. CyCRS uses this only as context about Indian crime patterns, not as an input to its recommendations.",
+  "feeds": [],
+  "limitations": [
+    "Only 36 cases for 8 variables.",
+    "NCRB counts reported FIRs, which depend on how readily each state registers cyber crime."
+  ]
+}

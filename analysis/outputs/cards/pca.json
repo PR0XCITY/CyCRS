@@ -1,0 +1,2344 @@
+{
+  "id": "pca",
+  "title": "How many things really describe an incident",
+  "module": "5: Principal component analysis",
+  "stage": "segment",
+  "used_live": false,
+  "order": 10,
+  "question": "How many independent dimensions are hidden in the dozens of yes/no flags that describe each incident?",
+  "data_in": {
+    "dataset": "VCDB validated incidents",
+    "n_rows": 10596,
+    "variables": [
+      {
+        "name": "actor_*, action_*, asset_*",
+        "type": "binary",
+        "scale": "nominal",
+        "transform": "standardised"
+      },
+      {
+        "name": "v_*, vec_*",
+        "type": "binary",
+        "scale": "nominal",
+        "transform": "standardised"
+      }
+    ],
+    "prep_steps": [
+      "Used 37 0/1 incident flags with non-zero variance",
+      "Standardised each flag to mean 0, SD 1 before PCA"
+    ],
+    "sample_rows": [
+      {
+        "actor_external": 1,
+        "actor_internal": 0,
+        "actor_partner": 0,
+        "action_hacking": 1,
+        "action_malware": 0,
+        "action_social": 0,
+        "action_error": 0,
+        "action_misuse": 0
+      },
+      {
+        "actor_external": 1,
+        "actor_internal": 0,
+        "actor_partner": 0,
+        "action_hacking": 1,
+        "action_malware": 0,
+        "action_social": 1,
+        "action_error": 0,
+        "action_misuse": 0
+      },
+      {
+        "actor_external": 1,
+        "actor_internal": 0,
+        "actor_partner": 0,
+        "action_hacking": 0,
+        "action_malware": 1,
+        "action_social": 0,
+        "action_error": 0,
+        "action_misuse": 0
+      },
+      {
+        "actor_external": 1,
+        "actor_internal": 1,
+        "actor_partner": 0,
+        "action_hacking": 0,
+        "action_malware": 0,
+        "action_social": 0,
+        "action_error": 1,
+        "action_misuse": 1
+      },
+      {
+        "actor_external": 0,
+        "actor_internal": 1,
+        "actor_partner": 0,
+        "action_hacking": 0,
+        "action_malware": 0,
+        "action_social": 0,
+        "action_error": 1,
+        "action_misuse": 0
+      },
+      {
+        "actor_external": 1,
+        "actor_internal": 0,
+        "actor_partner": 0,
+        "action_hacking": 1,
+        "action_malware": 0,
+        "action_social": 0,
+        "action_error": 0,
+        "action_misuse": 0
+      },
+      {
+        "actor_external": 1,
+        "actor_internal": 0,
+        "actor_partner": 0,
+        "action_hacking": 0,
+        "action_malware": 1,
+        "action_social": 0,
+        "action_error": 0,
+        "action_misuse": 0
+      },
+      {
+        "actor_external": 0,
+        "actor_internal": 1,
+        "actor_partner": 0,
+        "action_hacking": 0,
+        "action_malware": 0,
+        "action_social": 0,
+        "action_error": 1,
+        "action_misuse": 0
+      }
+    ]
+  },
+  "why": "The 37 flags overlap heavily (a ransomware flag implies a malware flag, an error flag often comes with media assets), so PCA can compress them into a few uncorrelated components. Kaiser's rule keeps 12 components and 80% of the variance needs 14, which measures how much redundancy there is.",
+  "data_properties": [
+    {
+      "name": "Components with eigenvalue above 1",
+      "value": 12,
+      "implication": "Kaiser dimension count."
+    },
+    {
+      "name": "Components for 80% variance",
+      "value": 14,
+      "implication": "Dimensions needed to keep most information."
+    },
+    {
+      "name": "Variance explained by PC1",
+      "value": 0.17878477,
+      "implication": "+action_hacking / +actor_external"
+    },
+    {
+      "name": "Variance explained by PC2",
+      "value": 0.10746543,
+      "implication": "+action_social / +asset_person"
+    }
+  ],
+  "alternatives": [
+    {
+      "model": "Factor analysis on incident flags",
+      "why_not": "Flags are binary and FA assumes continuous, roughly normal indicators; it is used on NCRB rates instead."
+    },
+    {
+      "model": "Keep all flags",
+      "why_not": "PC1 and PC2 alone carry 29% of the variance, so plots and clustering on raw flags would be noisy."
+    }
+  ],
+  "formula_tex": [
+    {
+      "label": "Eigen decomposition",
+      "tex": "\\Sigma v_k = \\lambda_k v_k"
+    },
+    {
+      "label": "Variance explained",
+      "tex": "\\frac{\\lambda_k}{\\sum_j \\lambda_j}"
+    },
+    {
+      "label": "Loading",
+      "tex": "\\ell_{jk} = v_{jk}\\sqrt{\\lambda_k}"
+    }
+  ],
+  "assumptions": [
+    {
+      "check": "Kaiser criterion vs 80% rule",
+      "statistic": 12.0,
+      "p_value": null,
+      "verdict": "12 vs 14 components",
+      "action_taken": "First 8 components interpreted."
+    }
+  ],
+  "results": {
+    "key_numbers": {
+      "features": 37,
+      "kaiser": 12,
+      "n80": 14,
+      "pc1_var": 0.17878477,
+      "pc2_var": 0.10746543
+    },
+    "tables": [
+      {
+        "title": "Component names (top two loadings)",
+        "columns": [
+          "component",
+          "name",
+          "variance"
+        ],
+        "rows": [
+          [
+            "PC1",
+            "+action_hacking / +actor_external",
+            0.17878477
+          ],
+          [
+            "PC2",
+            "+action_social / +asset_person",
+            0.10746543
+          ],
+          [
+            "PC3",
+            "+action_misuse / +v_privilege_abuse",
+            0.09269914
+          ],
+          [
+            "PC4",
+            "+action_error / +vec_carelessness",
+            0.08564801
+          ],
+          [
+            "PC5",
+            "+v_backdoor_c2 / -asset_server",
+            0.0571005
+          ],
+          [
+            "PC6",
+            "+asset_network / +v_brute_force",
+            0.03949644
+          ],
+          [
+            "PC7",
+            "+v_misconfiguration / -asset_media",
+            0.03765596
+          ],
+          [
+            "PC8",
+            "+actor_partner / +v_loss",
+            0.03249664
+          ]
+        ]
+      },
+      {
+        "title": "Loadings",
+        "columns": [
+          "feature",
+          "PC1",
+          "PC2",
+          "PC3",
+          "PC4",
+          "PC5",
+          "PC6",
+          "PC7",
+          "PC8"
+        ],
+        "rows": [
+          [
+            "actor_external",
+            0.7433,
+            -0.0332,
+            -0.4122,
+            -0.3212,
+            -0.1628,
+            -0.0622,
+            -0.0088,
+            -0.052
+          ],
+          [
+            "actor_internal",
+            -0.7069,
+            0.0594,
+            0.4599,
+            0.2745,
+            0.1935,
+            0.0275,
+            0.0111,
+            -0.153
+          ],
+          [
+            "actor_partner",
+            -0.1336,
+            0.0073,
+            0.0115,
+            0.1024,
+            -0.0414,
+            0.0702,
+            0.0634,
+            0.6473
+          ],
+          [
+            "action_hacking",
+            0.7536,
+            -0.2004,
+            0.0501,
+            0.0329,
+            -0.3934,
+            -0.0207,
+            -0.2491,
+            -0.0561
+          ],
+          [
+            "action_malware",
+            0.7164,
+            -0.1602,
+            0.1101,
+            0.2016,
+            0.4016,
+            -0.0021,
+            0.137,
+            0.0217
+          ],
+          [
+            "action_social",
+            0.4044,
+            0.8044,
+            0.1305,
+            0.1251,
+            0.024,
+            -0.2479,
+            0.1246,
+            0.0015
+          ],
+          [
+            "action_error",
+            -0.5527,
+            -0.0171,
+            -0.0675,
+            0.7522,
+            -0.0224,
+            0.0921,
+            0.1217,
+            0.0476
+          ],
+          [
+            "action_misuse",
+            -0.3367,
+            0.0891,
+            0.7148,
+            -0.4556,
+            0.2405,
+            -0.0378,
+            -0.1127,
+            0.0331
+          ],
+          [
+            "action_physical",
+            -0.1036,
+            0.0945,
+            -0.6731,
+            -0.4961,
+            0.2843,
+            0.1077,
+            0.0995,
+            0.0076
+          ],
+          [
+            "asset_server",
+            0.4644,
+            -0.1965,
+            0.5229,
+            -0.007,
+            -0.4348,
+            0.1532,
+            0.2149,
+            -0.0093
+          ],
+          [
+            "asset_user_device",
+            0.0899,
+            0.3845,
+            -0.3465,
+            -0.1796,
+            0.3321,
+            0.2299,
+            0.1542,
+            -0.0997
+          ],
+          [
+            "asset_person",
+            0.3823,
+            0.7902,
+            0.1372,
+            0.1182,
+            0.034,
+            -0.2622,
+            0.1173,
+            0.0033
+          ],
+          [
+            "asset_network",
+            0.2539,
+            0.3694,
+            0.0553,
+            0.1359,
+            0.0913,
+            0.5621,
+            -0.2989,
+            0.0262
+          ],
+          [
+            "asset_media",
+            -0.482,
+            0.04,
+            -0.2071,
+            0.3261,
+            0.3127,
+            -0.2492,
+            -0.4221,
+            0.0743
+          ],
+          [
+            "v_ransomware",
+            0.5973,
+            -0.437,
+            0.1112,
+            0.17,
+            0.3974,
+            -0.1098,
+            0.1684,
+            0.0344
+          ],
+          [
+            "v_phishing",
+            0.433,
+            0.7623,
+            0.0819,
+            0.1839,
+            0.0667,
+            -0.0153,
+            0.0698,
+            -0.0615
+          ],
+          [
+            "v_pretexting",
+            0.0836,
+            0.2436,
+            0.0038,
+            0.0036,
+            -0.1034,
+            -0.4507,
+            0.1152,
+            0.1605
+          ],
+          [
+            "v_stolen_creds",
+            0.3348,
+            0.3946,
+            0.0692,
+            0.0783,
+            -0.2397,
+            0.1526,
+            -0.2842,
+            0.0676
+          ],
+          [
+            "v_brute_force",
+            0.2788,
+            0.3646,
+            0.066,
+            0.1243,
+            0.0587,
+            0.5616,
+            -0.341,
+            0.0565
+          ],
+          [
+            "v_exploit_vuln",
+            0.6633,
+            -0.3386,
+            0.139,
+            0.2099,
+            0.3102,
+            0.1091,
+            -0.092,
+            0.0252
+          ],
+          [
+            "v_backdoor_c2",
+            0.7071,
+            -0.1902,
+            0.1528,
+            0.254,
+            0.4493,
+            0.0606,
+            0.021,
+            0.0111
+          ],
+          [
+            "v_dos",
+            0.0806,
+            -0.0607,
+            -0.0244,
+            -0.055,
+            -0.3276,
+            -0.0218,
+            -0.216,
+            -0.1916
+          ],
+          [
+            "v_privilege_abuse",
+            -0.2681,
+            0.0636,
+            0.7133,
+            -0.4453,
+            0.1612,
+            0.07,
+            0.0387,
+            -0.0244
+          ],
+          [
+            "v_theft",
+            -0.0946,
+            0.0958,
+            -0.6112,
+            -0.4353,
+            0.3181,
+            0.1336,
+            0.0849,
+            -0.0073
+          ],
+          [
+            "v_skimmer",
+            -0.0219,
+            0.0032,
+            -0.2037,
+            -0.1661,
+            0.0023,
+            -0.0175,
+            0.0657,
+            0.0128
+          ],
+          [
+            "v_misdelivery",
+            -0.3477,
+            0.0065,
+            -0.084,
+            0.5026,
+            0.1084,
+            -0.0767,
+            -0.1519,
+            -0.4444
+          ],
+          [
+            "v_misconfiguration",
+            -0.1481,
+            -0.0345,
+            0.0496,
+            0.2641,
+            -0.1953,
+            0.2673,
+            0.4549,
+            0.0115
+          ],
+          [
+            "v_publishing_error",
+            -0.155,
+            -0.0259,
+            0.0381,
+            0.2178,
+            -0.1523,
+            0.1951,
+            0.3442,
+            0.2551
+          ],
+          [
+            "v_loss",
+            -0.22,
+            0.0074,
+            -0.0899,
+            0.2787,
+            0.1081,
+            -0.1033,
+            -0.2162,
+            0.4566
+          ],
+          [
+            "vec_web_app",
+            0.6372,
+            -0.3821,
+            0.0801,
+            0.0619,
+            -0.2482,
+            -0.123,
+            -0.1905,
+            -0.0772
+          ],
+          [
+            "vec_email",
+            0.4328,
+            0.7791,
+            0.0796,
+            0.1788,
+            0.057,
+            -0.0973,
+            0.1037,
+            -0.042
+          ],
+          [
+            "vec_remote_access",
+            0.0146,
+            0.0259,
+            0.1011,
+            -0.0677,
+            -0.0476,
+            0.1078,
+            -0.1106,
+            0.2876
+          ],
+          [
+            "vec_partner",
+            0.0584,
+            0.0444,
+            0.008,
+            -0.011,
+            -0.1489,
+            -0.1521,
+            -0.0582,
+            0.2198
+          ],
+          [
+            "vec_direct_install",
+            0.6054,
+            -0.4891,
+            0.1372,
+            0.1906,
+            0.4129,
+            -0.0729,
+            0.0657,
+            0.0495
+          ],
+          [
+            "vec_lan_access",
+            -0.2638,
+            0.0562,
+            0.6973,
+            -0.4299,
+            0.1538,
+            0.081,
+            0.0845,
+            -0.0828
+          ],
+          [
+            "vec_physical_access",
+            -0.1725,
+            0.0696,
+            0.2121,
+            -0.1515,
+            0.2238,
+            -0.2298,
+            -0.3441,
+            0.107
+          ],
+          [
+            "vec_carelessness",
+            -0.397,
+            -0.0169,
+            -0.0513,
+            0.6238,
+            0.0011,
+            0.0474,
+            0.0656,
+            -0.1633
+          ]
+        ]
+      }
+    ],
+    "charts": [
+      {
+        "type": "bar",
+        "title": "Scree",
+        "x_label": "Component",
+        "y_label": "Eigenvalue",
+        "data": [
+          {
+            "x": 1,
+            "y": 6.61566082,
+            "cum": 0.17878477
+          },
+          {
+            "x": 2,
+            "y": 3.97659611,
+            "cum": 0.2862502
+          },
+          {
+            "x": 3,
+            "y": 3.43019197,
+            "cum": 0.37894934
+          },
+          {
+            "x": 4,
+            "y": 3.16927534,
+            "cum": 0.46459735
+          },
+          {
+            "x": 5,
+            "y": 2.11291806,
+            "cum": 0.52169785
+          },
+          {
+            "x": 6,
+            "y": 1.46150608,
+            "cum": 0.56119429
+          },
+          {
+            "x": 7,
+            "y": 1.39340198,
+            "cum": 0.59885024
+          },
+          {
+            "x": 8,
+            "y": 1.20248916,
+            "cum": 0.63134688
+          },
+          {
+            "x": 9,
+            "y": 1.15411966,
+            "cum": 0.66253636
+          },
+          {
+            "x": 10,
+            "y": 1.11145343,
+            "cum": 0.69257281
+          },
+          {
+            "x": 11,
+            "y": 1.07219004,
+            "cum": 0.72154819
+          },
+          {
+            "x": 12,
+            "y": 1.03728378,
+            "cum": 0.74958024
+          },
+          {
+            "x": 13,
+            "y": 0.99802284,
+            "cum": 0.77655128
+          },
+          {
+            "x": 14,
+            "y": 0.92979799,
+            "cum": 0.80167858
+          },
+          {
+            "x": 15,
+            "y": 0.91311875,
+            "cum": 0.82635514
+          },
+          {
+            "x": 16,
+            "y": 0.86573547,
+            "cum": 0.84975119
+          },
+          {
+            "x": 17,
+            "y": 0.78111754,
+            "cum": 0.87086048
+          },
+          {
+            "x": 18,
+            "y": 0.7150918,
+            "cum": 0.89018546
+          },
+          {
+            "x": 19,
+            "y": 0.57895482,
+            "cum": 0.90583141
+          },
+          {
+            "x": 20,
+            "y": 0.4771166,
+            "cum": 0.91872524
+          },
+          {
+            "x": 21,
+            "y": 0.46114793,
+            "cum": 0.93118752
+          },
+          {
+            "x": 22,
+            "y": 0.35701853,
+            "cum": 0.94083576
+          },
+          {
+            "x": 23,
+            "y": 0.28157121,
+            "cum": 0.94844507
+          },
+          {
+            "x": 24,
+            "y": 0.26250539,
+            "cum": 0.95553914
+          },
+          {
+            "x": 25,
+            "y": 0.24245978,
+            "cum": 0.96209149
+          },
+          {
+            "x": 26,
+            "y": 0.20415131,
+            "cum": 0.96760858
+          },
+          {
+            "x": 27,
+            "y": 0.20206191,
+            "cum": 0.97306919
+          },
+          {
+            "x": 28,
+            "y": 0.15493509,
+            "cum": 0.97725623
+          },
+          {
+            "x": 29,
+            "y": 0.14353129,
+            "cum": 0.98113509
+          },
+          {
+            "x": 30,
+            "y": 0.13688126,
+            "cum": 0.98483424
+          },
+          {
+            "x": 31,
+            "y": 0.11431333,
+            "cum": 0.98792349
+          },
+          {
+            "x": 32,
+            "y": 0.10799978,
+            "cum": 0.99084213
+          },
+          {
+            "x": 33,
+            "y": 0.0984118,
+            "cum": 0.99350166
+          },
+          {
+            "x": 34,
+            "y": 0.0870686,
+            "cum": 0.99585464
+          },
+          {
+            "x": 35,
+            "y": 0.06835105,
+            "cum": 0.99770179
+          },
+          {
+            "x": 36,
+            "y": 0.04741389,
+            "cum": 0.99898313
+          },
+          {
+            "x": 37,
+            "y": 0.03762781,
+            "cum": 1.0
+          }
+        ]
+      },
+      {
+        "type": "heatmap",
+        "title": "Loadings",
+        "x_label": "Component",
+        "y_label": "Feature",
+        "data": [
+          {
+            "x": "PC1",
+            "y": "actor_external",
+            "value": 0.74327081
+          },
+          {
+            "x": "PC2",
+            "y": "actor_external",
+            "value": -0.03320187
+          },
+          {
+            "x": "PC3",
+            "y": "actor_external",
+            "value": -0.41220621
+          },
+          {
+            "x": "PC4",
+            "y": "actor_external",
+            "value": -0.32116166
+          },
+          {
+            "x": "PC5",
+            "y": "actor_external",
+            "value": -0.16280498
+          },
+          {
+            "x": "PC6",
+            "y": "actor_external",
+            "value": -0.06217676
+          },
+          {
+            "x": "PC7",
+            "y": "actor_external",
+            "value": -0.00879037
+          },
+          {
+            "x": "PC8",
+            "y": "actor_external",
+            "value": -0.05198785
+          },
+          {
+            "x": "PC1",
+            "y": "actor_internal",
+            "value": -0.70688995
+          },
+          {
+            "x": "PC2",
+            "y": "actor_internal",
+            "value": 0.05944406
+          },
+          {
+            "x": "PC3",
+            "y": "actor_internal",
+            "value": 0.45988964
+          },
+          {
+            "x": "PC4",
+            "y": "actor_internal",
+            "value": 0.27446573
+          },
+          {
+            "x": "PC5",
+            "y": "actor_internal",
+            "value": 0.19350087
+          },
+          {
+            "x": "PC6",
+            "y": "actor_internal",
+            "value": 0.02749951
+          },
+          {
+            "x": "PC7",
+            "y": "actor_internal",
+            "value": 0.01110184
+          },
+          {
+            "x": "PC8",
+            "y": "actor_internal",
+            "value": -0.15304807
+          },
+          {
+            "x": "PC1",
+            "y": "actor_partner",
+            "value": -0.13356873
+          },
+          {
+            "x": "PC2",
+            "y": "actor_partner",
+            "value": 0.00733989
+          },
+          {
+            "x": "PC3",
+            "y": "actor_partner",
+            "value": 0.01153867
+          },
+          {
+            "x": "PC4",
+            "y": "actor_partner",
+            "value": 0.10239608
+          },
+          {
+            "x": "PC5",
+            "y": "actor_partner",
+            "value": -0.04136872
+          },
+          {
+            "x": "PC6",
+            "y": "actor_partner",
+            "value": 0.07019196
+          },
+          {
+            "x": "PC7",
+            "y": "actor_partner",
+            "value": 0.06342321
+          },
+          {
+            "x": "PC8",
+            "y": "actor_partner",
+            "value": 0.64730027
+          },
+          {
+            "x": "PC1",
+            "y": "action_hacking",
+            "value": 0.75359813
+          },
+          {
+            "x": "PC2",
+            "y": "action_hacking",
+            "value": -0.20036586
+          },
+          {
+            "x": "PC3",
+            "y": "action_hacking",
+            "value": 0.05014418
+          },
+          {
+            "x": "PC4",
+            "y": "action_hacking",
+            "value": 0.03286838
+          },
+          {
+            "x": "PC5",
+            "y": "action_hacking",
+            "value": -0.39338551
+          },
+          {
+            "x": "PC6",
+            "y": "action_hacking",
+            "value": -0.02070018
+          },
+          {
+            "x": "PC7",
+            "y": "action_hacking",
+            "value": -0.24913878
+          },
+          {
+            "x": "PC8",
+            "y": "action_hacking",
+            "value": -0.05613487
+          },
+          {
+            "x": "PC1",
+            "y": "action_malware",
+            "value": 0.71642698
+          },
+          {
+            "x": "PC2",
+            "y": "action_malware",
+            "value": -0.16021425
+          },
+          {
+            "x": "PC3",
+            "y": "action_malware",
+            "value": 0.11014061
+          },
+          {
+            "x": "PC4",
+            "y": "action_malware",
+            "value": 0.20162005
+          },
+          {
+            "x": "PC5",
+            "y": "action_malware",
+            "value": 0.40158677
+          },
+          {
+            "x": "PC6",
+            "y": "action_malware",
+            "value": -0.00210151
+          },
+          {
+            "x": "PC7",
+            "y": "action_malware",
+            "value": 0.13698958
+          },
+          {
+            "x": "PC8",
+            "y": "action_malware",
+            "value": 0.0217037
+          },
+          {
+            "x": "PC1",
+            "y": "action_social",
+            "value": 0.40441236
+          },
+          {
+            "x": "PC2",
+            "y": "action_social",
+            "value": 0.80442492
+          },
+          {
+            "x": "PC3",
+            "y": "action_social",
+            "value": 0.13054692
+          },
+          {
+            "x": "PC4",
+            "y": "action_social",
+            "value": 0.1250941
+          },
+          {
+            "x": "PC5",
+            "y": "action_social",
+            "value": 0.02395056
+          },
+          {
+            "x": "PC6",
+            "y": "action_social",
+            "value": -0.24786043
+          },
+          {
+            "x": "PC7",
+            "y": "action_social",
+            "value": 0.12459314
+          },
+          {
+            "x": "PC8",
+            "y": "action_social",
+            "value": 0.0015384
+          },
+          {
+            "x": "PC1",
+            "y": "action_error",
+            "value": -0.55273121
+          },
+          {
+            "x": "PC2",
+            "y": "action_error",
+            "value": -0.01708891
+          },
+          {
+            "x": "PC3",
+            "y": "action_error",
+            "value": -0.06754164
+          },
+          {
+            "x": "PC4",
+            "y": "action_error",
+            "value": 0.75216424
+          },
+          {
+            "x": "PC5",
+            "y": "action_error",
+            "value": -0.02238425
+          },
+          {
+            "x": "PC6",
+            "y": "action_error",
+            "value": 0.09212064
+          },
+          {
+            "x": "PC7",
+            "y": "action_error",
+            "value": 0.12167554
+          },
+          {
+            "x": "PC8",
+            "y": "action_error",
+            "value": 0.04757089
+          },
+          {
+            "x": "PC1",
+            "y": "action_misuse",
+            "value": -0.33667861
+          },
+          {
+            "x": "PC2",
+            "y": "action_misuse",
+            "value": 0.08911261
+          },
+          {
+            "x": "PC3",
+            "y": "action_misuse",
+            "value": 0.71480919
+          },
+          {
+            "x": "PC4",
+            "y": "action_misuse",
+            "value": -0.45564237
+          },
+          {
+            "x": "PC5",
+            "y": "action_misuse",
+            "value": 0.2405353
+          },
+          {
+            "x": "PC6",
+            "y": "action_misuse",
+            "value": -0.03775046
+          },
+          {
+            "x": "PC7",
+            "y": "action_misuse",
+            "value": -0.11270322
+          },
+          {
+            "x": "PC8",
+            "y": "action_misuse",
+            "value": 0.03307765
+          },
+          {
+            "x": "PC1",
+            "y": "action_physical",
+            "value": -0.10356911
+          },
+          {
+            "x": "PC2",
+            "y": "action_physical",
+            "value": 0.09449933
+          },
+          {
+            "x": "PC3",
+            "y": "action_physical",
+            "value": -0.67308474
+          },
+          {
+            "x": "PC4",
+            "y": "action_physical",
+            "value": -0.49608607
+          },
+          {
+            "x": "PC5",
+            "y": "action_physical",
+            "value": 0.28426838
+          },
+          {
+            "x": "PC6",
+            "y": "action_physical",
+            "value": 0.10768573
+          },
+          {
+            "x": "PC7",
+            "y": "action_physical",
+            "value": 0.09945396
+          },
+          {
+            "x": "PC8",
+            "y": "action_physical",
+            "value": 0.00757028
+          },
+          {
+            "x": "PC1",
+            "y": "asset_server",
+            "value": 0.46439941
+          },
+          {
+            "x": "PC2",
+            "y": "asset_server",
+            "value": -0.19654732
+          },
+          {
+            "x": "PC3",
+            "y": "asset_server",
+            "value": 0.52291011
+          },
+          {
+            "x": "PC4",
+            "y": "asset_server",
+            "value": -0.00701069
+          },
+          {
+            "x": "PC5",
+            "y": "asset_server",
+            "value": -0.43481647
+          },
+          {
+            "x": "PC6",
+            "y": "asset_server",
+            "value": 0.15319436
+          },
+          {
+            "x": "PC7",
+            "y": "asset_server",
+            "value": 0.21485592
+          },
+          {
+            "x": "PC8",
+            "y": "asset_server",
+            "value": -0.00926006
+          },
+          {
+            "x": "PC1",
+            "y": "asset_user_device",
+            "value": 0.08992858
+          },
+          {
+            "x": "PC2",
+            "y": "asset_user_device",
+            "value": 0.38447703
+          },
+          {
+            "x": "PC3",
+            "y": "asset_user_device",
+            "value": -0.34652324
+          },
+          {
+            "x": "PC4",
+            "y": "asset_user_device",
+            "value": -0.17961908
+          },
+          {
+            "x": "PC5",
+            "y": "asset_user_device",
+            "value": 0.33208722
+          },
+          {
+            "x": "PC6",
+            "y": "asset_user_device",
+            "value": 0.22985485
+          },
+          {
+            "x": "PC7",
+            "y": "asset_user_device",
+            "value": 0.15416038
+          },
+          {
+            "x": "PC8",
+            "y": "asset_user_device",
+            "value": -0.09970595
+          },
+          {
+            "x": "PC1",
+            "y": "asset_person",
+            "value": 0.38227335
+          },
+          {
+            "x": "PC2",
+            "y": "asset_person",
+            "value": 0.79018975
+          },
+          {
+            "x": "PC3",
+            "y": "asset_person",
+            "value": 0.13723967
+          },
+          {
+            "x": "PC4",
+            "y": "asset_person",
+            "value": 0.11822583
+          },
+          {
+            "x": "PC5",
+            "y": "asset_person",
+            "value": 0.0339667
+          },
+          {
+            "x": "PC6",
+            "y": "asset_person",
+            "value": -0.26217182
+          },
+          {
+            "x": "PC7",
+            "y": "asset_person",
+            "value": 0.11729819
+          },
+          {
+            "x": "PC8",
+            "y": "asset_person",
+            "value": 0.0032538
+          },
+          {
+            "x": "PC1",
+            "y": "asset_network",
+            "value": 0.25389988
+          },
+          {
+            "x": "PC2",
+            "y": "asset_network",
+            "value": 0.36938012
+          },
+          {
+            "x": "PC3",
+            "y": "asset_network",
+            "value": 0.05525099
+          },
+          {
+            "x": "PC4",
+            "y": "asset_network",
+            "value": 0.13586763
+          },
+          {
+            "x": "PC5",
+            "y": "asset_network",
+            "value": 0.09131998
+          },
+          {
+            "x": "PC6",
+            "y": "asset_network",
+            "value": 0.5620706
+          },
+          {
+            "x": "PC7",
+            "y": "asset_network",
+            "value": -0.29891352
+          },
+          {
+            "x": "PC8",
+            "y": "asset_network",
+            "value": 0.02615203
+          },
+          {
+            "x": "PC1",
+            "y": "asset_media",
+            "value": -0.48196066
+          },
+          {
+            "x": "PC2",
+            "y": "asset_media",
+            "value": 0.0400037
+          },
+          {
+            "x": "PC3",
+            "y": "asset_media",
+            "value": -0.2071252
+          },
+          {
+            "x": "PC4",
+            "y": "asset_media",
+            "value": 0.32606721
+          },
+          {
+            "x": "PC5",
+            "y": "asset_media",
+            "value": 0.31267499
+          },
+          {
+            "x": "PC6",
+            "y": "asset_media",
+            "value": -0.24924021
+          },
+          {
+            "x": "PC7",
+            "y": "asset_media",
+            "value": -0.42207966
+          },
+          {
+            "x": "PC8",
+            "y": "asset_media",
+            "value": 0.07425295
+          },
+          {
+            "x": "PC1",
+            "y": "v_ransomware",
+            "value": 0.5973335
+          },
+          {
+            "x": "PC2",
+            "y": "v_ransomware",
+            "value": -0.43704783
+          },
+          {
+            "x": "PC3",
+            "y": "v_ransomware",
+            "value": 0.11124565
+          },
+          {
+            "x": "PC4",
+            "y": "v_ransomware",
+            "value": 0.16999936
+          },
+          {
+            "x": "PC5",
+            "y": "v_ransomware",
+            "value": 0.39744268
+          },
+          {
+            "x": "PC6",
+            "y": "v_ransomware",
+            "value": -0.10982285
+          },
+          {
+            "x": "PC7",
+            "y": "v_ransomware",
+            "value": 0.1683861
+          },
+          {
+            "x": "PC8",
+            "y": "v_ransomware",
+            "value": 0.03437824
+          },
+          {
+            "x": "PC1",
+            "y": "v_phishing",
+            "value": 0.433042
+          },
+          {
+            "x": "PC2",
+            "y": "v_phishing",
+            "value": 0.7623007
+          },
+          {
+            "x": "PC3",
+            "y": "v_phishing",
+            "value": 0.08194578
+          },
+          {
+            "x": "PC4",
+            "y": "v_phishing",
+            "value": 0.18388962
+          },
+          {
+            "x": "PC5",
+            "y": "v_phishing",
+            "value": 0.06669535
+          },
+          {
+            "x": "PC6",
+            "y": "v_phishing",
+            "value": -0.01529705
+          },
+          {
+            "x": "PC7",
+            "y": "v_phishing",
+            "value": 0.06975041
+          },
+          {
+            "x": "PC8",
+            "y": "v_phishing",
+            "value": -0.06151762
+          },
+          {
+            "x": "PC1",
+            "y": "v_pretexting",
+            "value": 0.08357974
+          },
+          {
+            "x": "PC2",
+            "y": "v_pretexting",
+            "value": 0.24359702
+          },
+          {
+            "x": "PC3",
+            "y": "v_pretexting",
+            "value": 0.00376416
+          },
+          {
+            "x": "PC4",
+            "y": "v_pretexting",
+            "value": 0.00355302
+          },
+          {
+            "x": "PC5",
+            "y": "v_pretexting",
+            "value": -0.10344216
+          },
+          {
+            "x": "PC6",
+            "y": "v_pretexting",
+            "value": -0.45066188
+          },
+          {
+            "x": "PC7",
+            "y": "v_pretexting",
+            "value": 0.11516924
+          },
+          {
+            "x": "PC8",
+            "y": "v_pretexting",
+            "value": 0.1604688
+          },
+          {
+            "x": "PC1",
+            "y": "v_stolen_creds",
+            "value": 0.33480707
+          },
+          {
+            "x": "PC2",
+            "y": "v_stolen_creds",
+            "value": 0.39455059
+          },
+          {
+            "x": "PC3",
+            "y": "v_stolen_creds",
+            "value": 0.06915811
+          },
+          {
+            "x": "PC4",
+            "y": "v_stolen_creds",
+            "value": 0.07825146
+          },
+          {
+            "x": "PC5",
+            "y": "v_stolen_creds",
+            "value": -0.23969331
+          },
+          {
+            "x": "PC6",
+            "y": "v_stolen_creds",
+            "value": 0.15262815
+          },
+          {
+            "x": "PC7",
+            "y": "v_stolen_creds",
+            "value": -0.28424395
+          },
+          {
+            "x": "PC8",
+            "y": "v_stolen_creds",
+            "value": 0.06757419
+          },
+          {
+            "x": "PC1",
+            "y": "v_brute_force",
+            "value": 0.27882277
+          },
+          {
+            "x": "PC2",
+            "y": "v_brute_force",
+            "value": 0.36459136
+          },
+          {
+            "x": "PC3",
+            "y": "v_brute_force",
+            "value": 0.06601072
+          },
+          {
+            "x": "PC4",
+            "y": "v_brute_force",
+            "value": 0.12432951
+          },
+          {
+            "x": "PC5",
+            "y": "v_brute_force",
+            "value": 0.05870812
+          },
+          {
+            "x": "PC6",
+            "y": "v_brute_force",
+            "value": 0.56159456
+          },
+          {
+            "x": "PC7",
+            "y": "v_brute_force",
+            "value": -0.34101403
+          },
+          {
+            "x": "PC8",
+            "y": "v_brute_force",
+            "value": 0.05650462
+          },
+          {
+            "x": "PC1",
+            "y": "v_exploit_vuln",
+            "value": 0.66328592
+          },
+          {
+            "x": "PC2",
+            "y": "v_exploit_vuln",
+            "value": -0.33861476
+          },
+          {
+            "x": "PC3",
+            "y": "v_exploit_vuln",
+            "value": 0.13901205
+          },
+          {
+            "x": "PC4",
+            "y": "v_exploit_vuln",
+            "value": 0.20987439
+          },
+          {
+            "x": "PC5",
+            "y": "v_exploit_vuln",
+            "value": 0.3102178
+          },
+          {
+            "x": "PC6",
+            "y": "v_exploit_vuln",
+            "value": 0.10905443
+          },
+          {
+            "x": "PC7",
+            "y": "v_exploit_vuln",
+            "value": -0.09202058
+          },
+          {
+            "x": "PC8",
+            "y": "v_exploit_vuln",
+            "value": 0.02519889
+          },
+          {
+            "x": "PC1",
+            "y": "v_backdoor_c2",
+            "value": 0.70712755
+          },
+          {
+            "x": "PC2",
+            "y": "v_backdoor_c2",
+            "value": -0.1902442
+          },
+          {
+            "x": "PC3",
+            "y": "v_backdoor_c2",
+            "value": 0.15282243
+          },
+          {
+            "x": "PC4",
+            "y": "v_backdoor_c2",
+            "value": 0.25396318
+          },
+          {
+            "x": "PC5",
+            "y": "v_backdoor_c2",
+            "value": 0.44925011
+          },
+          {
+            "x": "PC6",
+            "y": "v_backdoor_c2",
+            "value": 0.06063456
+          },
+          {
+            "x": "PC7",
+            "y": "v_backdoor_c2",
+            "value": 0.02102615
+          },
+          {
+            "x": "PC8",
+            "y": "v_backdoor_c2",
+            "value": 0.01110588
+          },
+          {
+            "x": "PC1",
+            "y": "v_dos",
+            "value": 0.08064743
+          },
+          {
+            "x": "PC2",
+            "y": "v_dos",
+            "value": -0.06074295
+          },
+          {
+            "x": "PC3",
+            "y": "v_dos",
+            "value": -0.02435473
+          },
+          {
+            "x": "PC4",
+            "y": "v_dos",
+            "value": -0.05504721
+          },
+          {
+            "x": "PC5",
+            "y": "v_dos",
+            "value": -0.32764772
+          },
+          {
+            "x": "PC6",
+            "y": "v_dos",
+            "value": -0.02184282
+          },
+          {
+            "x": "PC7",
+            "y": "v_dos",
+            "value": -0.21602986
+          },
+          {
+            "x": "PC8",
+            "y": "v_dos",
+            "value": -0.19160333
+          },
+          {
+            "x": "PC1",
+            "y": "v_privilege_abuse",
+            "value": -0.26814805
+          },
+          {
+            "x": "PC2",
+            "y": "v_privilege_abuse",
+            "value": 0.06358733
+          },
+          {
+            "x": "PC3",
+            "y": "v_privilege_abuse",
+            "value": 0.71328161
+          },
+          {
+            "x": "PC4",
+            "y": "v_privilege_abuse",
+            "value": -0.44534663
+          },
+          {
+            "x": "PC5",
+            "y": "v_privilege_abuse",
+            "value": 0.16121825
+          },
+          {
+            "x": "PC6",
+            "y": "v_privilege_abuse",
+            "value": 0.07003898
+          },
+          {
+            "x": "PC7",
+            "y": "v_privilege_abuse",
+            "value": 0.03867423
+          },
+          {
+            "x": "PC8",
+            "y": "v_privilege_abuse",
+            "value": -0.02435986
+          },
+          {
+            "x": "PC1",
+            "y": "v_theft",
+            "value": -0.09456067
+          },
+          {
+            "x": "PC2",
+            "y": "v_theft",
+            "value": 0.09583529
+          },
+          {
+            "x": "PC3",
+            "y": "v_theft",
+            "value": -0.61121801
+          },
+          {
+            "x": "PC4",
+            "y": "v_theft",
+            "value": -0.43531794
+          },
+          {
+            "x": "PC5",
+            "y": "v_theft",
+            "value": 0.31808736
+          },
+          {
+            "x": "PC6",
+            "y": "v_theft",
+            "value": 0.13358523
+          },
+          {
+            "x": "PC7",
+            "y": "v_theft",
+            "value": 0.08493894
+          },
+          {
+            "x": "PC8",
+            "y": "v_theft",
+            "value": -0.00729183
+          },
+          {
+            "x": "PC1",
+            "y": "v_skimmer",
+            "value": -0.02190371
+          },
+          {
+            "x": "PC2",
+            "y": "v_skimmer",
+            "value": 0.00321338
+          },
+          {
+            "x": "PC3",
+            "y": "v_skimmer",
+            "value": -0.2037484
+          },
+          {
+            "x": "PC4",
+            "y": "v_skimmer",
+            "value": -0.16613339
+          },
+          {
+            "x": "PC5",
+            "y": "v_skimmer",
+            "value": 0.00230071
+          },
+          {
+            "x": "PC6",
+            "y": "v_skimmer",
+            "value": -0.01751109
+          },
+          {
+            "x": "PC7",
+            "y": "v_skimmer",
+            "value": 0.06569911
+          },
+          {
+            "x": "PC8",
+            "y": "v_skimmer",
+            "value": 0.01283248
+          },
+          {
+            "x": "PC1",
+            "y": "v_misdelivery",
+            "value": -0.3476991
+          },
+          {
+            "x": "PC2",
+            "y": "v_misdelivery",
+            "value": 0.00647101
+          },
+          {
+            "x": "PC3",
+            "y": "v_misdelivery",
+            "value": -0.08399467
+          },
+          {
+            "x": "PC4",
+            "y": "v_misdelivery",
+            "value": 0.50257222
+          },
+          {
+            "x": "PC5",
+            "y": "v_misdelivery",
+            "value": 0.10837576
+          },
+          {
+            "x": "PC6",
+            "y": "v_misdelivery",
+            "value": -0.0766705
+          },
+          {
+            "x": "PC7",
+            "y": "v_misdelivery",
+            "value": -0.15190715
+          },
+          {
+            "x": "PC8",
+            "y": "v_misdelivery",
+            "value": -0.44444029
+          },
+          {
+            "x": "PC1",
+            "y": "v_misconfiguration",
+            "value": -0.14810787
+          },
+          {
+            "x": "PC2",
+            "y": "v_misconfiguration",
+            "value": -0.03452888
+          },
+          {
+            "x": "PC3",
+            "y": "v_misconfiguration",
+            "value": 0.04957886
+          },
+          {
+            "x": "PC4",
+            "y": "v_misconfiguration",
+            "value": 0.26405684
+          },
+          {
+            "x": "PC5",
+            "y": "v_misconfiguration",
+            "value": -0.19525267
+          },
+          {
+            "x": "PC6",
+            "y": "v_misconfiguration",
+            "value": 0.26730416
+          },
+          {
+            "x": "PC7",
+            "y": "v_misconfiguration",
+            "value": 0.45493944
+          },
+          {
+            "x": "PC8",
+            "y": "v_misconfiguration",
+            "value": 0.0114618
+          },
+          {
+            "x": "PC1",
+            "y": "v_publishing_error",
+            "value": -0.15500414
+          },
+          {
+            "x": "PC2",
+            "y": "v_publishing_error",
+            "value": -0.0259141
+          },
+          {
+            "x": "PC3",
+            "y": "v_publishing_error",
+            "value": 0.03805008
+          },
+          {
+            "x": "PC4",
+            "y": "v_publishing_error",
+            "value": 0.21782595
+          },
+          {
+            "x": "PC5",
+            "y": "v_publishing_error",
+            "value": -0.15225429
+          },
+          {
+            "x": "PC6",
+            "y": "v_publishing_error",
+            "value": 0.19513954
+          },
+          {
+            "x": "PC7",
+            "y": "v_publishing_error",
+            "value": 0.34415174
+          },
+          {
+            "x": "PC8",
+            "y": "v_publishing_error",
+            "value": 0.25507232
+          },
+          {
+            "x": "PC1",
+            "y": "v_loss",
+            "value": -0.21995203
+          },
+          {
+            "x": "PC2",
+            "y": "v_loss",
+            "value": 0.00740338
+          },
+          {
+            "x": "PC3",
+            "y": "v_loss",
+            "value": -0.08985845
+          },
+          {
+            "x": "PC4",
+            "y": "v_loss",
+            "value": 0.27865032
+          },
+          {
+            "x": "PC5",
+            "y": "v_loss",
+            "value": 0.10812822
+          },
+          {
+            "x": "PC6",
+            "y": "v_loss",
+            "value": -0.10326499
+          },
+          {
+            "x": "PC7",
+            "y": "v_loss",
+            "value": -0.21617497
+          },
+          {
+            "x": "PC8",
+            "y": "v_loss",
+            "value": 0.4566161
+          },
+          {
+            "x": "PC1",
+            "y": "vec_web_app",
+            "value": 0.63724375
+          },
+          {
+            "x": "PC2",
+            "y": "vec_web_app",
+            "value": -0.3821033
+          },
+          {
+            "x": "PC3",
+            "y": "vec_web_app",
+            "value": 0.08009281
+          },
+          {
+            "x": "PC4",
+            "y": "vec_web_app",
+            "value": 0.0618711
+          },
+          {
+            "x": "PC5",
+            "y": "vec_web_app",
+            "value": -0.24820558
+          },
+          {
+            "x": "PC6",
+            "y": "vec_web_app",
+            "value": -0.12298288
+          },
+          {
+            "x": "PC7",
+            "y": "vec_web_app",
+            "value": -0.19047521
+          },
+          {
+            "x": "PC8",
+            "y": "vec_web_app",
+            "value": -0.07718666
+          },
+          {
+            "x": "PC1",
+            "y": "vec_email",
+            "value": 0.4328102
+          },
+          {
+            "x": "PC2",
+            "y": "vec_email",
+            "value": 0.77908885
+          },
+          {
+            "x": "PC3",
+            "y": "vec_email",
+            "value": 0.079559
+          },
+          {
+            "x": "PC4",
+            "y": "vec_email",
+            "value": 0.17880949
+          },
+          {
+            "x": "PC5",
+            "y": "vec_email",
+            "value": 0.0569845
+          },
+          {
+            "x": "PC6",
+            "y": "vec_email",
+            "value": -0.09725267
+          },
+          {
+            "x": "PC7",
+            "y": "vec_email",
+            "value": 0.10369104
+          },
+          {
+            "x": "PC8",
+            "y": "vec_email",
+            "value": -0.04195872
+          },
+          {
+            "x": "PC1",
+            "y": "vec_remote_access",
+            "value": 0.01461368
+          },
+          {
+            "x": "PC2",
+            "y": "vec_remote_access",
+            "value": 0.02589598
+          },
+          {
+            "x": "PC3",
+            "y": "vec_remote_access",
+            "value": 0.10108388
+          },
+          {
+            "x": "PC4",
+            "y": "vec_remote_access",
+            "value": -0.0676746
+          },
+          {
+            "x": "PC5",
+            "y": "vec_remote_access",
+            "value": -0.0475562
+          },
+          {
+            "x": "PC6",
+            "y": "vec_remote_access",
+            "value": 0.10777533
+          },
+          {
+            "x": "PC7",
+            "y": "vec_remote_access",
+            "value": -0.1106364
+          },
+          {
+            "x": "PC8",
+            "y": "vec_remote_access",
+            "value": 0.28755323
+          },
+          {
+            "x": "PC1",
+            "y": "vec_partner",
+            "value": 0.05838197
+          },
+          {
+            "x": "PC2",
+            "y": "vec_partner",
+            "value": 0.04436612
+          },
+          {
+            "x": "PC3",
+            "y": "vec_partner",
+            "value": 0.00797205
+          },
+          {
+            "x": "PC4",
+            "y": "vec_partner",
+            "value": -0.01097665
+          },
+          {
+            "x": "PC5",
+            "y": "vec_partner",
+            "value": -0.14889957
+          },
+          {
+            "x": "PC6",
+            "y": "vec_partner",
+            "value": -0.15207849
+          },
+          {
+            "x": "PC7",
+            "y": "vec_partner",
+            "value": -0.05820194
+          },
+          {
+            "x": "PC8",
+            "y": "vec_partner",
+            "value": 0.2197988
+          },
+          {
+            "x": "PC1",
+            "y": "vec_direct_install",
+            "value": 0.60543793
+          },
+          {
+            "x": "PC2",
+            "y": "vec_direct_install",
+            "value": -0.48910989
+          },
+          {
+            "x": "PC3",
+            "y": "vec_direct_install",
+            "value": 0.13715492
+          },
+          {
+            "x": "PC4",
+            "y": "vec_direct_install",
+            "value": 0.19056098
+          },
+          {
+            "x": "PC5",
+            "y": "vec_direct_install",
+            "value": 0.4129236
+          },
+          {
+            "x": "PC6",
+            "y": "vec_direct_install",
+            "value": -0.07287366
+          },
+          {
+            "x": "PC7",
+            "y": "vec_direct_install",
+            "value": 0.06574325
+          },
+          {
+            "x": "PC8",
+            "y": "vec_direct_install",
+            "value": 0.04947288
+          },
+          {
+            "x": "PC1",
+            "y": "vec_lan_access",
+            "value": -0.26378428
+          },
+          {
+            "x": "PC2",
+            "y": "vec_lan_access",
+            "value": 0.05619558
+          },
+          {
+            "x": "PC3",
+            "y": "vec_lan_access",
+            "value": 0.69728019
+          },
+          {
+            "x": "PC4",
+            "y": "vec_lan_access",
+            "value": -0.42985662
+          },
+          {
+            "x": "PC5",
+            "y": "vec_lan_access",
+            "value": 0.15382337
+          },
+          {
+            "x": "PC6",
+            "y": "vec_lan_access",
+            "value": 0.08098157
+          },
+          {
+            "x": "PC7",
+            "y": "vec_lan_access",
+            "value": 0.08454474
+          },
+          {
+            "x": "PC8",
+            "y": "vec_lan_access",
+            "value": -0.08276098
+          },
+          {
+            "x": "PC1",
+            "y": "vec_physical_access",
+            "value": -0.1724877
+          },
+          {
+            "x": "PC2",
+            "y": "vec_physical_access",
+            "value": 0.06964617
+          },
+          {
+            "x": "PC3",
+            "y": "vec_physical_access",
+            "value": 0.21214196
+          },
+          {
+            "x": "PC4",
+            "y": "vec_physical_access",
+            "value": -0.15146051
+          },
+          {
+            "x": "PC5",
+            "y": "vec_physical_access",
+            "value": 0.22381425
+          },
+          {
+            "x": "PC6",
+            "y": "vec_physical_access",
+            "value": -0.22979421
+          },
+          {
+            "x": "PC7",
+            "y": "vec_physical_access",
+            "value": -0.34410369
+          },
+          {
+            "x": "PC8",
+            "y": "vec_physical_access",
+            "value": 0.1070098
+          },
+          {
+            "x": "PC1",
+            "y": "vec_carelessness",
+            "value": -0.39699539
+          },
+          {
+            "x": "PC2",
+            "y": "vec_carelessness",
+            "value": -0.01685754
+          },
+          {
+            "x": "PC3",
+            "y": "vec_carelessness",
+            "value": -0.05132321
+          },
+          {
+            "x": "PC4",
+            "y": "vec_carelessness",
+            "value": 0.6238212
+          },
+          {
+            "x": "PC5",
+            "y": "vec_carelessness",
+            "value": 0.0010741
+          },
+          {
+            "x": "PC6",
+            "y": "vec_carelessness",
+            "value": 0.04743496
+          },
+          {
+            "x": "PC7",
+            "y": "vec_carelessness",
+            "value": 0.06560565
+          },
+          {
+            "x": "PC8",
+            "y": "vec_carelessness",
+            "value": -0.16325033
+          }
+        ]
+      }
+    ]
+  },
+  "yields": "The 37 incident flags boil down to about 12 independent patterns by Kaiser's rule (14 to keep 80% of the information), led by +action_hacking / +actor_external. That is 32% as many dimensions as flags, so the flags overlap but each still adds information; CyCRS keeps the separate attack categories rather than replacing them with components.",
+  "feeds": [
+    "personas-kmeans"
+  ],
+  "limitations": [
+    "PCA on binary flags is descriptive; components are linear summaries, not causal factors.",
+    "Rare flags get large standardised values and can dominate later components."
+  ]
+}
