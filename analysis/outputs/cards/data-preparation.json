@@ -1,0 +1,754 @@
+{
+  "id": "data-preparation",
+  "title": "Preparing the breach records",
+  "module": "1: Descriptive statistics and data preparation",
+  "stage": "prepare",
+  "used_live": false,
+  "order": 1,
+  "question": "Which incident records can we trust and use, and in what form, to learn how breaches happen?",
+  "data_in": {
+    "dataset": "VERIS Community Database (VCDB), validated incidents",
+    "n_rows": 10596,
+    "variables": [
+      {
+        "name": "sector_code",
+        "type": "categorical",
+        "scale": "nominal",
+        "transform": "one-hot, Unknown kept as level"
+      },
+      {
+        "name": "sector",
+        "type": "categorical",
+        "scale": "nominal",
+        "transform": "one-hot, Unknown kept as level"
+      },
+      {
+        "name": "employee_count",
+        "type": "categorical",
+        "scale": "ordinal",
+        "transform": "ordered levels, Unknown kept as level"
+      },
+      {
+        "name": "size",
+        "type": "categorical",
+        "scale": "ordinal",
+        "transform": "ordered levels, Unknown kept as level"
+      },
+      {
+        "name": "country",
+        "type": "categorical",
+        "scale": "nominal",
+        "transform": "one-hot, Unknown kept as level"
+      },
+      {
+        "name": "actor_external",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "actor_internal",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "actor_partner",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "motive",
+        "type": "categorical",
+        "scale": "nominal",
+        "transform": "one-hot, Unknown kept as level"
+      },
+      {
+        "name": "action_hacking",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "action_malware",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "action_social",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "action_error",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "action_misuse",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "action_physical",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "action_environmental",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "v_ransomware",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "v_phishing",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "v_pretexting",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "v_stolen_creds",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "v_brute_force",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "v_exploit_vuln",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "v_backdoor_c2",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "v_dos",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "v_privilege_abuse",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "v_theft",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "v_skimmer",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "v_misdelivery",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "v_misconfiguration",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "v_publishing_error",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "v_loss",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "vec_web_app",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "vec_email",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "vec_remote_access",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "vec_partner",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "vec_direct_install",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "vec_lan_access",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "vec_physical_access",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "vec_carelessness",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "asset_server",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "asset_user_device",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "asset_person",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "asset_network",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "asset_media",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "data_disclosure",
+        "type": "categorical",
+        "scale": "nominal",
+        "transform": "one-hot, Unknown kept as level"
+      },
+      {
+        "name": "data_total",
+        "type": "numeric continuous",
+        "scale": "ratio",
+        "transform": "log10(1 + x)"
+      },
+      {
+        "name": "integrity",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "availability",
+        "type": "binary flag",
+        "scale": "nominal",
+        "transform": "0/1 as is"
+      },
+      {
+        "name": "discovery_unit",
+        "type": "categorical",
+        "scale": "nominal",
+        "transform": "one-hot, Unknown kept as level"
+      },
+      {
+        "name": "discovery_days",
+        "type": "numeric continuous",
+        "scale": "ratio",
+        "transform": "none"
+      },
+      {
+        "name": "year",
+        "type": "numeric discrete",
+        "scale": "interval",
+        "transform": "none"
+      },
+      {
+        "name": "breach",
+        "type": "binary target",
+        "scale": "nominal",
+        "transform": "1 Yes, 0 No, else missing"
+      }
+    ],
+    "prep_steps": [
+      "Read 10596 validated incident files and flattened each into one row of 53 fields",
+      "Mapped the first two NAICS digits to the Census 2022 sector name",
+      "Grouped employee counts into small (up to 100, or VERIS Small), medium (101 to 1000), large",
+      "Kept Unknown as its own category instead of filling it in",
+      "Took log10(1 + records lost) for the 5398 incidents with a known count",
+      "Kept only Yes or No disclosure for the breach target, leaving 7579 incidents"
+    ],
+    "sample_rows": [
+      {
+        "sector": "Health Care and Social Assistance",
+        "size": "large",
+        "motive": "Unknown",
+        "action_hacking": 1,
+        "action_error": 0,
+        "data_disclosure": "Yes",
+        "data_total": 6000.0,
+        "log_records": 3.77822363
+      },
+      {
+        "sector": "Information",
+        "size": "medium",
+        "motive": "Fun",
+        "action_hacking": 1,
+        "action_error": 0,
+        "data_disclosure": "Yes",
+        "data_total": null,
+        "log_records": null
+      },
+      {
+        "sector": "Retail Trade",
+        "size": "large",
+        "motive": "Financial",
+        "action_hacking": 0,
+        "action_error": 0,
+        "data_disclosure": "Yes",
+        "data_total": 1100000.0,
+        "log_records": 6.04139308
+      },
+      {
+        "sector": "Real Estate and Rental and Leasing",
+        "size": "medium",
+        "motive": "Financial",
+        "action_hacking": 0,
+        "action_error": 1,
+        "data_disclosure": "Yes",
+        "data_total": null,
+        "log_records": null
+      },
+      {
+        "sector": "Public Administration",
+        "size": "large",
+        "motive": "Unknown",
+        "action_hacking": 0,
+        "action_error": 1,
+        "data_disclosure": "Yes",
+        "data_total": 1.0,
+        "log_records": 0.30103
+      },
+      {
+        "sector": "Health Care and Social Assistance",
+        "size": "unknown",
+        "motive": "Unknown",
+        "action_hacking": 1,
+        "action_error": 0,
+        "data_disclosure": "Not coded",
+        "data_total": null,
+        "log_records": null
+      },
+      {
+        "sector": "Arts, Entertainment, and Recreation",
+        "size": "small",
+        "motive": "Financial",
+        "action_hacking": 0,
+        "action_error": 0,
+        "data_disclosure": "Potentially",
+        "data_total": null,
+        "log_records": null
+      },
+      {
+        "sector": "Educational Services",
+        "size": "medium",
+        "motive": "Unknown",
+        "action_hacking": 0,
+        "action_error": 1,
+        "data_disclosure": "Yes",
+        "data_total": 1100.0,
+        "log_records": 3.04178732
+      }
+    ]
+  },
+  "why": "Records lost is extremely right skewed (skewness 50.6): the mean is 22,774,208 while the median is 1,364, so a few mega breaches dominate any raw average. After log10(1 + x) the skewness falls to 0.36, which makes regression and distance based methods usable. Dropping every row with any gap would remove 98% of incidents, so Unknown is kept as a category and only each model's own inputs must be present.",
+  "data_properties": [
+    {
+      "name": "Skewness of records lost (raw)",
+      "value": 50.5663,
+      "implication": "A few huge breaches dominate; raw averages and linear fits would be misleading."
+    },
+    {
+      "name": "Skewness of log10(1 + records lost)",
+      "value": 0.3601,
+      "implication": "Close to symmetric, so the log scale is used for every model of breach size."
+    },
+    {
+      "name": "IQR outliers in records lost, raw then log",
+      "value": "1144 then 9",
+      "implication": "The log scale turns most extreme values into ordinary ones, so none are deleted."
+    },
+    {
+      "name": "Share of breach target that is Yes",
+      "value": "98.85% (7492 Yes, 87 No)",
+      "implication": "Very unbalanced classes: accuracy is meaningless, use ROC AUC and class weights."
+    },
+    {
+      "name": "Rows with at least one missing or Unknown field",
+      "value": "97.5%",
+      "implication": "Listwise deletion would throw away most of the data."
+    }
+  ],
+  "alternatives": [
+    {
+      "model": "Mean imputation of records lost",
+      "why_not": "The mean (22,774,208) is far above the median (1,364) because of skewness 50.6, so filling gaps with it would invent huge breaches."
+    },
+    {
+      "model": "Listwise deletion across all fields",
+      "why_not": "It would drop 10334 of 10596 incidents (98%), mostly because Unknown is common."
+    },
+    {
+      "model": "Treating Potentially as Yes for the target",
+      "why_not": "2109 incidents say only Potentially; counting them as breaches would mix confirmed and suspected losses."
+    }
+  ],
+  "formula_tex": [
+    {
+      "label": "Log transform",
+      "tex": "y = \\log_{10}(1 + x)"
+    },
+    {
+      "label": "Sample skewness",
+      "tex": "g_1 = \\frac{\\frac{1}{n}\\sum_{i=1}^{n}(x_i-\\bar{x})^3}{\\left(\\frac{1}{n}\\sum_{i=1}^{n}(x_i-\\bar{x})^2\\right)^{3/2}}"
+    },
+    {
+      "label": "IQR outlier fences",
+      "tex": "x < Q_1 - 1.5\\,\\mathrm{IQR} \\;\\text{or}\\; x > Q_3 + 1.5\\,\\mathrm{IQR}"
+    }
+  ],
+  "assumptions": [
+    {
+      "check": "Normality of log10(1 + records lost), D'Agostino K squared",
+      "statistic": 214.3835,
+      "p_value": 0.0,
+      "verdict": "not normal",
+      "action_taken": "Keep log scale for symmetry; later models use tests robust to non-normality where needed."
+    }
+  ],
+  "results": {
+    "key_numbers": {
+      "raw_files": 10596,
+      "flattened_rows": 10596,
+      "columns": 54,
+      "classifier_rows": 7579,
+      "breach_yes": 7492,
+      "breach_no": 87,
+      "regression_rows": 5398,
+      "skew_raw": 50.56625329,
+      "skew_log": 0.36008094
+    },
+    "tables": [
+      {
+        "title": "Row counts at each step",
+        "columns": [
+          "step",
+          "rows",
+          "rule"
+        ],
+        "rows": [
+          [
+            "raw validated files",
+            10596,
+            "data/json/validated/*.json"
+          ],
+          [
+            "flattened incidents",
+            10596,
+            "one row per incident"
+          ],
+          [
+            "classifier set (Yes or No)",
+            7579,
+            "data_disclosure Yes=1 No=0; Potentially, Unknown, Not coded dropped"
+          ],
+          [
+            "regression set",
+            5398,
+            "data_total known (numeric, at least 0)"
+          ]
+        ]
+      },
+      {
+        "title": "Missing or Unknown values",
+        "columns": [
+          "variable",
+          "missing",
+          "pct"
+        ],
+        "rows": [
+          [
+            "sector",
+            231,
+            2.18
+          ],
+          [
+            "size",
+            0,
+            0.0
+          ],
+          [
+            "country",
+            223,
+            2.1
+          ],
+          [
+            "motive",
+            4730,
+            44.64
+          ],
+          [
+            "data_disclosure",
+            908,
+            8.57
+          ],
+          [
+            "data_total",
+            5198,
+            49.06
+          ],
+          [
+            "discovery_days",
+            9160,
+            86.45
+          ],
+          [
+            "year",
+            0,
+            0.0
+          ],
+          [
+            "breach",
+            3017,
+            28.47
+          ]
+        ]
+      },
+      {
+        "title": "Data disclosure values",
+        "columns": [
+          "value",
+          "incidents"
+        ],
+        "rows": [
+          [
+            "Yes",
+            7492
+          ],
+          [
+            "Potentially",
+            2109
+          ],
+          [
+            "Not coded",
+            688
+          ],
+          [
+            "Unknown",
+            220
+          ],
+          [
+            "No",
+            87
+          ]
+        ]
+      }
+    ],
+    "charts": [
+      {
+        "type": "bar",
+        "title": "Incidents kept at each step",
+        "x_label": "Step",
+        "y_label": "Incidents",
+        "data": [
+          {
+            "x": "raw validated files",
+            "y": 10596
+          },
+          {
+            "x": "flattened incidents",
+            "y": 10596
+          },
+          {
+            "x": "classifier set (Yes or No)",
+            "y": 7579
+          },
+          {
+            "x": "regression set",
+            "y": 5398
+          }
+        ]
+      },
+      {
+        "type": "histogram",
+        "title": "Records lost on the log scale",
+        "x_label": "log10(1 + records lost)",
+        "y_label": "Incidents",
+        "data": [
+          {
+            "x0": 0.30103,
+            "x1": 0.8160815,
+            "y": 1100
+          },
+          {
+            "x0": 0.8160815,
+            "x1": 1.331133,
+            "y": 206
+          },
+          {
+            "x0": 1.331133,
+            "x1": 1.8461845,
+            "y": 248
+          },
+          {
+            "x0": 1.8461845,
+            "x1": 2.36123599,
+            "y": 278
+          },
+          {
+            "x0": 2.36123599,
+            "x1": 2.87628749,
+            "y": 451
+          },
+          {
+            "x0": 2.87628749,
+            "x1": 3.39133899,
+            "y": 767
+          },
+          {
+            "x0": 3.39133899,
+            "x1": 3.90639049,
+            "y": 575
+          },
+          {
+            "x0": 3.90639049,
+            "x1": 4.42144199,
+            "y": 409
+          },
+          {
+            "x0": 4.42144199,
+            "x1": 4.93649349,
+            "y": 256
+          },
+          {
+            "x0": 4.93649349,
+            "x1": 5.45154499,
+            "y": 240
+          },
+          {
+            "x0": 5.45154499,
+            "x1": 5.96659649,
+            "y": 206
+          },
+          {
+            "x0": 5.96659649,
+            "x1": 6.48164799,
+            "y": 248
+          },
+          {
+            "x0": 6.48164799,
+            "x1": 6.99669949,
+            "y": 150
+          },
+          {
+            "x0": 6.99669949,
+            "x1": 7.51175099,
+            "y": 118
+          },
+          {
+            "x0": 7.51175099,
+            "x1": 8.02680249,
+            "y": 82
+          },
+          {
+            "x0": 8.02680249,
+            "x1": 8.54185399,
+            "y": 35
+          },
+          {
+            "x0": 8.54185399,
+            "x1": 9.05690549,
+            "y": 20
+          },
+          {
+            "x0": 9.05690549,
+            "x1": 9.57195699,
+            "y": 3
+          },
+          {
+            "x0": 9.57195699,
+            "x1": 10.08700849,
+            "y": 4
+          },
+          {
+            "x0": 10.08700849,
+            "x1": 10.60205999,
+            "y": 2
+          }
+        ]
+      }
+    ]
+  },
+  "yields": "Out of 10596 public incident reports, 7579 clearly say whether data was exposed and 5398 say how many records were lost. CyCRS learns how breaches happen from these rows and measures breach size on a log scale so one giant leak does not distort the picture for a small business.",
+  "feeds": [],
+  "limitations": [
+    "Only 87 incidents are confirmed No disclosure, so the breach classifier has very few negatives.",
+    "688 incidents have no confidentiality section and are left out of the target.",
+    "VCDB is built from public news reports, so large and US organisations are over represented.",
+    "VERIS Small (up to 1000 staff) cannot be split and is counted as small.",
+    "Discovery time in days is known for only 1436 incidents."
+  ]
+}
