@@ -1,0 +1,12 @@
+{
+  "ruff (analysis)": "pass",
+  "pytest (analysis)": "pass: 124 passed, 1 warning in 5.14s",
+  "npm run verify (lint, tsc, vitest, next build)": "pass:       Tests  61 passed (61)",
+  "Playwright e2e": "pass: 29 passed (45.7s)",
+  "Live trace vs Python (vitest model.test.ts, 5 reference profiles, 1e-6)": "pass",
+  "Semgrep p/default, p/typescript, p/python": "pass",
+  "gitleaks (full history)": "pass",
+  "Trivy fs HIGH/CRITICAL": "pass",
+  "npm audit production (high)": "pass",
+  "pip-audit requirements.txt": "pass"
+}

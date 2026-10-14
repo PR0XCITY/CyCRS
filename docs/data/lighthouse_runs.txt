@@ -1,0 +1,6 @@
+/ perf 97 a11y 100 final http://127.0.0.1:4173/ FCP 0.8 s LCP 2.6 s TBT 90 ms CLS 0
+/results/ perf 84 a11y 100 final http://127.0.0.1:4173/results/ FCP 0.9 s LCP 3.6 s TBT 300 ms CLS 0
+/models/mlr-impact/ perf 87 a11y 100 final http://127.0.0.1:4173/models/mlr-impact/ FCP 1.7 s LCP 3.3 s TBT 230 ms CLS 0
+/ perf 96 a11y 100 final http://127.0.0.1:4173/ FCP 0.8 s LCP 2.6 s TBT 90 ms CLS 0
+/results/ perf 81 a11y 100 final http://127.0.0.1:4173/results/ FCP 1.7 s LCP 3.6 s TBT 350 ms CLS 0
+/models/mlr-impact/ perf 87 a11y 100 final http://127.0.0.1:4173/models/mlr-impact/ FCP 1.7 s LCP 3.3 s TBT 250 ms CLS 0
