@@ -156,7 +156,7 @@ def scorable(bundle):
     return out, skipped
 
 
-def recommend(profile, bundle):
+def recommend(profile, bundle, p_scale=1.0):
     att, imp, cfg = bundle["attack"], bundle["impact"], bundle["config"]
     x = encode_profile(profile, att["feature_order"], att["sectors"])
     pi = cfg["annual_incident_prob"]["value"]
@@ -164,6 +164,7 @@ def recommend(profile, bundle):
     cats, base = [], {}
     for c in CATEGORIES:
         z, p, top = logit_trace(att["models"][c], x)
+        p = min(p * p_scale, 1.0)
         y, rec = impact_records(imp, x, c)
         ic = rec * cpr
         lc = pi * p * ic

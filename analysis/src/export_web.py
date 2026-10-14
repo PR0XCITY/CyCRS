@@ -7,6 +7,7 @@ from src.cards import load_cards, to_plain, validate_card
 from src.classify import PROFILE_ASSETS
 from src.nbutil import MODELS, OUT, ROOT
 from src.recommender import CATEGORIES, SIZES, split_tokens
+from src.replay import actual_categories, case_profile
 from src.sources import CASES, CONTROLS, DATASETS, SOURCES_MD, read_values
 
 WEB = ROOT.parent / "web" / "public" / "model"
@@ -87,6 +88,8 @@ SCHEMA = {
                 "summary": STR,
                 "source_url": STR,
                 "accessed": STR,
+                "profile": {"sector": STR, "size": STR, "assets": [STR]},
+                "actual_categories": [STR],
             }
         ],
     },
@@ -292,6 +295,11 @@ def sources_export():
     ]
     with Path(CASES).open(newline="", encoding="utf-8") as f:
         cs = list(csv.DictReader(f))
+    top = json.loads((MODELS / "attack_models.json").read_text(encoding="utf-8"))["sectors"]
+    for c in cs:
+        q = case_profile(c, top, 0)
+        c["profile"] = {"sector": q["sector"], "size": q["size"], "assets": q["assets"]}
+        c["actual_categories"] = actual_categories(c["actual_actions"])
     return {"values": vs, "bibliography": bibliography(), "cases": cs}
 
 
