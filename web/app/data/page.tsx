@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import FunnelChart from "@/components/FunnelChart";
+import LazyFunnel from "@/components/LazyFunnel";
 import { lineage, sources } from "@/lib/data";
 import { count, inr, num } from "@/lib/format";
 
@@ -82,7 +82,7 @@ export default function DataPage() {
       <section className="rule mt-10 pt-6" aria-labelledby="d2">
         <Head n="02" id="d2" title="Cleaning funnel" />
         <div className="mt-4 panel p-3">
-          <FunnelChart steps={lineage.steps} />
+          <LazyFunnel steps={lineage.steps} />
           <ul className="mt-2 text-sm text-muted list-disc pl-5">
             {lineage.steps.map((s) => (
               <li key={s.step}>

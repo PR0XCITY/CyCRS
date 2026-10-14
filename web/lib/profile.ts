@@ -17,8 +17,8 @@ export const ASSET_RULES = [
 ] as const;
 
 export function sizeBucket(employees: number) {
-  if (employees <= 100) return "small";
-  if (employees <= 1000) return "medium";
+  if (employees <= model.size_bands.small_max_employees) return "small";
+  if (employees <= model.size_bands.medium_max_employees) return "medium";
   return "large";
 }
 
