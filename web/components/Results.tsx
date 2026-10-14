@@ -6,11 +6,12 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import Panel from "@/components/Panel";
 import { budgetToSlider, SLIDER_STEPS, sliderToBudget } from "@/lib/budget";
+import { BUDGET_MAX } from "@/lib/profileSchema";
 import { model } from "@/lib/modelData";
-import { inr, inrFull, num, pct } from "@/lib/format";
+import { count, inr, inrFull, num, pct } from "@/lib/format";
 import { categoryLabel, featureLabel, tokenLabel } from "@/lib/labels";
 import { recommend, type Recommendation } from "@/lib/model";
-import { parseProfile, PROFILE_KEY, removeStored, sizeBucket, toEngine, writeStored } from "@/lib/profile";
+import { parseProfile, PROFILE_KEY, removeStored, sizeBucket, stateOf, toEngine, writeStored } from "@/lib/profile";
 import type { ProfileForm } from "@/lib/profileSchema";
 import { useStoredRaw } from "@/lib/useStored";
 
@@ -78,6 +79,16 @@ function pickReduction(rec: Recommendation, name: string) {
   return undefined;
 }
 
+function nextControl(profile: ProfileForm) {
+  const have = new Set(recommend(toEngine(profile), model).plan.map((x) => x.control));
+  for (const m of [2, 4, 10, 20, 50, 100]) {
+    const b = Math.min(BUDGET_MAX, profile.budget * m);
+    const more = recommend(toEngine(profile, b), model).plan.find((x) => !have.has(x.control));
+    if (more) return { budget: b, control: more.control };
+  }
+  return null;
+}
+
 export default function Results({ tex }: Props) {
   const router = useRouter();
   const raw = useStoredRaw(PROFILE_KEY);
@@ -92,6 +103,7 @@ export default function Results({ tex }: Props) {
 
   const budget = profile?.budget ?? 0;
   const rec = useMemo(() => (profile ? recommend(toEngine(profile), model) : null), [profile]);
+  const nextBudget = useMemo(() => (profile ? nextControl(profile) : null), [profile]);
   const robust = useMemo(() => {
     if (!profile || !sens) return null;
     const plans = SCALES.map((s) => new Set(recommend(toEngine(profile), model, { pScale: s }).plan.map((x) => x.control)));
@@ -108,14 +120,26 @@ export default function Results({ tex }: Props) {
   const pi = rec.inputs.annual_incident_prob?.value ?? 0;
   const t = rec.totals;
   const cats = [...rec.categories].sort((a, b) => b.expected_loss_inr - a.expected_loss_inr);
+  const top = cats[0];
+  const first = rec.plan.find((p) => !p.already_in_place);
+  const closest = rec.persona.distances
+    .map((d, i) => ({ name: d.persona, value: d.distance, chosen: i === rec.persona.index }))
+    .sort((a, b) => a.value - b.value)
+    .slice(0, 5);
+  const st = stateOf(profile.state);
 
   return (
     <div className="wrap pb-10">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-muted">
-            {profile.sector}, {sizeBucket(profile.employees)} business ({profile.employees} staff), {profile.city}. Budget <span className="num">{inr(budget)}</span> a year.
+            {profile.sector}, {sizeBucket(profile.employees)} business ({count(profile.employees)} staff), {profile.city}, {profile.state}. Budget <span className="num">{inr(budget)}</span> a year.
           </p>
+          {st ? (
+            <p className="text-sm text-muted mt-1">
+              Police in {st.name} recorded <span className="num">{count(st.cases_2024)}</span> cyber crimes in 2024, <span className="num">{num(st.crime_rate_2024, 1)}</span> per lakh people (NCRB Crime in India 2024, Table 9A.1).
+            </p>
+          ) : null}
         </div>
         <div className="flex gap-2 no-print">
           <button type="button" className="btn btn-ghost" onClick={() => window.print()}>
@@ -127,76 +151,47 @@ export default function Results({ tex }: Props) {
         </div>
       </div>
 
-
-      <Section n="01" id="sec-persona" title={`You look most like: ${rec.persona.chosen}`}>
-        <p className="text-sm text-muted max-w-2xl">Closest group of past incidents by sector, size and the IT you rely on. Shorter bar means more similar.</p>
-        <PersonaChart data={rec.persona.distances.map((d, i) => ({ name: d.persona, value: d.distance, chosen: i === rec.persona.index }))} />
-        <Panel learn={LEARN.persona} testId="panel-persona">
-          {tex.distance}
-          <p className="mt-2">Your answers become these model inputs (1 = yes):</p>
-          <div className="scroll-x">
-            <table className="data mt-2">
-              <tbody>
-                {rec.features.map((f) => (
-                  <Row key={f.name} k={featureLabel(f.name)} v={f.value} />
-                ))}
-              </tbody>
-            </table>
+      <Section n="01" id="sec-totals" title="Your year at a glance">
+        <div className="grid12 gap-y-6">
+          <div className="col-span-12 sm:col-span-4 border-t border-ink pt-3">
+            <p className="label">Expected loss, no controls</p>
+            <p className="num text-3xl text-risk-ink">{inr(t.loss_no_controls_inr)}</p>
+            <p className="text-sm text-muted mt-1">a year, before you do anything</p>
           </div>
-          <p className="mt-3">Squared distance to each persona centre:</p>
-          <table className="data mt-2">
+          <div className="col-span-12 sm:col-span-4 border-t border-ink pt-3">
+            <p className="label">After this plan</p>
+            <p className="num text-3xl text-safe-ink">{inr(t.loss_after_plan_inr)}</p>
+            <p className="text-sm text-muted mt-1">{pct(100 - t.residual_risk_pct, 0)} lower</p>
+          </div>
+          <div className="col-span-12 sm:col-span-4 border-t border-ink pt-3">
+            <p className="label">Plan cost</p>
+            <p className="num text-3xl">{t.spent_inr === 0 ? "Free" : inr(t.spent_inr)}</p>
+            <p className="text-sm text-muted mt-1">of your {inr(budget)} budget</p>
+          </div>
+        </div>
+        {top ? (
+          <p className="mt-6 max-w-2xl">
+            Your biggest risk is <strong>{categoryLabel(top.category).toLowerCase()}</strong>, at <span className="num">{inr(top.expected_loss_inr)}</span> a year.
+            {first ? (
+              <>
+                {" "}Start with <strong>{first.control}</strong>.
+              </>
+            ) : null}
+          </p>
+        ) : null}
+        <Panel learn={LEARN.totals} testId="panel-totals">
+          <table className="data">
             <tbody>
-              {rec.persona.distances.map((d, i) => (
-                <Row key={d.persona} k={i === rec.persona.index ? <strong>{d.persona} (chosen)</strong> : d.persona} v={num(d.distance, 4)} />
-              ))}
+              <Row k="Expected loss with no controls" v={inrFull(t.loss_no_controls_inr)} />
+              <Row k="With the controls you already have" v={inrFull(t.loss_with_current_controls_inr)} />
+              <Row k="After the plan" v={inrFull(t.loss_after_plan_inr)} />
+              <Row k="Spent on new controls" v={inrFull(t.spent_inr)} />
+              <Row k="Residual risk = after / no controls" v={pct(t.residual_risk_pct, 2)} />
             </tbody>
           </table>
         </Panel>
       </Section>
-
-      <Section n="02" id="sec-risk" title="Expected yearly loss by attack type">
-        <p className="text-sm text-muted max-w-2xl">
-          Chance of an incident this year, times the chance it is this kind of attack, times what it would cost. Total{" "}
-          <span className="num text-ink">{inr(t.loss_no_controls_inr)}</span> a year before any controls.
-        </p>
-        <LossChart data={cats.map((c) => ({ name: categoryLabel(c.category), value: c.expected_loss_inr }))} />
-        <Panel learn={LEARN.risk} testId="panel-risk">
-          <div className="grid gap-1">
-            {tex.logit}
-            {tex.sigmoid}
-            {tex.impact}
-            {tex.loss}
-          </div>
-          {cats.map((c) => {
-            const shown = c.top_contributions.reduce((s, q) => s + q.contribution, 0);
-            const rest = c.z - c.intercept - shown;
-            return (
-              <div key={c.category} className="mt-4 pt-3 border-t border-rule">
-                <p className="font-medium">{categoryLabel(c.category)}</p>
-                <p className="num mt-1 break-words">
-                  z = {num(c.intercept, 4)}
-                  {c.top_contributions.map((q) => ` ${q.contribution < 0 ? "-" : "+"} ${num(Math.abs(q.contribution), 4)} (${featureLabel(q.feature)})`).join("")}
-                  {Math.abs(rest) > 1e-12 ? ` ${rest < 0 ? "-" : "+"} ${num(Math.abs(rest), 4)} (other terms)` : ""} = {num(c.z, 4)}
-                </p>
-                <p className="num">
-                  p = 1 / (1 + e^-({num(c.z, 4)})) = {num(c.p_c, 4)}
-                </p>
-                <p className="num">
-                  records = 10^{num(c.log_records, 4)} - 1 = {num(c.records, 0)};{" "}
-                  {c.impact_cap_inr === null
-                    ? `I = records x ${inrFull(cpr)} = ${inr(c.impact_inr)}`
-                    : `I = min(records x ${inrFull(cpr)}, cap ${inr(c.impact_cap_inr)}) = min(${inr(c.impact_uncapped_inr)}, ${inr(c.impact_cap_inr)}) = ${inr(c.impact_inr)}${c.capped ? " (capped)" : ""}`}
-                </p>
-                <p className="num">
-                  L = {num(pi, 3)} x {num(c.p_c, 4)} x {inr(c.impact_inr)} = {inr(c.expected_loss_inr)}
-                </p>
-              </div>
-            );
-          })}
-        </Panel>
-      </Section>
-
-      <Section n="03" id="sec-plan" title="What to do first">
+      <Section n="02" id="sec-plan" title="What to do first">
         <div className="no-print panel px-4 py-4 grid12 gap-y-4 items-end">
           <div className="col-span-12 md:col-span-8">
             <label htmlFor="live-budget" className="text-sm font-medium">
@@ -258,6 +253,12 @@ export default function Results({ tex }: Props) {
           })}
         </ol>
         {rec.plan.length === 0 ? <p className="text-sm text-muted">No scored control is affordable or useful at this budget.</p> : null}
+        <p className="mt-4 text-sm">
+          This plan uses <span className="num">{inr(t.spent_inr)}</span> of your <span className="num">{inr(budget)}</span> budget.{" "}
+          {nextBudget
+            ? `At ${inr(nextBudget.budget)} a year, ${nextBudget.control} would join the plan.`
+            : "A bigger budget would not add another ranked control, so the spare money can go to the free items below."}
+        </p>
         <div className="mt-5" data-testid="not-scored">
           <p className="label">Not ranked yet</p>
           <ul className="mt-2 grid gap-2 text-sm">
@@ -266,9 +267,11 @@ export default function Results({ tex }: Props) {
               const free = c?.annual_cost_inr === 0;
               return (
                 <li key={s.control} className="border-l-2 border-rule pl-3">
-                  <span className="font-medium">{s.control}</span>
-                  {free ? <span className="label ml-2 text-safe-ink">free</span> : null}
-                  <span className="text-muted"> · {c?.effectiveness_note ? c.effectiveness_note.charAt(0).toUpperCase() + c.effectiveness_note.slice(1) : s.reason}</span>
+                  <p>
+                    <span className="font-medium">{s.control}</span>
+                    {free ? <span className="label ml-2 text-safe-ink">free</span> : null}
+                  </p>
+                  <p className="text-muted">{c?.effectiveness_note ? c.effectiveness_note.charAt(0).toUpperCase() + c.effectiveness_note.slice(1) : s.reason}</p>
                 </li>
               );
             })}
@@ -308,33 +311,74 @@ export default function Results({ tex }: Props) {
         </Panel>
       </Section>
 
-      <Section n="04" id="sec-totals" title="Before and after">
-        <div className="grid12 gap-y-6">
-          <div className="col-span-12 sm:col-span-4 border-t border-ink pt-3">
-            <p className="label">No controls</p>
-            <p className="num text-3xl text-risk-ink">{inr(t.loss_no_controls_inr)}</p>
+      <Section n="03" id="sec-risk" title="Expected yearly loss by attack type">
+        <p className="text-sm text-muted max-w-2xl">
+          Chance of an incident this year, times the chance it is this kind of attack, times what it would cost. Total{" "}
+          <span className="num text-ink">{inr(t.loss_no_controls_inr)}</span> a year before any controls.
+        </p>
+        <LossChart data={cats.map((c) => ({ name: categoryLabel(c.category), value: c.expected_loss_inr }))} />
+        <Panel learn={LEARN.risk} testId="panel-risk">
+          <div className="grid gap-1">
+            {tex.logit}
+            {tex.sigmoid}
+            {tex.impact}
+            {tex.loss}
           </div>
-          <div className="col-span-12 sm:col-span-4 border-t border-ink pt-3">
-            <p className="label">After this plan</p>
-            <p className="num text-3xl text-safe-ink">{inr(t.loss_after_plan_inr)}</p>
+          {cats.map((c) => {
+            const shown = c.top_contributions.reduce((s, q) => s + q.contribution, 0);
+            const rest = c.z - c.intercept - shown;
+            return (
+              <div key={c.category} className="mt-4 pt-3 border-t border-rule">
+                <p className="font-medium">{categoryLabel(c.category)}</p>
+                <p className="num mt-1 break-words">
+                  z = {num(c.intercept, 4)}
+                  {c.top_contributions.map((q) => ` ${q.contribution < 0 ? "-" : "+"} ${num(Math.abs(q.contribution), 4)} (${featureLabel(q.feature)})`).join("")}
+                  {Math.abs(rest) > 1e-12 ? ` ${rest < 0 ? "-" : "+"} ${num(Math.abs(rest), 4)} (other terms)` : ""} = {num(c.z, 4)}
+                </p>
+                <p className="num">
+                  p = 1 / (1 + e^-({num(c.z, 4)})) = {num(c.p_c, 4)}
+                </p>
+                <p className="num">
+                  records = 10^{num(c.log_records, 4)} - 1 = {num(c.records, 0)};{" "}
+                  {c.impact_cap_inr === null
+                    ? `I = records x ${inrFull(cpr)} = ${inr(c.impact_inr)}`
+                    : `I = min(records x ${inrFull(cpr)}, cap ${inr(c.impact_cap_inr)}) = min(${inr(c.impact_uncapped_inr)}, ${inr(c.impact_cap_inr)}) = ${inr(c.impact_inr)}${c.capped ? " (capped)" : ""}`}
+                </p>
+                <p className="num">
+                  L = {num(pi, 3)} x {num(c.p_c, 4)} x {inr(c.impact_inr)} = {inr(c.expected_loss_inr)}
+                </p>
+              </div>
+            );
+          })}
+        </Panel>
+      </Section>
+
+      <Section n="04" id="sec-persona" title={`Businesses like yours: ${rec.persona.chosen}`}>
+        <p className="text-sm text-muted max-w-2xl">The five closest groups of past incidents by sector, size and the IT you rely on. Shorter bar means more similar.</p>
+        <PersonaChart data={closest} />
+        <Panel learn={LEARN.persona} testId="panel-persona">
+          {tex.distance}
+          <p className="mt-2">Your answers become these model inputs (1 = yes):</p>
+          <div className="scroll-x">
+            <table className="data mt-2">
+              <tbody>
+                {rec.features.map((f) => (
+                  <Row key={f.name} k={featureLabel(f.name)} v={f.value} />
+                ))}
+              </tbody>
+            </table>
           </div>
-          <div className="col-span-12 sm:col-span-4 border-t border-ink pt-3">
-            <p className="label">Residual risk</p>
-            <p className="num text-3xl">{pct(t.residual_risk_pct)}</p>
-          </div>
-        </div>
-        <Panel learn={LEARN.totals} testId="panel-totals">
-          <table className="data">
+          <p className="mt-3">Squared distance to each persona centre:</p>
+          <table className="data mt-2">
             <tbody>
-              <Row k="Expected loss with no controls" v={inrFull(t.loss_no_controls_inr)} />
-              <Row k="With the controls you already have" v={inrFull(t.loss_with_current_controls_inr)} />
-              <Row k="After the plan" v={inrFull(t.loss_after_plan_inr)} />
-              <Row k="Spent on new controls" v={inrFull(t.spent_inr)} />
-              <Row k="Residual risk = after / no controls" v={pct(t.residual_risk_pct, 2)} />
+              {rec.persona.distances.map((d, i) => (
+                <Row key={d.persona} k={i === rec.persona.index ? <strong>{d.persona} (chosen)</strong> : d.persona} v={num(d.distance, 4)} />
+              ))}
             </tbody>
           </table>
         </Panel>
       </Section>
+
     </div>
   );
 }

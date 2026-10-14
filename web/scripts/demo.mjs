@@ -21,6 +21,7 @@ await page.waitForURL(/assess/);
 await pause(600);
 await page.getByLabel("Sector").selectOption("Retail Trade");
 await page.getByLabel("Number of employees").pressSequentially("12", { delay: 90 });
+await page.getByLabel("State or union territory").selectOption("Maharashtra");
 await page.getByLabel("City").pressSequentially("Pune", { delay: 90 });
 await pause(500);
 await page.getByRole("button", { name: "Next" }).click();

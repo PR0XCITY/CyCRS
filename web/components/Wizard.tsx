@@ -5,17 +5,19 @@ import { useEffect, useId, useState } from "react";
 import type { ZodMiniType } from "zod/mini";
 import { budgetToSlider, SLIDER_STEPS, sliderToBudget } from "@/lib/budget";
 import { inr } from "@/lib/format";
-import { CONTROL_NAMES, DRAFT_KEY, PROFILE_KEY, readStored, removeStored, schemas, SECTORS, writeStored } from "@/lib/profile";
-import type { ProfileForm } from "@/lib/profileSchema";
+import { CONTROL_NAMES, DRAFT_KEY, PROFILE_KEY, readStored, removeStored, schemas, SECTORS, STATES, writeStored } from "@/lib/profile";
+import { COUNTRIES, type ProfileForm } from "@/lib/profileSchema";
 import { useIsClient } from "@/lib/useStored";
 
 const STEPS = ["Business", "Digital footprint", "Current controls", "Budget"] as const;
 const STEP_SCHEMAS: ZodMiniType[] = [schemas.business, schemas.footprint, schemas.current, schemas.budget];
 const EMPTY: ProfileForm = {
   sector: "",
-  employees: 0,
+  employees: Number.NaN,
+  country: "India",
+  state: "",
   city: "",
-  devices: 0,
+  devices: Number.NaN,
   website: false,
   payments: false,
   customerData: false,
@@ -44,8 +46,8 @@ function Field({ id, label, error, hint, children }: FieldProps) {
       <label htmlFor={id} className="block text-sm font-medium">
         {label}
       </label>
-      {hint ? <p className="text-xs text-muted mt-0.5">{hint}</p> : null}
       <div className="mt-1.5">{children}</div>
+      {hint ? <p className="text-xs text-muted mt-1">{hint}</p> : null}
       {error ? (
         <p id={`${id}-err`} role="alert" className="mt-1 text-sm text-risk-ink">
           {error}
@@ -53,6 +55,34 @@ function Field({ id, label, error, hint, children }: FieldProps) {
       ) : null}
     </div>
   );
+}
+
+type NumberProps = { id: string; value: number; onChange: (v: number) => void; extra: Record<string, unknown> };
+
+function digitsOf(s: string) {
+  return s.replace(/\D/g, "").slice(0, 7);
+}
+
+function NumberInput({ id, value, onChange, extra }: NumberProps) {
+  return (
+    <input
+      id={id}
+      className="field num"
+      type="text"
+      inputMode="numeric"
+      autoComplete="off"
+      value={Number.isFinite(value) ? String(value) : ""}
+      onChange={(e) => {
+        const d = digitsOf(e.target.value);
+        onChange(d === "" ? Number.NaN : Number(d));
+      }}
+      {...extra}
+    />
+  );
+}
+
+function finiteOnly(f: ProfileForm) {
+  return Object.fromEntries(Object.entries(f).filter(([, v]) => typeof v !== "number" || Number.isFinite(v)));
 }
 
 type CheckProps = { id: string; label: string; checked: boolean; onChange: (v: boolean) => void };
@@ -93,7 +123,7 @@ function WizardForm({ initial }: { initial: Draft }) {
   }, [initial.valid]);
 
   useEffect(() => {
-    writeStored(DRAFT_KEY, { step, form });
+    writeStored(DRAFT_KEY, { step, form: finiteOnly(form) });
   }, [step, form]);
 
   function set<K extends keyof ProfileForm>(k: K, v: ProfileForm[K]) {
@@ -178,9 +208,28 @@ function WizardForm({ initial }: { initial: Draft }) {
               </select>
             </Field>
             <Field id={fid("employees")} label="Number of employees" error={errors.employees}>
-              <input id={fid("employees")} className="field num" type="number" inputMode="numeric" min={1} value={form.employees || ""} onChange={(e) => set("employees", Number(e.target.value))} {...inv("employees")} />
+              <NumberInput id={fid("employees")} value={form.employees} onChange={(v) => set("employees", v)} extra={inv("employees")} />
             </Field>
-            <Field id={fid("city")} label="City" error={errors.city} hint="Shown on your plan only; it does not change the numbers.">
+            <Field id={fid("country")} label="Country" error={errors.country} hint="CyCRS is built for Indian businesses.">
+              <select id={fid("country")} className="field" value={form.country} onChange={(e) => set("country", e.target.value)} {...inv("country")}>
+                {COUNTRIES.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </select>
+            </Field>
+            <Field id={fid("state")} label="State or union territory" error={errors.state} hint="Your plan shows the 2024 NCRB cyber crime figures for it.">
+              <select id={fid("state")} className="field" value={form.state} autoComplete="address-level1" onChange={(e) => set("state", e.target.value)} {...inv("state")}>
+                <option value="">Choose a state or union territory</option>
+                {STATES.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </select>
+            </Field>
+            <Field id={fid("city")} label="City or town" error={errors.city} hint="Shown on your plan only; it does not change the numbers.">
               <input id={fid("city")} className="field" type="text" autoComplete="address-level2" value={form.city} onChange={(e) => set("city", e.target.value)} {...inv("city")} />
             </Field>
           </>
@@ -188,7 +237,7 @@ function WizardForm({ initial }: { initial: Draft }) {
         {step === 1 ? (
           <>
             <Field id={fid("devices")} label="Computers, phones and tablets used for work" error={errors.devices}>
-              <input id={fid("devices")} className="field num" type="number" inputMode="numeric" min={0} value={Number.isFinite(form.devices) ? form.devices : ""} onChange={(e) => set("devices", Number(e.target.value))} {...inv("devices")} />
+              <NumberInput id={fid("devices")} value={form.devices} onChange={(v) => set("devices", v)} extra={inv("devices")} />
             </Field>
             <div className="col-span-12" />
             <Check id={fid("website")} label="We have a website" checked={form.website} onChange={(v) => set("website", v)} />

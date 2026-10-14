@@ -12,6 +12,7 @@ test("complete the wizard, open every panel, change the budget", async ({ page }
   await expect(page.getByRole("alert").first()).toBeVisible();
   await page.getByLabel("Sector").selectOption({ index: 1 });
   await page.getByLabel("Number of employees").fill("12");
+  await page.getByLabel("State or union territory").selectOption("Maharashtra");
   await page.getByLabel("City").fill("Pune");
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByLabel("Computers, phones and tablets used for work").fill("5");
