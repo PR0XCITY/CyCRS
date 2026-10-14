@@ -156,17 +156,24 @@ def scorable(bundle):
     return out, skipped
 
 
+def impact_cap(cfg, size):
+    e = cfg.get(f"impact_cap_{size}_inr")
+    return None if e is None else e["value"]
+
+
 def recommend(profile, bundle, p_scale=1.0):
     att, imp, cfg = bundle["attack"], bundle["impact"], bundle["config"]
     x = encode_profile(profile, att["feature_order"], att["sectors"])
     pi = cfg["annual_incident_prob"]["value"]
     cpr = cfg["per_record_cost_inr"]["value"]
+    cap = impact_cap(cfg, profile.get("size", "unknown"))
     cats, base = [], {}
     for c in CATEGORIES:
         z, p, top = logit_trace(att["models"][c], x)
         p = min(p * p_scale, 1.0)
         y, rec = impact_records(imp, x, c)
-        ic = rec * cpr
+        raw = rec * cpr
+        ic = raw if cap is None else min(raw, cap)
         lc = pi * p * ic
         base[c] = lc
         cats.append(
@@ -178,6 +185,9 @@ def recommend(profile, bundle, p_scale=1.0):
                 "p_c": p,
                 "log_records": y,
                 "records": rec,
+                "impact_uncapped_inr": raw,
+                "impact_cap_inr": cap,
+                "capped": cap is not None and raw > cap,
                 "impact_inr": ic,
                 "expected_loss_inr": lc,
             }

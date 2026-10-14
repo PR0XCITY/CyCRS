@@ -60,6 +60,7 @@ SCHEMA = {
                 "cost_url": STR,
                 "cost_excerpt": STR,
                 "coverage": {"*": NUM},
+                "effectiveness_note": STR,
             }
         ],
         "config": {"*": CONFIG_ENTRY},
@@ -114,12 +115,24 @@ SCHEMA = {
     ],
 }
 
+DERIVED_UNITS = {
+    "per_record_cost_inr": "INR per record (derived: breach_total_cost_inr / breach_avg_records)",
+    "impact_cap_small_inr": (
+        "INR per incident, cap for small businesses (derived: smb_breach_cost_small_gbp x gbp_inr)"
+    ),
+    "impact_cap_medium_inr": (
+        "INR per incident, cap for medium businesses (derived: smb_breach_cost_medium_gbp x gbp_inr)"
+    ),
+}
+
 CONFIG_KEYS = {
     "annual_incident_prob": "annual_incident_prob",
     "per_record_cost_inr": "breach_total_cost_inr",
     "breach_total_cost_inr": "breach_total_cost_inr",
     "breach_avg_records": "breach_avg_records",
     "usd_inr": "usd_inr",
+    "impact_cap_small_inr": "smb_breach_cost_small_gbp",
+    "impact_cap_medium_inr": "smb_breach_cost_medium_gbp",
 }
 
 
@@ -220,6 +233,9 @@ def controls_export(coverage):
                 "cost_url": r["cost_url"],
                 "cost_excerpt": r["cost_excerpt"],
                 "coverage": coverage[r["control"]],
+                "effectiveness_note": ev.get("notes", "").removeprefix("MISSING: ")
+                if not str(ev.get("value", "")).strip()
+                else "",
             }
         )
     return out

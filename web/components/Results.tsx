@@ -182,7 +182,10 @@ export default function Results({ tex }: Props) {
                   p = 1 / (1 + e^-({num(c.z, 4)})) = {num(c.p_c, 4)}
                 </p>
                 <p className="num">
-                  records = 10^{num(c.log_records, 4)} - 1 = {num(c.records, 0)}; I = records x {inrFull(cpr)} = {inr(c.impact_inr)}
+                  records = 10^{num(c.log_records, 4)} - 1 = {num(c.records, 0)};{" "}
+                  {c.impact_cap_inr === null
+                    ? `I = records x ${inrFull(cpr)} = ${inr(c.impact_inr)}`
+                    : `I = min(records x ${inrFull(cpr)}, cap ${inr(c.impact_cap_inr)}) = min(${inr(c.impact_uncapped_inr)}, ${inr(c.impact_cap_inr)}) = ${inr(c.impact_inr)}${c.capped ? " (capped)" : ""}`}
                 </p>
                 <p className="num">
                   L = {num(pi, 3)} x {num(c.p_c, 4)} x {inr(c.impact_inr)} = {inr(c.expected_loss_inr)}
@@ -255,10 +258,22 @@ export default function Results({ tex }: Props) {
           })}
         </ol>
         {rec.plan.length === 0 ? <p className="text-sm text-muted">No scored control is affordable or useful at this budget.</p> : null}
-        <p className="mt-4 text-sm text-muted">
-          Not yet scored, because a published effectiveness or price is missing:{" "}
-          {rec.not_scored.map((s) => `${s.control} (${s.reason.toLowerCase()})`).join("; ")}.
-        </p>
+        <div className="mt-5" data-testid="not-scored">
+          <p className="label">Not ranked yet</p>
+          <ul className="mt-2 grid gap-2 text-sm">
+            {rec.not_scored.map((s) => {
+              const c = controlOf(s.control);
+              const free = c?.annual_cost_inr === 0;
+              return (
+                <li key={s.control} className="border-l-2 border-rule pl-3">
+                  <span className="font-medium">{s.control}</span>
+                  {free ? <span className="label ml-2 text-safe-ink">free</span> : null}
+                  <span className="text-muted"> · {c?.effectiveness_note ? c.effectiveness_note.charAt(0).toUpperCase() + c.effectiveness_note.slice(1) : s.reason}</span>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
         <Panel learn={LEARN.plan} testId="panel-plan">
           {tex.combine}
           {tex.greedy}

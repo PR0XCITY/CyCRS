@@ -30,6 +30,9 @@ test("complete the wizard, open every panel, change the budget", async ({ page }
     await expect(p.getByText("Learn the model")).toBeVisible();
   }
   await expect(page.getByTestId("panel-risk").getByText(/^p = 1 \/ \(1 \+ e\^-/).first()).toBeVisible();
+  await expect(page.getByTestId("panel-risk").getByText(/cap ₹/).first()).toBeVisible();
+  await expect(page.getByTestId("not-scored").getByText("Phishing awareness training")).toBeVisible();
+  await expect(page.getByTestId("not-scored").getByText(/no significant effect/)).toBeVisible();
 
   const before = await page.getByText(/^Yearly budget:/).innerText();
   const slider = page.locator("#live-budget");

@@ -99,8 +99,11 @@
           "p_c": 0.56183564,
           "log_records": 4.56550312,
           "records": 36769.80350073,
-          "impact_inr": 237374680.8274572,
-          "expected_loss_inr": 62415080.06512617
+          "impact_uncapped_inr": 237374680.8274572,
+          "impact_cap_inr": 1818316.568,
+          "capped": true,
+          "impact_inr": 1818316.568,
+          "expected_loss_inr": 478106.48456631
         },
         {
           "category": "malware",
@@ -123,8 +126,11 @@
           "p_c": 0.69369873,
           "log_records": 4.84978765,
           "records": 70758.9716113,
-          "impact_inr": 456798424.3259922,
-          "expected_loss_inr": 148300068.30756667
+          "impact_uncapped_inr": 456798424.3259922,
+          "impact_cap_inr": 1818316.568,
+          "capped": true,
+          "impact_inr": 1818316.568,
+          "expected_loss_inr": 590318.3042653
         },
         {
           "category": "social",
@@ -147,8 +153,11 @@
           "p_c": 0.18048954,
           "log_records": 3.63707121,
           "records": 4334.8196573,
-          "impact_inr": 27984278.80029551,
-          "expected_loss_inr": 2363806.93005732
+          "impact_uncapped_inr": 27984278.80029551,
+          "impact_cap_inr": 1818316.568,
+          "capped": true,
+          "impact_inr": 1818316.568,
+          "expected_loss_inr": 153591.5695791
         },
         {
           "category": "error",
@@ -171,8 +180,11 @@
           "p_c": 0.06652814,
           "log_records": 3.51451087,
           "records": 3268.72230553,
-          "impact_inr": 21101878.17490494,
-          "expected_loss_inr": 657010.56143974
+          "impact_uncapped_inr": 21101878.17490494,
+          "impact_cap_inr": 1818316.568,
+          "capped": true,
+          "impact_inr": 1818316.568,
+          "expected_loss_inr": 56613.59521247
         },
         {
           "category": "misuse",
@@ -195,8 +207,11 @@
           "p_c": 0.02986851,
           "log_records": 2.70498593,
           "records": 505.97428337,
-          "impact_inr": 3266416.25975576,
-          "expected_loss_inr": 45659.47959396
+          "impact_uncapped_inr": 3266416.25975576,
+          "impact_cap_inr": 1818316.568,
+          "capped": true,
+          "impact_inr": 1818316.568,
+          "expected_loss_inr": 25417.27129358
         },
         {
           "category": "physical",
@@ -219,8 +234,11 @@
           "p_c": 0.2246073,
           "log_records": 3.7934052,
           "records": 6213.48580001,
-          "impact_inr": 40112376.68360709,
-          "expected_loss_inr": 4216461.25698509
+          "impact_uncapped_inr": 40112376.68360709,
+          "impact_cap_inr": 1818316.568,
+          "capped": true,
+          "impact_inr": 1818316.568,
+          "expected_loss_inr": 191134.55735569
         }
       ],
       "persona": {
@@ -322,94 +340,94 @@
           "candidates": [
             {
               "control": "MFA",
-              "reduction": 24195494.94242436,
+              "reduction": 182285.04707899,
               "cost": 0.0,
               "ratio": null
             },
             {
               "control": "Offline or cloud backups",
-              "reduction": 102740902.34631711,
+              "reduction": 495886.6202467,
               "cost": 1560.0,
-              "ratio": 65859.5527861
+              "ratio": 317.87603862
             },
             {
               "control": "Endpoint protection",
-              "reduction": 169522488.87142324,
+              "reduction": 818212.92340706,
               "cost": 0.0,
               "ratio": null
             },
             {
               "control": "Email filtering",
-              "reduction": 29731706.17378289,
+              "reduction": 243795.31971332,
               "cost": 32400.0,
-              "ratio": 917.64525228
+              "ratio": 7.5245469
             }
           ],
           "pick": "Endpoint protection",
-          "loss_after": 48475597.72934568
+          "loss_after": 676968.85886538
         },
         {
           "candidates": [
             {
               "control": "MFA",
-              "reduction": 6842301.726382,
+              "reduction": 79641.85481955,
               "cost": 0.0,
               "ratio": null
             },
             {
               "control": "Offline or cloud backups",
-              "reduction": 9826771.8581031,
+              "reduction": 92839.71011498,
               "cost": 1560.0,
-              "ratio": 6299.21272955
+              "ratio": 59.51263469
             },
             {
               "control": "Email filtering",
-              "reduction": 4640899.19480505,
+              "reduction": 91342.23425296,
               "cost": 32400.0,
-              "ratio": 143.23762947
+              "ratio": 2.81920476
             }
           ],
           "pick": "MFA",
-          "loss_after": 41633296.00296368
+          "loss_after": 597327.00404583
         },
         {
           "candidates": [
             {
               "control": "Offline or cloud backups",
-              "reduction": 8316596.23471772,
+              "reduction": 74666.67072602,
               "cost": 1560.0,
-              "ratio": 5331.15143251
+              "ratio": 47.86325047
             },
             {
               "control": "Email filtering",
-              "reduction": 3761334.60625018,
+              "reduction": 65400.42181107,
               "cost": 32400.0,
-              "ratio": 116.09057427
+              "ratio": 2.01853154
             }
           ],
           "pick": "Offline or cloud backups",
-          "loss_after": 33316699.76824596
+          "loss_after": 522660.33331981
         },
         {
           "candidates": [
             {
               "control": "Email filtering",
-              "reduction": 2857555.03751558,
+              "reduction": 49201.19738647,
               "cost": 32400.0,
-              "ratio": 88.19614313
+              "ratio": 1.51855547
             }
           ],
           "pick": "Email filtering",
-          "loss_after": 30459144.73073038
+          "loss_after": 473459.13593334
         }
       ],
       "totals": {
-        "loss_no_controls_inr": 217998086.60076892,
-        "loss_with_current_controls_inr": 217998086.60076892,
-        "loss_after_plan_inr": 30459144.73073038,
+        "loss_no_controls_inr": 1495181.78227244,
+        "loss_with_current_controls_inr": 1495181.78227244,
+        "loss_after_plan_inr": 473459.13593334,
         "spent_inr": 33960.0,
         "budget_inr": 50000.0,
-        "residual_risk_pct": 13.97220737
+        "residual_risk_pct": 31.66565708
       },
       "inputs": {
         "annual_incident_prob": {
@@ -431,6 +449,14 @@
         "usd_inr": {
           "value": 95.2477,
           "fallback_level": ""
+        },
+        "impact_cap_small_inr": {
+          "value": 1818316.568,
+          "fallback_level": "3_global_smb"
+        },
+        "impact_cap_medium_inr": {
+          "value": 10527095.92,
+          "fallback_level": "3_global_smb"
         }
       }
     },
@@ -537,8 +563,11 @@
           "p_c": 0.01077998,
           "log_records": 4.3916549,
           "records": 24639.80546191,
-          "impact_inr": 159067098.55156046,
-          "expected_loss_inr": 802498.63513975
+          "impact_uncapped_inr": 159067098.55156046,
+          "impact_cap_inr": 10527095.92,
+          "capped": true,
+          "impact_inr": 10527095.92,
+          "expected_loss_inr": 53109.53795418
         },
         {
           "category": "malware",
@@ -565,8 +594,11 @@
           "p_c": 0.0069264,
           "log_records": 4.67593943,
           "records": 47416.58484907,
-          "impact_inr": 306107066.74710625,
-          "expected_loss_inr": 992263.35051629
+          "impact_uncapped_inr": 306107066.74710625,
+          "impact_cap_inr": 10527095.92,
+          "capped": true,
+          "impact_inr": 10527095.92,
+          "expected_loss_inr": 34124.17615767
         },
         {
           "category": "social",
@@ -593,8 +625,11 @@
           "p_c": 0.04080347,
           "log_records": 3.46322299,
           "records": 2904.51411778,
-          "impact_inr": 18750660.76035139,
-          "expected_loss_inr": 358063.10811788
+          "impact_uncapped_inr": 18750660.76035139,
+          "impact_cap_inr": 10527095.92,
+          "capped": true,
+          "impact_inr": 10527095.92,
+          "expected_loss_inr": 201025.69892047
         },
         {
           "category": "error",
@@ -621,8 +656,11 @@
           "p_c": 0.56521865,
           "log_records": 3.34066265,
           "records": 2190.10227611,
-          "impact_inr": 14138634.94705016,
-          "expected_loss_inr": 3739984.62336926
+          "impact_uncapped_inr": 14138634.94705016,
+          "impact_cap_inr": 10527095.92,
+          "capped": true,
+          "impact_inr": 10527095.92,
+          "expected_loss_inr": 2784651.91420389
         },
         {
           "category": "misuse",
@@ -649,6 +687,9 @@
           "p_c": 0.19275069,
           "log_records": 2.53113771,
           "records": 338.7329811,
+          "impact_uncapped_inr": 2186757.21977078,
+          "impact_cap_inr": 10527095.92,
+          "capped": false,
           "impact_inr": 2186757.21977078,
           "expected_loss_inr": 197261.51828315
         },
@@ -677,8 +718,11 @@
           "p_c": 0.01612817,
           "log_records": 3.61955698,
           "records": 4163.44355481,
-          "impact_inr": 26877926.74625193,
-          "expected_loss_inr": 202874.20150245
+          "impact_uncapped_inr": 26877926.74625193,
+          "impact_cap_inr": 10527095.92,
+          "capped": true,
+          "impact_inr": 10527095.92,
+          "expected_loss_inr": 79458.36742068
         }
       ],
       "persona": {
@@ -770,22 +814,22 @@
           "candidates": [
             {
               "control": "Endpoint protection",
-              "reduction": 1242558.21136729,
+              "reduction": 113825.627894,
               "cost": 0.0,
               "ratio": null
             }
           ],
           "pick": "Endpoint protection",
-          "loss_after": 4703929.93402836
+          "loss_after": 3149148.70588896
         }
       ],
       "totals": {
-        "loss_no_controls_inr": 6292945.4369288,
-        "loss_with_current_controls_inr": 5946488.14539565,
-        "loss_after_plan_inr": 4703929.93402836,
+        "loss_no_controls_inr": 3349631.21294004,
+        "loss_with_current_controls_inr": 3262974.33378295,
+        "loss_after_plan_inr": 3149148.70588896,
         "spent_inr": 0.0,
         "budget_inr": 0.0,
-        "residual_risk_pct": 74.74925663
+        "residual_risk_pct": 94.01478866
       },
       "inputs": {
         "annual_incident_prob": {
@@ -807,6 +851,14 @@
         "usd_inr": {
           "value": 95.2477,
           "fallback_level": ""
+        },
+        "impact_cap_small_inr": {
+          "value": 1818316.568,
+          "fallback_level": "3_global_smb"
+        },
+        "impact_cap_medium_inr": {
+          "value": 10527095.92,
+          "fallback_level": "3_global_smb"
         }
       }
     },
@@ -902,8 +954,11 @@
           "p_c": 0.64839489,
           "log_records": 5.20733036,
           "records": 161186.12904474,
-          "impact_inr": 1040568681.1746526,
-          "expected_loss_inr": 315759326.5271433
+          "impact_uncapped_inr": 1040568681.1746526,
+          "impact_cap_inr": 1818316.568,
+          "capped": true,
+          "impact_inr": 1818316.568,
+          "expected_loss_inr": 551765.99614424
         },
         {
           "category": "malware",
@@ -922,8 +977,11 @@
           "p_c": 0.23592072,
           "log_records": 5.49161489,
           "records": 310179.78446628,
-          "impact_inr": 2002426456.6805265,
-          "expected_loss_inr": 221089704.05574408
+          "impact_uncapped_inr": 2002426456.6805265,
+          "impact_cap_inr": 1818316.568,
+          "capped": true,
+          "impact_inr": 1818316.568,
+          "expected_loss_inr": 200761.96584278
         },
         {
           "category": "social",
@@ -942,8 +1000,11 @@
           "p_c": 0.05265856,
           "log_records": 4.27889845,
           "records": 19005.33807478,
-          "impact_inr": 122692688.83715506,
-          "expected_loss_inr": 3023663.7043945
+          "impact_uncapped_inr": 122692688.83715506,
+          "impact_cap_inr": 1818316.568,
+          "capped": true,
+          "impact_inr": 1818316.568,
+          "expected_loss_inr": 44810.96519987
         },
         {
           "category": "error",
@@ -962,8 +1023,11 @@
           "p_c": 0.1665755,
           "log_records": 4.15633811,
           "records": 14332.03330428,
-          "impact_inr": 92523252.97698075,
-          "expected_loss_inr": 7212865.99147774
+          "impact_uncapped_inr": 92523252.97698075,
+          "impact_cap_inr": 1818316.568,
+          "capped": true,
+          "impact_inr": 1818316.568,
+          "expected_loss_inr": 141751.10918691
         },
         {
           "category": "misuse",
@@ -982,8 +1046,11 @@
           "p_c": 0.1425621,
           "log_records": 3.34681317,
           "records": 2221.35364628,
-          "impact_inr": 14340384.29878013,
-          "expected_loss_inr": 956777.01893272
+          "impact_uncapped_inr": 14340384.29878013,
+          "impact_cap_inr": 1818316.568,
+          "capped": true,
+          "impact_inr": 1818316.568,
+          "expected_loss_inr": 121316.37961439
         },
         {
           "category": "physical",
@@ -1002,8 +1069,11 @@
           "p_c": 0.00606509,
           "log_records": 4.43523244,
           "records": 27240.58922916,
-          "impact_inr": 175856968.4413698,
-          "expected_loss_inr": 499163.03093684
+          "impact_uncapped_inr": 175856968.4413698,
+          "impact_cap_inr": 1818316.568,
+          "capped": true,
+          "impact_inr": 1818316.568,
+          "expected_loss_inr": 5161.21946904
         }
       ],
       "persona": {
@@ -1095,40 +1165,40 @@
           "candidates": [
             {
               "control": "MFA",
-              "reduction": 69823112.63699538,
+              "reduction": 119478.76852071,
               "cost": 0.0,
               "ratio": null
             },
             {
               "control": "Endpoint protection",
-              "reduction": 329785404.5127611,
+              "reduction": 410946.136035,
               "cost": 0.0,
               "ratio": null
             }
           ],
           "pick": "Endpoint protection",
-          "loss_after": 218756095.81586802
+          "loss_after": 654621.49942222
         },
         {
           "candidates": [
             {
               "control": "MFA",
-              "reduction": 32247123.65765184,
+              "reduction": 65083.92795634,
               "cost": 0.0,
               "ratio": null
             }
           ],
           "pick": "MFA",
-          "loss_after": 186508972.15821618
+          "loss_after": 589537.57146588
         }
       ],
       "totals": {
-        "loss_no_controls_inr": 548541500.3286291,
-        "loss_with_current_controls_inr": 548541500.3286291,
-        "loss_after_plan_inr": 186508972.15821618,
+        "loss_no_controls_inr": 1065567.63545722,
+        "loss_with_current_controls_inr": 1065567.63545722,
+        "loss_after_plan_inr": 589537.57146588,
         "spent_inr": 0.0,
         "budget_inr": 1000.0,
-        "residual_risk_pct": 34.00088636
+        "residual_risk_pct": 55.32615217
       },
       "inputs": {
         "annual_incident_prob": {
@@ -1150,6 +1220,14 @@
         "usd_inr": {
           "value": 95.2477,
           "fallback_level": ""
+        },
+        "impact_cap_small_inr": {
+          "value": 1818316.568,
+          "fallback_level": "3_global_smb"
+        },
+        "impact_cap_medium_inr": {
+          "value": 10527095.92,
+          "fallback_level": "3_global_smb"
         }
       }
     },
@@ -1259,6 +1337,9 @@
           "p_c": 0.86994614,
           "log_records": 4.65020131,
           "records": 44688.06929128,
+          "impact_uncapped_inr": 288492599.2220973,
+          "impact_cap_inr": null,
+          "capped": false,
           "impact_inr": 288492599.2220973,
           "expected_loss_inr": 117455375.13192728
         },
@@ -1291,6 +1372,9 @@
           "p_c": 0.97484467,
           "log_records": 4.93448584,
           "records": 85996.50272857,
+          "impact_uncapped_inr": 555167296.0957202,
+          "impact_cap_inr": null,
+          "capped": false,
           "impact_inr": 555167296.0957202,
           "expected_loss_inr": 253282480.37846363
         },
@@ -1323,6 +1407,9 @@
           "p_c": 0.79814889,
           "log_records": 3.7217694,
           "records": 5268.49989265,
+          "impact_uncapped_inr": 34011834.74998838,
+          "impact_cap_inr": null,
+          "capped": false,
           "impact_inr": 34011834.74998838,
           "expected_loss_inr": 12704565.75750496
         },
@@ -1355,6 +1442,9 @@
           "p_c": 0.08455758,
           "log_records": 3.59920906,
           "records": 3972.82794945,
+          "impact_uncapped_inr": 25647370.30655355,
+          "impact_cap_inr": null,
+          "capped": false,
           "impact_inr": 25647370.30655355,
           "expected_loss_inr": 1014942.03258442
         },
@@ -1387,6 +1477,9 @@
           "p_c": 0.00671136,
           "log_records": 2.78968412,
           "records": 615.14669035,
+          "impact_uncapped_inr": 3971200.15291109,
+          "impact_cap_inr": null,
+          "capped": false,
           "impact_inr": 3971200.15291109,
           "expected_loss_inr": 12473.20780149
         },
@@ -1419,6 +1512,9 @@
           "p_c": 0.0601471,
           "log_records": 3.87810339,
           "records": 7551.72009546,
+          "impact_uncapped_inr": 48751610.74286004,
+          "impact_cap_inr": null,
+          "capped": false,
           "impact_inr": 48751610.74286004,
           "expected_loss_inr": 1372301.43375371
         }
@@ -1631,6 +1727,14 @@
         "usd_inr": {
           "value": 95.2477,
           "fallback_level": ""
+        },
+        "impact_cap_small_inr": {
+          "value": 1818316.568,
+          "fallback_level": "3_global_smb"
+        },
+        "impact_cap_medium_inr": {
+          "value": 10527095.92,
+          "fallback_level": "3_global_smb"
         }
       }
     },
@@ -1726,6 +1830,9 @@
           "p_c": 0.00675814,
           "log_records": 4.65891588,
           "records": 45593.85931381,
+          "impact_uncapped_inr": 294340104.4308578,
+          "impact_cap_inr": null,
+          "capped": false,
           "impact_inr": 294340104.4308578,
           "expected_loss_inr": 930941.0141117
         },
@@ -1746,6 +1853,9 @@
           "p_c": 0.00073124,
           "log_records": 4.94320041,
           "records": 87739.56162798,
+          "impact_uncapped_inr": 566419954.8134043,
+          "impact_cap_inr": null,
+          "capped": false,
           "impact_inr": 566419954.8134043,
           "expected_loss_inr": 193841.28349083
         },
@@ -1766,6 +1876,9 @@
           "p_c": 0.01126471,
           "log_records": 3.73048397,
           "records": 5375.30588575,
+          "impact_uncapped_inr": 34701341.79407055,
+          "impact_cap_inr": null,
+          "capped": false,
           "impact_inr": 34701341.79407055,
           "expected_loss_inr": 182941.46580582
         },
@@ -1786,6 +1899,9 @@
           "p_c": 0.49121165,
           "log_records": 3.60792363,
           "records": 4053.37233681,
+          "impact_uncapped_inr": 26167340.40218602,
+          "impact_cap_inr": null,
+          "capped": false,
           "impact_inr": 26167340.40218602,
           "expected_loss_inr": 6015532.69012512
         },
@@ -1806,6 +1922,9 @@
           "p_c": 0.13810388,
           "log_records": 2.79839869,
           "records": 627.6351922,
+          "impact_uncapped_inr": 4051822.12688232,
+          "impact_cap_inr": null,
+          "capped": false,
           "impact_inr": 4051822.12688232,
           "expected_loss_inr": 261879.86689659
         },
@@ -1826,6 +1945,9 @@
           "p_c": 0.21276016,
           "log_records": 3.88681796,
           "records": 7704.80402883,
+          "impact_uncapped_inr": 49739874.11014295,
+          "impact_cap_inr": null,
+          "capped": false,
           "impact_inr": 49739874.11014295,
           "expected_loss_inr": 4952686.63967645
         }
@@ -2038,6 +2160,14 @@
         "usd_inr": {
           "value": 95.2477,
           "fallback_level": ""
+        },
+        "impact_cap_small_inr": {
+          "value": 1818316.568,
+          "fallback_level": "3_global_smb"
+        },
+        "impact_cap_medium_inr": {
+          "value": 10527095.92,
+          "fallback_level": "3_global_smb"
         }
       }
     }

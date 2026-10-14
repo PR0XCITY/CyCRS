@@ -45,6 +45,7 @@ Numbers are rounded to 8 decimals. Each file is under 2 MB.
 | `controls[].cost_url` | string |
 | `controls[].cost_excerpt` | string |
 | `controls[].coverage.*` | number |
+| `controls[].effectiveness_note` | string |
 | `config.*.value` | number |
 | `config.*.unit` | string |
 | `config.*.fallback_level` | string |
