@@ -85,3 +85,10 @@
 - Case replay at INR 50,000: AIIMS 2022, C-Edge 2024, Tata Technologies 2025 (all malware) covered by top 3 Endpoint protection, MFA, backups; Star Health 2024 not assessable (source does not state the method). Verdict uses VERIS variety/vector categories from load_vcdb, not hand mapping.
 - Sensitivity, 3 largest personas (all Mixed sector: small, unknown, large; server): largest swings incident probability and per-record cost (tied, both linear x0.5/x1.5), smallest effectiveness. 0 of 24 scenarios change plan order or set; all 4 scorable controls stable. At INR 50,000 every scorable control is affordable, so stability is partly structural.
 - Export: sources.cases carry model profile and actual_categories; cards.json now 18 cards. Fixed results disclaimer regex (/^d+_/ lost its backslash in Phase 8).
+
+## Fixes after Phase 9 (2026-10-14)
+- Breach target: no confidentiality section (Not coded) now counts as No (VERIS records it only when data is affected). Classifier set 8267 (7492 Yes, 775 No vs 87). Tree CV AUC 0.826 +/- 0.019 (was 0.766 +/- 0.039); NB specificity 0.52.
+- Ransomware robustness row: without the 857 incidents dated 2023, share from 2020 is 22.2% vs 2.4% before (h 0.67, Holm reject); 2023 inflated it to 55.2%.
+- Impact cap: I_c = min(records x cost per record, cap by size). Caps from UK Cyber security breaches survey 2025/2026 Table 4.1b (orgs with an outcome): small 95th pct GBP 14,440 (INR 18.2 lakh), medium 90th pct GBP 83,600 (INR 1.05 crore), x gbp_inr 125.9222 (RBI page fetched 2026-10-13). Fallback level 3_global_smb; large and unknown uncapped. Small retail reference L0 INR 21.8 crore -> 15.0 lakh/yr; all 6 categories capped, so small-profile risk ranking follows p_c only.
+- Phishing training stays unscored; plain-language notes for every unscored control exported (controls[].effectiveness_note) and shown in the plan as "Not ranked yet".
+- Checks: pytest 117, vitest 55, Playwright 29, 48 screenshots. Lighthouse still needs a Vercel deploy (TODO: connect repo, Root Directory web, run PageSpeed on /, /results, one model page).
