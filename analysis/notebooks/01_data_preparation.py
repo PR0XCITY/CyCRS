@@ -217,7 +217,7 @@ lin = pd.DataFrame(
         "rule": [
             "data/json/validated/*.json",
             "one row per incident",
-            "data_disclosure Yes=1 No=0; Potentially, Unknown, Not coded dropped",
+            "data_disclosure Yes=1; No or no confidentiality section (Not coded)=0; Potentially, Unknown dropped",
             "data_total known (numeric, at least 0)",
         ],
     }
@@ -335,7 +335,7 @@ card = {
             "Grouped employee counts into small (up to 100, or VERIS Small), medium (101 to 1000), large",
             "Kept Unknown as its own category instead of filling it in",
             f"Took log10(1 + records lost) for the {n_reg} incidents with a known count",
-            f"Kept only Yes or No disclosure for the breach target, leaving {n_cls} incidents",
+            f"Breach target: Yes is 1; No, or no confidentiality section at all, is 0 (VERIS records that section only when data was affected); Potentially and Unknown dropped, leaving {n_cls} incidents",
         ],
         "sample_rows": sr,
     },
@@ -468,8 +468,8 @@ card = {
     ),
     "feeds": [],
     "limitations": [
-        f"Only {n_neg} incidents are confirmed No disclosure, so the breach classifier has very few negatives.",
-        f"{int(dc.get('Not coded', 0))} incidents have no confidentiality section and are left out of the target.",
+        f"Only {n_neg} incidents ({100 * n_neg / n_cls:.1f}%) are No, so the breach classifier still has far fewer negatives than positives.",
+        f"{int(dc.get('Not coded', 0))} incidents have no confidentiality section and are counted as no disclosure; this assumes the coder would have recorded any data exposure.",
         "VCDB is built from public news reports, so large and US organisations are over represented.",
         "VERIS Small (up to 1000 staff) cannot be split and is counted as small.",
         f"Discovery time in days is known for only {int(df['discovery_days'].notna().sum())} incidents.",

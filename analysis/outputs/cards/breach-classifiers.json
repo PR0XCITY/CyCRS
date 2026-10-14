@@ -8,7 +8,7 @@
   "question": "Can the kind of attack, attacker and assets involved tell us whether an incident ends in confirmed data disclosure?",
   "data_in": {
     "dataset": "VCDB incidents with data_disclosure Yes or No",
-    "n_rows": 7579,
+    "n_rows": 8267,
     "variables": [
       {
         "name": "breach",
@@ -36,16 +36,32 @@
       }
     ],
     "prep_steps": [
-      "Stratified 70/30 split (random_state 42): train 5244 Yes / 61 No, test 2248 Yes / 26 No",
-      "Dropped flags that, in the training rows, occur in only one class or fewer than 5 times: action_environmental, asset_network, sector_manufacturing",
+      "Stratified 70/30 split (random_state 42): train 5244 Yes / 542 No, test 2248 Yes / 233 No",
+      "Dropped flags that, in the training rows, occur in only one class or fewer than 5 times: action_environmental",
       "Standard scaling inside the pipeline for logistic, KNN and LDA; class_weight balanced for logistic and tree",
       "asset_person left out: VERIS codes the targeted person as an asset in every social attack, so it restates the label"
     ],
     "sample_rows": [
       {
         "breach": 1,
-        "actor_external": 1,
-        "action_hacking": 1,
+        "actor_external": 0,
+        "action_hacking": 0,
+        "action_error": 1,
+        "asset_server": 1,
+        "size": "medium"
+      },
+      {
+        "breach": 1,
+        "actor_external": 0,
+        "action_hacking": 0,
+        "action_error": 1,
+        "asset_server": 1,
+        "size": "large"
+      },
+      {
+        "breach": 1,
+        "actor_external": 0,
+        "action_hacking": 0,
         "action_error": 0,
         "asset_server": 1,
         "size": "large"
@@ -56,7 +72,7 @@
         "action_hacking": 0,
         "action_error": 1,
         "asset_server": 0,
-        "size": "unknown"
+        "size": "large"
       },
       {
         "breach": 1,
@@ -67,18 +83,18 @@
         "size": "large"
       },
       {
-        "breach": 1,
-        "actor_external": 0,
-        "action_hacking": 0,
-        "action_error": 1,
+        "breach": 0,
+        "actor_external": 1,
+        "action_hacking": 1,
+        "action_error": 0,
         "asset_server": 1,
         "size": "unknown"
       },
       {
         "breach": 1,
-        "actor_external": 0,
+        "actor_external": 1,
         "action_hacking": 0,
-        "action_error": 1,
+        "action_error": 0,
         "asset_server": 0,
         "size": "medium"
       },
@@ -86,59 +102,43 @@
         "breach": 1,
         "actor_external": 0,
         "action_hacking": 0,
-        "action_error": 0,
-        "asset_server": 1,
-        "size": "medium"
-      },
-      {
-        "breach": 1,
-        "actor_external": 1,
-        "action_hacking": 1,
-        "action_error": 0,
-        "asset_server": 1,
-        "size": "medium"
-      },
-      {
-        "breach": 1,
-        "actor_external": 0,
-        "action_hacking": 0,
         "action_error": 1,
         "asset_server": 1,
-        "size": "large"
+        "size": "small"
       }
     ]
   },
-  "why": "The target is binary and only 1.1% of training incidents are No, so models are compared on AUC and recall/specificity rather than accuracy, and class weights are used where supported. Each model has a data-based reason: logistic, binary target with 22 binary predictors; class weights offset the 61 No cases in training; decision_tree, finds interactions between attack and asset flags as readable rules; depth 10 and leaf 50 chosen by CV AUC; knn, non-parametric baseline on scaled flags; k = 2 minimised CV balanced error; naive_bayes, all predictors are 0/1 flags, so Bernoulli Naive Bayes is the matching likelihood; lda, linear boundary with shared covariance; a classical comparison for logistic regression.",
+  "why": "The target is binary and only 9.4% of training incidents are No, so models are compared on AUC and recall/specificity rather than accuracy, and class weights are used where supported. Each model has a data-based reason: logistic, binary target with 24 binary predictors; class weights offset the 542 No cases in training; decision_tree, finds interactions between attack and asset flags as readable rules; depth 10 and leaf 20 chosen by CV AUC; knn, non-parametric baseline on scaled flags; k = 2 minimised CV balanced error; naive_bayes, all predictors are 0/1 flags, so Bernoulli Naive Bayes is the matching likelihood; lda, linear boundary with shared covariance; a classical comparison for logistic regression.",
   "data_properties": [
     {
       "name": "Share of No in training",
-      "value": 0.01149859,
+      "value": 0.09367439,
       "implication": "Severe imbalance: accuracy is misleading."
     },
     {
       "name": "No cases in test set",
-      "value": 26,
+      "value": 233,
       "implication": "Test AUC and specificity are estimated from very few cases."
     },
     {
       "name": "Best model by CV AUC",
-      "value": "decision_tree (0.766 +/- 0.039)",
+      "value": "decision_tree (0.826 +/- 0.019)",
       "implication": "Model used for the Youden threshold."
     },
     {
       "name": "Youden threshold for best model",
-      "value": 0.55217763,
-      "implication": "J = 0.498; balances recall and specificity."
+      "value": 0.44247082,
+      "implication": "J = 0.555; balances recall and specificity."
     }
   ],
   "alternatives": [
     {
       "model": "Accuracy as the selection metric",
-      "why_not": "Predicting Yes for every incident already scores 0.989 accuracy."
+      "why_not": "Predicting Yes for every incident already scores 0.906 accuracy."
     },
     {
       "model": "SMOTE oversampling",
-      "why_not": "Synthesising 61 rare cases of binary flags creates unrealistic incidents; class weights are simpler and in the syllabus."
+      "why_not": "Synthesising 542 rare cases of binary flags creates unrealistic incidents; class weights are simpler and in the syllabus."
     }
   ],
   "formula_tex": [
@@ -158,14 +158,14 @@
   "assumptions": [
     {
       "check": "Class balance (No share in training)",
-      "statistic": 0.01149859,
+      "statistic": 0.09367439,
       "p_value": null,
       "verdict": "severely imbalanced",
       "action_taken": "Class weights, AUC-based selection, Youden threshold."
     },
     {
       "check": "Logit convergence after separation drops",
-      "statistic": -289.43930361,
+      "statistic": -1460.12213463,
       "p_value": 0.0,
       "verdict": "converged",
       "action_taken": "Odds ratios read from the statsmodels fit."
@@ -174,11 +174,11 @@
   "results": {
     "key_numbers": {
       "best_model": "decision_tree",
-      "best_cv_auc": 0.76618262,
-      "youden_threshold": 0.55217763,
+      "best_cv_auc": 0.82625628,
+      "youden_threshold": 0.44247082,
       "k_knn": 2,
       "tree_depth": 10,
-      "tree_min_leaf": 50
+      "tree_min_leaf": 20
     },
     "tables": [
       {
@@ -197,58 +197,58 @@
         "rows": [
           [
             "logistic",
-            0.6882,
-            0.9955,
-            0.6877,
-            0.7308,
-            0.8135,
-            0.7469,
-            0.7299,
-            0.055
+            0.7267,
+            0.9689,
+            0.7215,
+            0.7768,
+            0.8271,
+            0.8204,
+            0.8051,
+            0.012
           ],
           [
             "decision_tree",
-            0.7419,
-            0.9952,
-            0.7424,
-            0.6923,
-            0.8504,
-            0.7597,
-            0.7662,
-            0.0388
+            0.7259,
+            0.9734,
+            0.7171,
+            0.8112,
+            0.8258,
+            0.8498,
+            0.8263,
+            0.0193
           ],
           [
             "knn",
-            0.989,
-            0.9894,
-            0.9996,
-            0.0769,
-            0.9945,
-            0.5883,
-            0.5633,
-            0.0535
+            0.8952,
+            0.9104,
+            0.9809,
+            0.0687,
+            0.9443,
+            0.6425,
+            0.6142,
+            0.0364
           ],
           [
             "naive_bayes",
-            0.9886,
-            0.9886,
-            1.0,
-            0.0,
-            0.9943,
-            0.6931,
-            0.7434,
-            0.0686
+            0.8263,
+            0.9456,
+            0.8577,
+            0.5236,
+            0.8995,
+            0.7755,
+            0.7706,
+            0.0224
           ],
           [
             "lda",
-            0.9886,
-            0.9886,
-            1.0,
-            0.0,
-            0.9943,
-            0.6938,
-            0.7234,
-            0.0648
+            0.9073,
+            0.9078,
+            0.9991,
+            0.0215,
+            0.9513,
+            0.8073,
+            0.7952,
+            0.0191
           ]
         ]
       },
@@ -266,21 +266,21 @@
         "rows": [
           [
             0.5,
-            18,
-            8,
-            579,
-            1669,
-            0.74243772,
-            0.69230769
+            189,
+            44,
+            636,
+            1612,
+            0.71708185,
+            0.8111588
           ],
           [
-            0.55217763,
-            21,
-            5,
-            696,
-            1552,
-            0.69039146,
-            0.80769231
+            0.44247082,
+            178,
+            55,
+            470,
+            1778,
+            0.79092527,
+            0.7639485
           ]
         ]
       },
@@ -297,118 +297,118 @@
             "|   |--- sector_health_care_and_social_assistance <= 0.50"
           ],
           [
-            "|   |   |--- action_misuse <= 0.50"
+            "|   |   |--- action_error <= 0.50"
           ],
           [
-            "|   |   |   |--- actor_partner <= 0.50"
+            "|   |   |   |--- sector_public_administration <= 0.50"
           ],
           [
-            "|   |   |   |   |--- asset_media <= 0.50"
+            "|   |   |   |   |--- sector_manufacturing <= 0.50"
+          ],
+          [
+            "|   |   |   |   |   |--- truncated branch of depth 6"
+          ],
+          [
+            "|   |   |   |   |--- sector_manufacturing >  0.50"
           ],
           [
             "|   |   |   |   |   |--- class: 1"
           ],
           [
-            "|   |   |   |   |--- asset_media >  0.50"
+            "|   |   |   |--- sector_public_administration >  0.50"
+          ],
+          [
+            "|   |   |   |   |--- size_medium <= 0.50"
+          ],
+          [
+            "|   |   |   |   |   |--- truncated branch of depth 4"
+          ],
+          [
+            "|   |   |   |   |--- size_medium >  0.50"
+          ],
+          [
+            "|   |   |   |   |   |--- class: 0"
+          ],
+          [
+            "|   |   |--- action_error >  0.50"
+          ],
+          [
+            "|   |   |   |--- sector_public_administration <= 0.50"
+          ],
+          [
+            "|   |   |   |   |--- size_large <= 0.50"
+          ],
+          [
+            "|   |   |   |   |   |--- truncated branch of depth 5"
+          ],
+          [
+            "|   |   |   |   |--- size_large >  0.50"
+          ],
+          [
+            "|   |   |   |   |   |--- truncated branch of depth 5"
+          ],
+          [
+            "|   |   |   |--- sector_public_administration >  0.50"
+          ],
+          [
+            "|   |   |   |   |--- size_large <= 0.50"
+          ],
+          [
+            "|   |   |   |   |   |--- truncated branch of depth 3"
+          ],
+          [
+            "|   |   |   |   |--- size_large >  0.50"
           ],
           [
             "|   |   |   |   |   |--- truncated branch of depth 2"
           ],
           [
-            "|   |   |   |--- actor_partner >  0.50"
-          ],
-          [
-            "|   |   |   |   |--- class: 0"
-          ],
-          [
-            "|   |   |--- action_misuse >  0.50"
-          ],
-          [
-            "|   |   |   |--- sector_finance_and_insurance <= 0.50"
-          ],
-          [
-            "|   |   |   |   |--- sector_public_administration <= 0.50"
-          ],
-          [
-            "|   |   |   |   |   |--- truncated branch of depth 3"
-          ],
-          [
-            "|   |   |   |   |--- sector_public_administration >  0.50"
-          ],
-          [
-            "|   |   |   |   |   |--- truncated branch of depth 3"
-          ],
-          [
-            "|   |   |   |--- sector_finance_and_insurance >  0.50"
-          ],
-          [
-            "|   |   |   |   |--- class: 0"
-          ],
-          [
             "|   |--- sector_health_care_and_social_assistance >  0.50"
           ],
           [
-            "|   |   |--- class: 1"
+            "|   |   |--- action_physical <= 0.50"
+          ],
+          [
+            "|   |   |   |--- asset_user_device <= 0.50"
+          ],
+          [
+            "|   |   |   |   |--- actor_partner <= 0.50"
+          ],
+          [
+            "|   |   |   |   |   |--- truncated branch of depth 5"
+          ],
+          [
+            "|   |   |   |   |--- actor_partner >  0.50"
+          ],
+          [
+            "|   |   |   |   |   |--- truncated branch of depth 2"
+          ],
+          [
+            "|   |   |   |--- asset_user_device >  0.50"
+          ],
+          [
+            "|   |   |   |   |--- size_large <= 0.50"
+          ],
+          [
+            "|   |   |   |   |   |--- class: 1"
+          ],
+          [
+            "|   |   |   |   |--- size_large >  0.50"
+          ],
+          [
+            "|   |   |   |   |   |--- class: 1"
+          ],
+          [
+            "|   |   |--- action_physical >  0.50"
+          ],
+          [
+            "|   |   |   |--- class: 1"
           ],
           [
             "|--- actor_external >  0.50"
           ],
           [
             "|   |--- size_large <= 0.50"
-          ],
-          [
-            "|   |   |--- sector_health_care_and_social_assistance <= 0.50"
-          ],
-          [
-            "|   |   |   |--- sector_retail_trade <= 0.50"
-          ],
-          [
-            "|   |   |   |   |--- action_social <= 0.50"
-          ],
-          [
-            "|   |   |   |   |   |--- truncated branch of depth 6"
-          ],
-          [
-            "|   |   |   |   |--- action_social >  0.50"
-          ],
-          [
-            "|   |   |   |   |   |--- truncated branch of depth 2"
-          ],
-          [
-            "|   |   |   |--- sector_retail_trade >  0.50"
-          ],
-          [
-            "|   |   |   |   |--- asset_server <= 0.50"
-          ],
-          [
-            "|   |   |   |   |   |--- class: 1"
-          ],
-          [
-            "|   |   |   |   |--- asset_server >  0.50"
-          ],
-          [
-            "|   |   |   |   |   |--- class: 1"
-          ],
-          [
-            "|   |   |--- sector_health_care_and_social_assistance >  0.50"
-          ],
-          [
-            "|   |   |   |--- asset_server <= 0.50"
-          ],
-          [
-            "|   |   |   |   |--- class: 1"
-          ],
-          [
-            "|   |   |   |--- asset_server >  0.50"
-          ],
-          [
-            "|   |   |   |   |--- size_medium <= 0.50"
-          ],
-          [
-            "|   |   |   |   |   |--- class: 1"
-          ],
-          [
-            "|   |   |   |   |--- size_medium >  0.50"
           ]
         ]
       }
@@ -426,235 +426,235 @@
           },
           {
             "fpr": 0.0,
-            "tpr": 0.02046263
+            "tpr": 0.01734875
           },
           {
-            "fpr": 0.03846154,
-            "tpr": 0.02491103
+            "fpr": 0.00429185,
+            "tpr": 0.02669039
           },
           {
-            "fpr": 0.03846154,
-            "tpr": 0.0524911
+            "fpr": 0.00429185,
+            "tpr": 0.05115658
           },
           {
-            "fpr": 0.03846154,
-            "tpr": 0.06005338
+            "fpr": 0.00858369,
+            "tpr": 0.06272242
           },
           {
-            "fpr": 0.03846154,
-            "tpr": 0.06850534
+            "fpr": 0.00858369,
+            "tpr": 0.07517794
           },
           {
-            "fpr": 0.03846154,
-            "tpr": 0.08274021
+            "fpr": 0.01287554,
+            "tpr": 0.14368327
           },
           {
-            "fpr": 0.03846154,
-            "tpr": 0.09074733
+            "fpr": 0.01716738,
+            "tpr": 0.16859431
           },
           {
-            "fpr": 0.03846154,
-            "tpr": 0.12455516
+            "fpr": 0.01716738,
+            "tpr": 0.18149466
           },
           {
-            "fpr": 0.03846154,
-            "tpr": 0.13122776
+            "fpr": 0.01716738,
+            "tpr": 0.1930605
           },
           {
-            "fpr": 0.03846154,
-            "tpr": 0.14234875
+            "fpr": 0.02145923,
+            "tpr": 0.21040925
           },
           {
-            "fpr": 0.03846154,
-            "tpr": 0.15480427
+            "fpr": 0.02575107,
+            "tpr": 0.22286477
           },
           {
-            "fpr": 0.03846154,
-            "tpr": 0.16459075
+            "fpr": 0.03004292,
+            "tpr": 0.23532028
           },
           {
-            "fpr": 0.03846154,
-            "tpr": 0.17393238
+            "fpr": 0.03862661,
+            "tpr": 0.25044484
           },
           {
-            "fpr": 0.03846154,
-            "tpr": 0.20017794
+            "fpr": 0.03862661,
+            "tpr": 0.26957295
           },
           {
-            "fpr": 0.03846154,
-            "tpr": 0.20774021
+            "fpr": 0.03862661,
+            "tpr": 0.28736655
           },
           {
-            "fpr": 0.03846154,
-            "tpr": 0.27268683
+            "fpr": 0.0472103,
+            "tpr": 0.32829181
           },
           {
-            "fpr": 0.07692308,
-            "tpr": 0.28825623
-          },
-          {
-            "fpr": 0.07692308,
-            "tpr": 0.31272242
-          },
-          {
-            "fpr": 0.07692308,
-            "tpr": 0.33718861
-          },
-          {
-            "fpr": 0.07692308,
+            "fpr": 0.05150215,
             "tpr": 0.34830961
           },
           {
-            "fpr": 0.11538462,
-            "tpr": 0.3594306
+            "fpr": 0.06008584,
+            "tpr": 0.35676157
           },
           {
-            "fpr": 0.11538462,
-            "tpr": 0.37144128
+            "fpr": 0.06008584,
+            "tpr": 0.36921708
           },
           {
-            "fpr": 0.15384615,
-            "tpr": 0.38211744
+            "fpr": 0.06437768,
+            "tpr": 0.37855872
           },
           {
-            "fpr": 0.15384615,
-            "tpr": 0.40035587
+            "fpr": 0.07296137,
+            "tpr": 0.40080071
           },
           {
-            "fpr": 0.15384615,
-            "tpr": 0.41103203
+            "fpr": 0.09012876,
+            "tpr": 0.49199288
           },
           {
-            "fpr": 0.15384615,
-            "tpr": 0.4252669
+            "fpr": 0.09871245,
+            "tpr": 0.50044484
           },
           {
-            "fpr": 0.19230769,
-            "tpr": 0.43460854
+            "fpr": 0.10300429,
+            "tpr": 0.52090747
           },
           {
-            "fpr": 0.19230769,
-            "tpr": 0.44483986
+            "fpr": 0.11158798,
+            "tpr": 0.53469751
           },
           {
-            "fpr": 0.19230769,
-            "tpr": 0.45596085
+            "fpr": 0.12446352,
+            "tpr": 0.5680605
           },
           {
-            "fpr": 0.19230769,
-            "tpr": 0.46708185
+            "fpr": 0.12875536,
+            "tpr": 0.58274021
           },
           {
-            "fpr": 0.19230769,
-            "tpr": 0.49065836
+            "fpr": 0.1416309,
+            "tpr": 0.59252669
           },
           {
-            "fpr": 0.19230769,
-            "tpr": 0.50088968
+            "fpr": 0.1416309,
+            "tpr": 0.60409253
           },
           {
-            "fpr": 0.19230769,
-            "tpr": 0.51067616
+            "fpr": 0.1416309,
+            "tpr": 0.62544484
           },
           {
-            "fpr": 0.19230769,
-            "tpr": 0.52446619
+            "fpr": 0.14592275,
+            "tpr": 0.63523132
           },
           {
-            "fpr": 0.19230769,
-            "tpr": 0.60987544
+            "fpr": 0.15450644,
+            "tpr": 0.65124555
           },
           {
-            "fpr": 0.19230769,
-            "tpr": 0.61699288
-          },
-          {
-            "fpr": 0.23076923,
-            "tpr": 0.6272242
-          },
-          {
-            "fpr": 0.23076923,
+            "fpr": 0.15879828,
             "tpr": 0.66503559
           },
           {
-            "fpr": 0.23076923,
-            "tpr": 0.67838078
+            "fpr": 0.16738197,
+            "tpr": 0.67393238
           },
           {
-            "fpr": 0.26923077,
-            "tpr": 0.68549822
+            "fpr": 0.19742489,
+            "tpr": 0.6930605
           },
           {
-            "fpr": 0.26923077,
-            "tpr": 0.69217082
+            "fpr": 0.20600858,
+            "tpr": 0.70685053
           },
           {
-            "fpr": 0.26923077,
-            "tpr": 0.70507117
+            "fpr": 0.21888412,
+            "tpr": 0.71975089
           },
           {
-            "fpr": 0.26923077,
-            "tpr": 0.71708185
+            "fpr": 0.25751073,
+            "tpr": 0.7366548
           },
           {
-            "fpr": 0.30769231,
-            "tpr": 0.73087189
+            "fpr": 0.27038627,
+            "tpr": 0.74866548
           },
           {
-            "fpr": 0.38461538,
-            "tpr": 0.75400356
+            "fpr": 0.28755365,
+            "tpr": 0.76823843
           },
           {
-            "fpr": 0.38461538,
-            "tpr": 0.78024911
+            "fpr": 0.29184549,
+            "tpr": 0.77891459
           },
           {
-            "fpr": 0.46153846,
-            "tpr": 0.81005338
+            "fpr": 0.30472103,
+            "tpr": 0.78692171
           },
           {
-            "fpr": 0.46153846,
-            "tpr": 0.81761566
+            "fpr": 0.31759657,
+            "tpr": 0.80427046
           },
           {
-            "fpr": 0.46153846,
-            "tpr": 0.83007117
+            "fpr": 0.32618026,
+            "tpr": 0.8158363
           },
           {
-            "fpr": 0.5,
-            "tpr": 0.85587189
+            "fpr": 0.36480687,
+            "tpr": 0.82740214
           },
           {
-            "fpr": 0.53846154,
-            "tpr": 0.86966192
+            "fpr": 0.39484979,
+            "tpr": 0.85053381
           },
           {
-            "fpr": 0.69230769,
-            "tpr": 0.88923488
+            "fpr": 0.40343348,
+            "tpr": 0.86343416
           },
           {
-            "fpr": 0.73076923,
-            "tpr": 0.91236655
+            "fpr": 0.41201717,
+            "tpr": 0.87233096
           },
           {
-            "fpr": 0.73076923,
-            "tpr": 0.92571174
+            "fpr": 0.44206009,
+            "tpr": 0.90213523
           },
           {
-            "fpr": 0.76923077,
-            "tpr": 0.93149466
+            "fpr": 0.46351931,
+            "tpr": 0.90791815
           },
           {
-            "fpr": 0.84615385,
-            "tpr": 0.95462633
+            "fpr": 0.49785408,
+            "tpr": 0.91503559
           },
           {
-            "fpr": 0.92307692,
-            "tpr": 0.97775801
+            "fpr": 0.527897,
+            "tpr": 0.92126335
           },
           {
-            "fpr": 1.0,
-            "tpr": 0.98354093
+            "fpr": 0.58369099,
+            "tpr": 0.94617438
+          },
+          {
+            "fpr": 0.59656652,
+            "tpr": 0.95151246
+          },
+          {
+            "fpr": 0.87553648,
+            "tpr": 0.97330961
+          },
+          {
+            "fpr": 0.92703863,
+            "tpr": 0.99021352
+          },
+          {
+            "fpr": 0.9527897,
+            "tpr": 0.9933274
+          },
+          {
+            "fpr": 0.97424893,
+            "tpr": 0.99644128
           },
           {
             "fpr": 1.0,
@@ -673,84 +673,236 @@
             "tpr": 0.0
           },
           {
-            "fpr": 0.19230769,
-            "tpr": 0.55160142
+            "fpr": 0.04291845,
+            "tpr": 0.32072954
           },
           {
-            "fpr": 0.19230769,
-            "tpr": 0.613879
+            "fpr": 0.0472103,
+            "tpr": 0.38078292
           },
           {
-            "fpr": 0.19230769,
-            "tpr": 0.64101423
+            "fpr": 0.05150215,
+            "tpr": 0.46663701
           },
           {
-            "fpr": 0.19230769,
-            "tpr": 0.66859431
+            "fpr": 0.06008584,
+            "tpr": 0.49065836
           },
           {
-            "fpr": 0.19230769,
-            "tpr": 0.69039146
+            "fpr": 0.06008584,
+            "tpr": 0.49644128
           },
           {
-            "fpr": 0.26923077,
-            "tpr": 0.70373665
+            "fpr": 0.06008584,
+            "tpr": 0.50311388
           },
           {
-            "fpr": 0.30769231,
-            "tpr": 0.72419929
+            "fpr": 0.06866953,
+            "tpr": 0.51023132
           },
           {
-            "fpr": 0.30769231,
-            "tpr": 0.74243772
+            "fpr": 0.07296137,
+            "tpr": 0.51467972
           },
           {
-            "fpr": 0.30769231,
-            "tpr": 0.75489324
+            "fpr": 0.07725322,
+            "tpr": 0.52491103
           },
           {
-            "fpr": 0.5,
-            "tpr": 0.8225089
+            "fpr": 0.08154506,
+            "tpr": 0.53870107
           },
           {
-            "fpr": 0.53846154,
-            "tpr": 0.83941281
+            "fpr": 0.0944206,
+            "tpr": 0.55871886
           },
           {
-            "fpr": 0.53846154,
-            "tpr": 0.85008897
+            "fpr": 0.0944206,
+            "tpr": 0.56761566
           },
           {
-            "fpr": 0.53846154,
-            "tpr": 0.86877224
+            "fpr": 0.09871245,
+            "tpr": 0.58096085
           },
           {
-            "fpr": 0.57692308,
-            "tpr": 0.88300712
+            "fpr": 0.10300429,
+            "tpr": 0.58185053
           },
           {
-            "fpr": 0.57692308,
-            "tpr": 0.89679715
+            "fpr": 0.10300429,
+            "tpr": 0.59875445
           },
           {
-            "fpr": 0.57692308,
-            "tpr": 0.90969751
+            "fpr": 0.10729614,
+            "tpr": 0.61921708
           },
           {
-            "fpr": 0.57692308,
+            "fpr": 0.10729614,
+            "tpr": 0.62322064
+          },
+          {
+            "fpr": 0.10729614,
+            "tpr": 0.6338968
+          },
+          {
+            "fpr": 0.11158798,
+            "tpr": 0.63478648
+          },
+          {
+            "fpr": 0.11158798,
+            "tpr": 0.64012456
+          },
+          {
+            "fpr": 0.11158798,
+            "tpr": 0.64724199
+          },
+          {
+            "fpr": 0.11587983,
+            "tpr": 0.65524911
+          },
+          {
+            "fpr": 0.12446352,
+            "tpr": 0.66681495
+          },
+          {
+            "fpr": 0.13733906,
+            "tpr": 0.68016014
+          },
+          {
+            "fpr": 0.1416309,
+            "tpr": 0.68727758
+          },
+          {
+            "fpr": 0.16309013,
+            "tpr": 0.70685053
+          },
+          {
+            "fpr": 0.17596567,
+            "tpr": 0.71174377
+          },
+          {
+            "fpr": 0.1888412,
+            "tpr": 0.71708185
+          },
+          {
+            "fpr": 0.19313305,
+            "tpr": 0.7344306
+          },
+          {
+            "fpr": 0.19313305,
+            "tpr": 0.74288256
+          },
+          {
+            "fpr": 0.19742489,
+            "tpr": 0.75
+          },
+          {
+            "fpr": 0.2360515,
+            "tpr": 0.79092527
+          },
+          {
+            "fpr": 0.24463519,
+            "tpr": 0.79314947
+          },
+          {
+            "fpr": 0.25321888,
+            "tpr": 0.8047153
+          },
+          {
+            "fpr": 0.25751073,
+            "tpr": 0.80649466
+          },
+          {
+            "fpr": 0.27038627,
+            "tpr": 0.81494662
+          },
+          {
+            "fpr": 0.28755365,
+            "tpr": 0.82295374
+          },
+          {
+            "fpr": 0.28755365,
+            "tpr": 0.82562278
+          },
+          {
+            "fpr": 0.28755365,
+            "tpr": 0.83140569
+          },
+          {
+            "fpr": 0.32188841,
+            "tpr": 0.86209964
+          },
+          {
+            "fpr": 0.33476395,
+            "tpr": 0.8661032
+          },
+          {
+            "fpr": 0.33905579,
+            "tpr": 0.86966192
+          },
+          {
+            "fpr": 0.34763948,
+            "tpr": 0.875
+          },
+          {
+            "fpr": 0.36051502,
+            "tpr": 0.88078292
+          },
+          {
+            "fpr": 0.38626609,
+            "tpr": 0.88701068
+          },
+          {
+            "fpr": 0.39484979,
+            "tpr": 0.88967972
+          },
+          {
+            "fpr": 0.42060086,
+            "tpr": 0.89635231
+          },
+          {
+            "fpr": 0.43347639,
+            "tpr": 0.90569395
+          },
+          {
+            "fpr": 0.43776824,
+            "tpr": 0.90791815
+          },
+          {
+            "fpr": 0.48497854,
             "tpr": 0.92215302
           },
           {
-            "fpr": 0.65384615,
-            "tpr": 0.93505338
+            "fpr": 0.53218884,
+            "tpr": 0.93772242
           },
           {
-            "fpr": 0.73076923,
-            "tpr": 0.95151246
+            "fpr": 0.54935622,
+            "tpr": 0.94039146
           },
           {
-            "fpr": 0.84615385,
-            "tpr": 0.98398577
+            "fpr": 0.55793991,
+            "tpr": 0.9452847
+          },
+          {
+            "fpr": 0.57081545,
+            "tpr": 0.95017794
+          },
+          {
+            "fpr": 0.81545064,
+            "tpr": 0.98843416
+          },
+          {
+            "fpr": 0.82832618,
+            "tpr": 0.99065836
+          },
+          {
+            "fpr": 0.8583691,
+            "tpr": 0.99199288
+          },
+          {
+            "fpr": 0.98712446,
+            "tpr": 1.0
           },
           {
             "fpr": 1.0,
@@ -769,12 +921,12 @@
             "tpr": 0.0
           },
           {
-            "fpr": 0.80769231,
-            "tpr": 0.98309609
+            "fpr": 0.55364807,
+            "tpr": 0.83585409
           },
           {
-            "fpr": 0.92307692,
-            "tpr": 0.99955516
+            "fpr": 0.93133047,
+            "tpr": 0.98087189
           },
           {
             "fpr": 1.0,
@@ -793,236 +945,236 @@
             "tpr": 0.0
           },
           {
-            "fpr": 0.0,
+            "fpr": 0.00429185,
             "tpr": 0.02090747
           },
           {
-            "fpr": 0.0,
-            "tpr": 0.04581851
+            "fpr": 0.00429185,
+            "tpr": 0.03425267
           },
           {
-            "fpr": 0.0,
-            "tpr": 0.10987544
+            "fpr": 0.01287554,
+            "tpr": 0.113879
           },
           {
-            "fpr": 0.0,
-            "tpr": 0.11654804
+            "fpr": 0.01287554,
+            "tpr": 0.1227758
           },
           {
-            "fpr": 0.0,
-            "tpr": 0.13078292
+            "fpr": 0.02575107,
+            "tpr": 0.13790036
           },
           {
-            "fpr": 0.03846154,
-            "tpr": 0.13879004
+            "fpr": 0.02575107,
+            "tpr": 0.14724199
           },
           {
-            "fpr": 0.03846154,
-            "tpr": 0.16459075
+            "fpr": 0.02575107,
+            "tpr": 0.15836299
           },
           {
-            "fpr": 0.07692308,
-            "tpr": 0.17393238
+            "fpr": 0.02575107,
+            "tpr": 0.18505338
           },
           {
-            "fpr": 0.07692308,
-            "tpr": 0.18149466
+            "fpr": 0.03004292,
+            "tpr": 0.19617438
           },
           {
-            "fpr": 0.07692308,
-            "tpr": 0.19483986
+            "fpr": 0.03433476,
+            "tpr": 0.22464413
           },
           {
-            "fpr": 0.07692308,
-            "tpr": 0.20774021
+            "fpr": 0.03433476,
+            "tpr": 0.23709964
           },
           {
-            "fpr": 0.07692308,
-            "tpr": 0.22553381
+            "fpr": 0.03862661,
+            "tpr": 0.25177936
           },
           {
-            "fpr": 0.07692308,
-            "tpr": 0.24065836
+            "fpr": 0.03862661,
+            "tpr": 0.26690391
           },
           {
-            "fpr": 0.07692308,
-            "tpr": 0.27268683
+            "fpr": 0.04291845,
+            "tpr": 0.29848754
           },
           {
-            "fpr": 0.07692308,
-            "tpr": 0.28158363
+            "fpr": 0.05150215,
+            "tpr": 0.30649466
           },
           {
-            "fpr": 0.07692308,
-            "tpr": 0.28825623
+            "fpr": 0.06008584,
+            "tpr": 0.32117438
           },
           {
-            "fpr": 0.07692308,
-            "tpr": 0.29982206
+            "fpr": 0.06437768,
+            "tpr": 0.35631673
           },
           {
-            "fpr": 0.07692308,
-            "tpr": 0.32339858
+            "fpr": 0.06866953,
+            "tpr": 0.37144128
           },
           {
-            "fpr": 0.07692308,
-            "tpr": 0.33362989
+            "fpr": 0.07296137,
+            "tpr": 0.39679715
           },
           {
-            "fpr": 0.11538462,
-            "tpr": 0.34564057
+            "fpr": 0.08154506,
+            "tpr": 0.40480427
           },
           {
-            "fpr": 0.15384615,
-            "tpr": 0.35898577
+            "fpr": 0.08583691,
+            "tpr": 0.41325623
           },
           {
-            "fpr": 0.15384615,
-            "tpr": 0.39368327
-          },
-          {
-            "fpr": 0.15384615,
-            "tpr": 0.40346975
-          },
-          {
-            "fpr": 0.15384615,
-            "tpr": 0.41014235
-          },
-          {
-            "fpr": 0.19230769,
-            "tpr": 0.42126335
-          },
-          {
-            "fpr": 0.23076923,
+            "fpr": 0.08583691,
             "tpr": 0.42615658
           },
           {
-            "fpr": 0.23076923,
+            "fpr": 0.09012876,
+            "tpr": 0.43950178
+          },
+          {
+            "fpr": 0.0944206,
             "tpr": 0.44928826
           },
           {
-            "fpr": 0.23076923,
-            "tpr": 0.45774021
+            "fpr": 0.11158798,
+            "tpr": 0.46975089
           },
           {
-            "fpr": 0.23076923,
-            "tpr": 0.46797153
+            "fpr": 0.12017167,
+            "tpr": 0.48265125
           },
           {
-            "fpr": 0.23076923,
-            "tpr": 0.47642349
+            "fpr": 0.12875536,
+            "tpr": 0.49065836
           },
           {
-            "fpr": 0.23076923,
-            "tpr": 0.48487544
+            "fpr": 0.13733906,
+            "tpr": 0.51379004
           },
           {
-            "fpr": 0.23076923,
-            "tpr": 0.50311388
+            "fpr": 0.1416309,
+            "tpr": 0.52268683
           },
           {
-            "fpr": 0.26923077,
-            "tpr": 0.51512456
+            "fpr": 0.15450644,
+            "tpr": 0.53469751
           },
           {
-            "fpr": 0.34615385,
-            "tpr": 0.52179715
+            "fpr": 0.16738197,
+            "tpr": 0.53914591
           },
           {
-            "fpr": 0.34615385,
-            "tpr": 0.53781139
+            "fpr": 0.17167382,
+            "tpr": 0.5480427
           },
           {
-            "fpr": 0.34615385,
-            "tpr": 0.54581851
+            "fpr": 0.18454936,
+            "tpr": 0.55382562
           },
           {
-            "fpr": 0.34615385,
-            "tpr": 0.55604982
+            "fpr": 0.20600858,
+            "tpr": 0.57918149
           },
           {
-            "fpr": 0.34615385,
-            "tpr": 0.5725089
+            "fpr": 0.22746781,
+            "tpr": 0.59119217
           },
           {
-            "fpr": 0.34615385,
-            "tpr": 0.57829181
+            "fpr": 0.24034335,
+            "tpr": 0.59564057
           },
           {
-            "fpr": 0.34615385,
-            "tpr": 0.60765125
+            "fpr": 0.24463519,
+            "tpr": 0.60498221
           },
           {
-            "fpr": 0.34615385,
-            "tpr": 0.61788256
+            "fpr": 0.24892704,
+            "tpr": 0.61743772
           },
           {
-            "fpr": 0.38461538,
-            "tpr": 0.70418149
+            "fpr": 0.26180258,
+            "tpr": 0.63211744
           },
           {
-            "fpr": 0.38461538,
-            "tpr": 0.71663701
+            "fpr": 0.26180258,
+            "tpr": 0.64590747
           },
           {
-            "fpr": 0.5,
-            "tpr": 0.73620996
+            "fpr": 0.27896996,
+            "tpr": 0.74421708
           },
           {
-            "fpr": 0.5,
-            "tpr": 0.75177936
+            "fpr": 0.30472103,
+            "tpr": 0.75489324
           },
           {
-            "fpr": 0.5,
-            "tpr": 0.75934164
+            "fpr": 0.32618026,
+            "tpr": 0.7655694
           },
           {
-            "fpr": 0.53846154,
-            "tpr": 0.78336299
+            "fpr": 0.34763948,
+            "tpr": 0.79092527
           },
           {
-            "fpr": 0.57692308,
-            "tpr": 0.79048043
+            "fpr": 0.36051502,
+            "tpr": 0.79982206
           },
           {
-            "fpr": 0.57692308,
-            "tpr": 0.80160142
+            "fpr": 0.39914163,
+            "tpr": 0.81405694
           },
           {
-            "fpr": 0.57692308,
-            "tpr": 0.8158363
+            "fpr": 0.42918455,
+            "tpr": 0.82206406
           },
           {
-            "fpr": 0.57692308,
-            "tpr": 0.83852313
+            "fpr": 0.44206009,
+            "tpr": 0.83274021
           },
           {
-            "fpr": 0.57692308,
-            "tpr": 0.84875445
+            "fpr": 0.45493562,
+            "tpr": 0.83896797
           },
           {
-            "fpr": 0.57692308,
-            "tpr": 0.85720641
+            "fpr": 0.472103,
+            "tpr": 0.85275801
           },
           {
-            "fpr": 0.61538462,
-            "tpr": 0.87544484
+            "fpr": 0.49356223,
+            "tpr": 0.87099644
           },
           {
-            "fpr": 0.65384615,
-            "tpr": 0.89991103
+            "fpr": 0.52360515,
+            "tpr": 0.88656584
           },
           {
-            "fpr": 0.69230769,
-            "tpr": 0.90969751
+            "fpr": 0.55364807,
+            "tpr": 0.89679715
           },
           {
-            "fpr": 0.76923077,
-            "tpr": 0.93460854
+            "fpr": 0.5751073,
+            "tpr": 0.90213523
           },
           {
-            "fpr": 0.84615385,
-            "tpr": 0.95862989
+            "fpr": 0.59227468,
+            "tpr": 0.90880783
+          },
+          {
+            "fpr": 0.6223176,
+            "tpr": 0.9230427
+          },
+          {
+            "fpr": 0.80686695,
+            "tpr": 0.95373665
+          },
+          {
+            "fpr": 0.93991416,
+            "tpr": 0.96619217
           },
           {
             "fpr": 1.0,
@@ -1042,235 +1194,235 @@
           },
           {
             "fpr": 0.0,
-            "tpr": 0.01645907
+            "tpr": 0.01156584
           },
           {
-            "fpr": 0.0,
-            "tpr": 0.02491103
+            "fpr": 0.00858369,
+            "tpr": 0.03024911
           },
           {
-            "fpr": 0.03846154,
-            "tpr": 0.03914591
+            "fpr": 0.00858369,
+            "tpr": 0.04003559
           },
           {
-            "fpr": 0.03846154,
-            "tpr": 0.05560498
+            "fpr": 0.00858369,
+            "tpr": 0.05738434
           },
           {
-            "fpr": 0.03846154,
-            "tpr": 0.06272242
+            "fpr": 0.01287554,
+            "tpr": 0.06717082
           },
           {
-            "fpr": 0.03846154,
-            "tpr": 0.08852313
+            "fpr": 0.01287554,
+            "tpr": 0.09653025
           },
           {
-            "fpr": 0.07692308,
-            "tpr": 0.09697509
+            "fpr": 0.02575107,
+            "tpr": 0.113879
           },
           {
-            "fpr": 0.07692308,
-            "tpr": 0.10809609
+            "fpr": 0.02575107,
+            "tpr": 0.13122776
           },
           {
-            "fpr": 0.07692308,
-            "tpr": 0.1383452
+            "fpr": 0.03004292,
+            "tpr": 0.14012456
           },
           {
-            "fpr": 0.07692308,
-            "tpr": 0.14768683
+            "fpr": 0.03433476,
+            "tpr": 0.14679715
           },
           {
-            "fpr": 0.07692308,
-            "tpr": 0.15435943
+            "fpr": 0.04291845,
+            "tpr": 0.22553381
           },
           {
-            "fpr": 0.07692308,
-            "tpr": 0.16192171
+            "fpr": 0.05150215,
+            "tpr": 0.23576512
           },
           {
-            "fpr": 0.11538462,
-            "tpr": 0.16903915
+            "fpr": 0.05579399,
+            "tpr": 0.25355872
           },
           {
-            "fpr": 0.11538462,
-            "tpr": 0.17882562
+            "fpr": 0.06437768,
+            "tpr": 0.26379004
           },
           {
-            "fpr": 0.11538462,
-            "tpr": 0.18772242
+            "fpr": 0.07296137,
+            "tpr": 0.27624555
           },
           {
-            "fpr": 0.15384615,
-            "tpr": 0.19706406
+            "fpr": 0.07296137,
+            "tpr": 0.28914591
           },
           {
-            "fpr": 0.15384615,
-            "tpr": 0.25978648
+            "fpr": 0.07725322,
+            "tpr": 0.31405694
           },
           {
-            "fpr": 0.15384615,
-            "tpr": 0.27090747
+            "fpr": 0.08154506,
+            "tpr": 0.32428826
           },
           {
-            "fpr": 0.15384615,
-            "tpr": 0.27935943
+            "fpr": 0.09012876,
+            "tpr": 0.33718861
           },
           {
-            "fpr": 0.15384615,
-            "tpr": 0.29181495
+            "fpr": 0.10300429,
+            "tpr": 0.4319395
           },
           {
-            "fpr": 0.15384615,
-            "tpr": 0.30115658
+            "fpr": 0.11158798,
+            "tpr": 0.44706406
           },
           {
-            "fpr": 0.15384615,
-            "tpr": 0.32339858
+            "fpr": 0.11158798,
+            "tpr": 0.46263345
           },
           {
-            "fpr": 0.15384615,
-            "tpr": 0.35320285
+            "fpr": 0.12017167,
+            "tpr": 0.49199288
           },
           {
-            "fpr": 0.19230769,
-            "tpr": 0.36298932
+            "fpr": 0.12875536,
+            "tpr": 0.51823843
           },
           {
-            "fpr": 0.19230769,
-            "tpr": 0.38033808
+            "fpr": 0.1416309,
+            "tpr": 0.53603203
           },
           {
-            "fpr": 0.19230769,
-            "tpr": 0.38967972
+            "fpr": 0.14592275,
+            "tpr": 0.54448399
           },
           {
-            "fpr": 0.23076923,
-            "tpr": 0.48131673
+            "fpr": 0.14592275,
+            "tpr": 0.56405694
           },
           {
-            "fpr": 0.26923077,
-            "tpr": 0.49377224
+            "fpr": 0.15450644,
+            "tpr": 0.58362989
           },
           {
-            "fpr": 0.26923077,
-            "tpr": 0.5088968
+            "fpr": 0.16738197,
+            "tpr": 0.59208185
           },
           {
-            "fpr": 0.26923077,
-            "tpr": 0.53425267
+            "fpr": 0.17596567,
+            "tpr": 0.6183274
           },
           {
-            "fpr": 0.26923077,
-            "tpr": 0.54225979
+            "fpr": 0.18025751,
+            "tpr": 0.6294484
           },
           {
-            "fpr": 0.26923077,
-            "tpr": 0.57962633
+            "fpr": 0.1888412,
+            "tpr": 0.64857651
           },
           {
-            "fpr": 0.26923077,
-            "tpr": 0.58540925
+            "fpr": 0.19313305,
+            "tpr": 0.65613879
           },
           {
-            "fpr": 0.26923077,
-            "tpr": 0.59830961
+            "fpr": 0.20600858,
+            "tpr": 0.66459075
           },
           {
-            "fpr": 0.26923077,
-            "tpr": 0.61032028
+            "fpr": 0.21459227,
+            "tpr": 0.68149466
           },
           {
-            "fpr": 0.26923077,
-            "tpr": 0.61743772
+            "fpr": 0.23175966,
+            "tpr": 0.6997331
           },
           {
-            "fpr": 0.26923077,
-            "tpr": 0.62633452
+            "fpr": 0.25321888,
+            "tpr": 0.72197509
           },
           {
-            "fpr": 0.30769231,
-            "tpr": 0.64190391
+            "fpr": 0.25751073,
+            "tpr": 0.73398577
           },
           {
-            "fpr": 0.30769231,
-            "tpr": 0.65435943
+            "fpr": 0.26609442,
+            "tpr": 0.75311388
           },
           {
-            "fpr": 0.30769231,
-            "tpr": 0.67838078
+            "fpr": 0.27467811,
+            "tpr": 0.75978648
           },
           {
-            "fpr": 0.34615385,
-            "tpr": 0.69483986
+            "fpr": 0.29184549,
+            "tpr": 0.77001779
           },
           {
-            "fpr": 0.34615385,
-            "tpr": 0.70596085
+            "fpr": 0.29184549,
+            "tpr": 0.78736655
           },
           {
-            "fpr": 0.38461538,
-            "tpr": 0.72108541
+            "fpr": 0.32188841,
+            "tpr": 0.80427046
           },
           {
-            "fpr": 0.42307692,
-            "tpr": 0.7366548
+            "fpr": 0.3304721,
+            "tpr": 0.8136121
           },
           {
-            "fpr": 0.46153846,
-            "tpr": 0.75355872
+            "fpr": 0.33476395,
+            "tpr": 0.82339858
           },
           {
-            "fpr": 0.46153846,
-            "tpr": 0.76868327
+            "fpr": 0.35193133,
+            "tpr": 0.83941281
           },
           {
-            "fpr": 0.46153846,
-            "tpr": 0.78959075
-          },
-          {
-            "fpr": 0.46153846,
-            "tpr": 0.79670819
-          },
-          {
-            "fpr": 0.53846154,
-            "tpr": 0.81183274
-          },
-          {
-            "fpr": 0.53846154,
-            "tpr": 0.8247331
-          },
-          {
-            "fpr": 0.53846154,
-            "tpr": 0.84430605
-          },
-          {
-            "fpr": 0.53846154,
+            "fpr": 0.39055794,
             "tpr": 0.85631673
           },
           {
-            "fpr": 0.57692308,
-            "tpr": 0.8727758
+            "fpr": 0.41630901,
+            "tpr": 0.87455516
           },
           {
-            "fpr": 0.61538462,
-            "tpr": 0.88256228
+            "fpr": 0.4248927,
+            "tpr": 0.88345196
           },
           {
-            "fpr": 0.69230769,
-            "tpr": 0.89724199
+            "fpr": 0.45922747,
+            "tpr": 0.90213523
           },
           {
-            "fpr": 0.73076923,
-            "tpr": 0.9297153
+            "fpr": 0.46351931,
+            "tpr": 0.90747331
           },
           {
-            "fpr": 0.76923077,
-            "tpr": 0.95240214
+            "fpr": 0.4806867,
+            "tpr": 0.92037367
           },
           {
-            "fpr": 0.84615385,
-            "tpr": 0.96040925
+            "fpr": 0.53648069,
+            "tpr": 0.93371886
+          },
+          {
+            "fpr": 0.59656652,
+            "tpr": 0.95329181
+          },
+          {
+            "fpr": 0.61802575,
+            "tpr": 0.95685053
+          },
+          {
+            "fpr": 0.63090129,
+            "tpr": 0.96307829
+          },
+          {
+            "fpr": 0.89699571,
+            "tpr": 0.98265125
+          },
+          {
+            "fpr": 0.96995708,
+            "tpr": 0.9977758
           },
           {
             "fpr": 1.0,
@@ -1285,12 +1437,12 @@
         "y_label": "Actual (No, Yes)",
         "data": [
           [
-            19,
-            7
+            181,
+            52
           ],
           [
-            702,
-            1546
+            626,
+            1622
           ]
         ]
       },
@@ -1301,12 +1453,12 @@
         "y_label": "Actual (No, Yes)",
         "data": [
           [
-            18,
-            8
+            189,
+            44
           ],
           [
-            579,
-            1669
+            636,
+            1612
           ]
         ]
       },
@@ -1317,12 +1469,12 @@
         "y_label": "Actual (No, Yes)",
         "data": [
           [
-            2,
-            24
+            16,
+            217
           ],
           [
-            1,
-            2247
+            43,
+            2205
           ]
         ]
       },
@@ -1333,12 +1485,12 @@
         "y_label": "Actual (No, Yes)",
         "data": [
           [
-            0,
-            26
+            122,
+            111
           ],
           [
-            0,
-            2248
+            320,
+            1928
           ]
         ]
       },
@@ -1349,12 +1501,12 @@
         "y_label": "Actual (No, Yes)",
         "data": [
           [
-            0,
-            26
+            5,
+            228
           ],
           [
-            0,
-            2248
+            2,
+            2246
           ]
         ]
       },
@@ -1366,175 +1518,175 @@
         "data": [
           {
             "x": 1,
-            "y": 0.47255114
+            "y": 0.45159456
           },
           {
             "x": 2,
-            "y": 0.43676968
+            "y": 0.38795256
           },
           {
             "x": 3,
-            "y": 0.49297499
+            "y": 0.44226072
           },
           {
             "x": 4,
-            "y": 0.49297499
+            "y": 0.39403415
           },
           {
             "x": 5,
-            "y": 0.49268901
+            "y": 0.4316183
           },
           {
             "x": 6,
-            "y": 0.49268901
+            "y": 0.40608505
           },
           {
             "x": 7,
-            "y": 0.49268901
+            "y": 0.44297731
           },
           {
             "x": 8,
-            "y": 0.49268901
+            "y": 0.43176667
           },
           {
             "x": 9,
-            "y": 0.50038132
+            "y": 0.45649115
           },
           {
             "x": 10,
-            "y": 0.50038132
+            "y": 0.39944402
           },
           {
             "x": 11,
-            "y": 0.5
+            "y": 0.44911228
           },
           {
             "x": 12,
-            "y": 0.50009533
+            "y": 0.43117467
           },
           {
             "x": 13,
-            "y": 0.5
+            "y": 0.45185927
           },
           {
             "x": 14,
-            "y": 0.5
+            "y": 0.42870165
           },
           {
             "x": 15,
-            "y": 0.5
+            "y": 0.43639915
           },
           {
             "x": 16,
-            "y": 0.5
+            "y": 0.43777633
           },
           {
             "x": 17,
-            "y": 0.5
+            "y": 0.46101247
           },
           {
             "x": 18,
-            "y": 0.5
+            "y": 0.41906303
           },
           {
             "x": 19,
-            "y": 0.5
+            "y": 0.46952172
           },
           {
             "x": 20,
-            "y": 0.5
+            "y": 0.42804007
           },
           {
             "x": 21,
-            "y": 0.5
+            "y": 0.45987978
           },
           {
             "x": 22,
-            "y": 0.5
+            "y": 0.42832835
           },
           {
             "x": 23,
-            "y": 0.5
+            "y": 0.44494344
           },
           {
             "x": 24,
-            "y": 0.5
+            "y": 0.42013894
           },
           {
             "x": 25,
-            "y": 0.5
+            "y": 0.4627277
           },
           {
             "x": 26,
-            "y": 0.5
+            "y": 0.42496485
           },
           {
             "x": 27,
-            "y": 0.5
+            "y": 0.48020465
           },
           {
             "x": 28,
-            "y": 0.5
+            "y": 0.44607998
           },
           {
             "x": 29,
-            "y": 0.5
+            "y": 0.46826303
           },
           {
             "x": 30,
-            "y": 0.5
+            "y": 0.42013185
           },
           {
             "x": 31,
-            "y": 0.5
+            "y": 0.46369367
           },
           {
             "x": 32,
-            "y": 0.5
+            "y": 0.43677098
           },
           {
             "x": 33,
-            "y": 0.5
+            "y": 0.47422422
           },
           {
             "x": 34,
-            "y": 0.5
+            "y": 0.43574123
           },
           {
             "x": 35,
-            "y": 0.5
+            "y": 0.43842359
           },
           {
             "x": 36,
-            "y": 0.5
+            "y": 0.4247528
           },
           {
             "x": 37,
-            "y": 0.5
+            "y": 0.44547713
           },
           {
             "x": 38,
-            "y": 0.5
+            "y": 0.45516108
           },
           {
             "x": 39,
-            "y": 0.5
+            "y": 0.43666715
           },
           {
             "x": 40,
-            "y": 0.5
+            "y": 0.42935507
           }
         ]
       }
     ]
   },
-  "yields": "Decision tree separates data-loss incidents best (CV AUC 0.77), and the strongest logistic signals are action_social (odds ratio 10.10), sector_health_care_and_social_assistance (odds ratio 5.35), size_large (odds ratio 3.13). With only 61 No cases to learn from, CyCRS treats most incidents as likely to expose data and uses this model only to explain which attack features matter, not to promise a business it is safe.",
+  "yields": "Decision tree separates data-loss incidents best (CV AUC 0.83), and the strongest logistic signals are action_physical (odds ratio 5.15), sector_health_care_and_social_assistance (odds ratio 4.97), action_error (odds ratio 4.26). With only 542 No cases to learn from, CyCRS treats most incidents as likely to expose data and uses this model only to explain which attack features matter, not to promise a business it is safe.",
   "feeds": [
     "attack-likelihood"
   ],
   "limitations": [
-    "Only 87 incidents are confirmed No, so every No-side metric is uncertain.",
-    "Potentially and Unknown disclosures were dropped, which removes the most ambiguous cases.",
-    "CV AUC SD for the best model is 0.039, so model ranks may change with a new sample."
+    "Only 775 incidents are confirmed No, so every No-side metric is uncertain.",
+    "Potentially and Unknown disclosures were dropped; incidents with no confidentiality section count as No, which assumes VERIS coders recorded every exposure.",
+    "CV AUC SD for the best model is 0.019, so model ranks may change with a new sample."
   ]
 }

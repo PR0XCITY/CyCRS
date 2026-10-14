@@ -329,7 +329,7 @@
       "Grouped employee counts into small (up to 100, or VERIS Small), medium (101 to 1000), large",
       "Kept Unknown as its own category instead of filling it in",
       "Took log10(1 + records lost) for the 5398 incidents with a known count",
-      "Kept only Yes or No disclosure for the breach target, leaving 7579 incidents"
+      "Breach target: Yes is 1; No, or no confidentiality section at all, is 0 (VERIS records that section only when data was affected); Potentially and Unknown dropped, leaving 8267 incidents"
     ],
     "sample_rows": [
       {
@@ -433,7 +433,7 @@
     },
     {
       "name": "Share of breach target that is Yes",
-      "value": "98.85% (7492 Yes, 87 No)",
+      "value": "90.63% (7492 Yes, 775 No)",
       "implication": "Very unbalanced classes: accuracy is meaningless, use ROC AUC and class weights."
     },
     {
@@ -484,9 +484,9 @@
       "raw_files": 10596,
       "flattened_rows": 10596,
       "columns": 55,
-      "classifier_rows": 7579,
+      "classifier_rows": 8267,
       "breach_yes": 7492,
-      "breach_no": 87,
+      "breach_no": 775,
       "regression_rows": 5398,
       "skew_raw": 50.56625329,
       "skew_log": 0.36008094
@@ -512,8 +512,8 @@
           ],
           [
             "classifier set (Yes or No)",
-            7579,
-            "data_disclosure Yes=1 No=0; Potentially, Unknown, Not coded dropped"
+            8267,
+            "data_disclosure Yes=1; No or no confidentiality section (Not coded)=0; Potentially, Unknown dropped"
           ],
           [
             "regression set",
@@ -572,8 +572,8 @@
           ],
           [
             "breach",
-            3017,
-            28.47
+            2329,
+            21.98
           ]
         ]
       },
@@ -624,7 +624,7 @@
           },
           {
             "x": "classifier set (Yes or No)",
-            "y": 7579
+            "y": 8267
           },
           {
             "x": "regression set",
@@ -742,11 +742,11 @@
       }
     ]
   },
-  "yields": "Out of 10596 public incident reports, 7579 clearly say whether data was exposed and 5398 say how many records were lost. CyCRS learns how breaches happen from these rows and measures breach size on a log scale so one giant leak does not distort the picture for a small business.",
+  "yields": "Out of 10596 public incident reports, 8267 clearly say whether data was exposed and 5398 say how many records were lost. CyCRS learns how breaches happen from these rows and measures breach size on a log scale so one giant leak does not distort the picture for a small business.",
   "feeds": [],
   "limitations": [
-    "Only 87 incidents are confirmed No disclosure, so the breach classifier has very few negatives.",
-    "688 incidents have no confidentiality section and are left out of the target.",
+    "Only 775 incidents (9.4%) are No, so the breach classifier still has far fewer negatives than positives.",
+    "688 incidents have no confidentiality section and are counted as no disclosure; this assumes the coder would have recorded any data exposure.",
     "VCDB is built from public news reports, so large and US organisations are over represented.",
     "VERIS Small (up to 1000 staff) cannot be split and is counted as small.",
     "Discovery time in days is known for only 1436 incidents."

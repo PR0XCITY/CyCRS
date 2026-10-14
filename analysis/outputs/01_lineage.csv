@@ -1,5 +1,5 @@
 step,rows,rule
 raw validated files,10596,data/json/validated/*.json
 flattened incidents,10596,one row per incident
-classifier set (Yes or No),7579,"data_disclosure Yes=1 No=0; Potentially, Unknown, Not coded dropped"
+classifier set (Yes or No),8267,"data_disclosure Yes=1; No or no confidentiality section (Not coded)=0; Potentially, Unknown dropped"
 regression set,5398,"data_total known (numeric, at least 0)"

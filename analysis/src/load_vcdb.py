@@ -73,7 +73,7 @@ SMALL = {"1 to 10", "11 to 100", "Small"}
 MEDIUM = {"101 to 1000"}
 LARGE = {"1001 to 10000", "10001 to 25000", "25001 to 50000", "50001 to 100000", "Over 100000", "Large"}
 
-BREACH = {"Yes": 1, "No": 0}
+BREACH = {"Yes": 1, "No": 0, "Not coded": 0}
 
 
 def load_sectors(p=NAICS):
@@ -175,7 +175,7 @@ def flatten_incident(j, sm):
     r["discovery_days"] = discovery_days(t)
     y = (t.get("incident") or {}).get("year")
     r["year"] = int(y) if isinstance(y, int) else np.nan
-    r["breach"] = breach_target(dd)
+    r["breach"] = breach_target(r["data_disclosure"])
     return r
 
 
