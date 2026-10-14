@@ -85,7 +85,7 @@ def test_banned_sample_column():
 
 def test_em_dash_rejected():
     c = make_card()
-    c["yields"] = "It works — really. Nothing else."
+    c["yields"] = f"It works {chr(0x2014)} really. Nothing else."
     with pytest.raises(CardError):
         validate_card(c)
 
