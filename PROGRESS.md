@@ -79,3 +79,9 @@
 - Lighthouse 13.5 local (mobile, gzip test server, 2 runs): / perf 88-97, /results 86, /models/mlr-impact 85-90; accessibility 100 and CLS 0 on all. Target 90 not consistently met for /results and model pages; re-measure on Vercel.
 - Perf changes: client imports model.json only (no client zod parse; validated in build and tests), profile validation on zod/mini named imports (results chunk 377 KB -> 70 KB), Recharts lazy with fixed-height frames, KaTeX CSS only on /results and /models/[id], fonts display optional, results heading and disclaimer server-rendered.
 - Fix: Next 16 static export on Windows writes RSC segment files as __next.x/__PAGE__.txt (backslash bug); local serve.mjs maps it, Linux builds unaffected.
+
+## Phase 9 (2026-10-14)
+- Files: notebooks/07_case_replay_sensitivity.py, src/{replay,sensitivity}.py, recommend(p_scale), tests/test_replay_sensitivity.py (113 pass), outputs/07_*.csv, figures/07_tornado.png, cards case-replay (17), sensitivity (18); web lib/cases.ts, /cases rebuilt, tests/unit/cases.test.ts (vitest 55 pass), Playwright 29 pass, 48 screenshots.
+- Case replay at INR 50,000: AIIMS 2022, C-Edge 2024, Tata Technologies 2025 (all malware) covered by top 3 Endpoint protection, MFA, backups; Star Health 2024 not assessable (source does not state the method). Verdict uses VERIS variety/vector categories from load_vcdb, not hand mapping.
+- Sensitivity, 3 largest personas (all Mixed sector: small, unknown, large; server): largest swings incident probability and per-record cost (tied, both linear x0.5/x1.5), smallest effectiveness. 0 of 24 scenarios change plan order or set; all 4 scorable controls stable. At INR 50,000 every scorable control is affordable, so stability is partly structural.
+- Export: sources.cases carry model profile and actual_categories; cards.json now 18 cards. Fixed results disclaimer regex (/^d+_/ lost its backslash in Phase 8).
