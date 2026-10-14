@@ -182,6 +182,7 @@
   "results": {
     "key_numbers": {
       "controls_scored": 4,
+      "reference_budget_inr": 50000,
       "max_gap_pct": 0.0
     },
     "tables": [

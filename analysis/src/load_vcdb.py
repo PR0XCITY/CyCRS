@@ -86,6 +86,14 @@ def sector_of(industry, sm):
     return c if c in sm else "00", sm.get(c, "Unknown")
 
 
+def band_upper(labels):
+    return max(int(b.split(" to ")[1]) for b in labels if " to " in b)
+
+
+def size_band_limits():
+    return {"small_max_employees": band_upper(SMALL), "medium_max_employees": band_upper(MEDIUM)}
+
+
 def size_bucket(ec):
     if ec in SMALL:
         return "small"

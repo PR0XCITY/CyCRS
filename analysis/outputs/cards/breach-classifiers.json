@@ -174,6 +174,7 @@
   "results": {
     "key_numbers": {
       "best_model": "decision_tree",
+      "youden_j": 0.55487376,
       "best_cv_auc": 0.82625628,
       "youden_threshold": 0.44247082,
       "k_knn": 2,
@@ -281,6 +282,31 @@
             1778,
             0.79092527,
             0.7639485
+          ]
+        ]
+      },
+      {
+        "title": "Strongest significant logistic odds ratios",
+        "columns": [
+          "term",
+          "odds_ratio",
+          "p_value"
+        ],
+        "rows": [
+          [
+            "action_physical",
+            5.14888247,
+            0.0
+          ],
+          [
+            "sector_health_care_and_social_assistance",
+            4.96798933,
+            0.0
+          ],
+          [
+            "action_error",
+            4.26321907,
+            2.1e-05
           ]
         ]
       },

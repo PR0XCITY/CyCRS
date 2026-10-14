@@ -5,6 +5,7 @@ from pathlib import Path
 
 from src.cards import load_cards, to_plain, validate_card
 from src.classify import PROFILE_ASSETS
+from src.load_vcdb import size_band_limits
 from src.nbutil import MODELS, OUT, ROOT
 from src.recommender import CATEGORIES, SIZES, split_tokens
 from src.replay import actual_categories, case_profile
@@ -25,6 +26,7 @@ SCHEMA = {
         "sizes": [STR],
         "assets": [STR],
         "categories": [STR],
+        "size_bands": {"small_max_employees": NUM, "medium_max_employees": NUM},
         "attack": {
             "feature_order": [STR],
             "sectors": [STR],
@@ -270,6 +272,7 @@ def build_bundle(cfg, coverage, version):
         "sizes": list(SIZES),
         "assets": PROFILE_ASSETS,
         "categories": list(CATEGORIES),
+        "size_bands": size_band_limits(),
         "attack": {k: att[k] for k in ("feature_order", "sectors", "reference_levels")}
         | {"models": {c: att["models"][c] for c in CATEGORIES}},
         "impact": {

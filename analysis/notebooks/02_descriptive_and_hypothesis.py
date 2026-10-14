@@ -816,6 +816,7 @@ card_f = {
     "results": {
         "key_numbers": {
             "n": len(x),
+            "skew_records_lost": rl["skewness"],
             "ks_d_normal": ks_n.statistic,
             "ks_d_lognormal": ks_l.statistic,
             "lognormal_sigma": s_ln,
