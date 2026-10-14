@@ -57,3 +57,27 @@ def write_json(obj, p):
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(json.dumps(to_plain(obj), indent=2), encoding="utf-8")
     return p
+
+
+def indian_group(n):
+    s = str(int(round(abs(n))))
+    if len(s) <= 3:
+        return s
+    h, t = s[:-3], s[-3:]
+    ps = []
+    while len(h) > 2:
+        ps.insert(0, h[-2:])
+        h = h[:-2]
+    if h:
+        ps.insert(0, h)
+    return ",".join(ps) + "," + t
+
+
+def inr(v):
+    a = abs(v)
+    sg = "-" if v < 0 else ""
+    if a >= 1e7:
+        return f"{sg}₹{a / 1e7:.2f} crore"
+    if a >= 1e5:
+        return f"{sg}₹{a / 1e5:.2f} lakh"
+    return f"{sg}₹{indian_group(a)}"

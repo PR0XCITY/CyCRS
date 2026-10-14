@@ -307,7 +307,7 @@
       }
     ]
   },
-  "yields": "For a small retail shop with INR 50,000 a year, the plan is Endpoint protection, MFA, Offline or cloud backups, Email filtering, cutting expected loss to 31.7% of the starting estimate. Only 4 controls have sourced effectiveness and cost, so the others are shown as not yet scored rather than guessed.",
+  "yields": "For a small retail shop with ₹50,000 a year, the plan is Endpoint protection, MFA, Offline or cloud backups, Email filtering, cutting expected loss to 31.7% of the starting estimate. Only 4 controls have sourced effectiveness and cost, so the others are shown as not yet scored rather than guessed.",
   "feeds": [],
   "limitations": [
     "8 controls cannot be ranked until their effectiveness or cost is sourced.",

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import FunnelChart from "@/components/FunnelChart";
 import { lineage, sources } from "@/lib/data";
-import { count, num } from "@/lib/format";
+import { count, inr, num } from "@/lib/format";
 
 export const metadata: Metadata = { title: "Data and sources", description: "Every dataset and external value behind CyCRS, with links and excerpts." };
 
@@ -21,6 +21,16 @@ function show(v: unknown) {
   if (typeof v === "number") return num(v, 4);
   if (typeof v === "boolean") return v ? "true" : "false";
   return typeof v === "object" ? JSON.stringify(v) : String(v);
+}
+
+function rate(key: string) {
+  return sources.values.find((x) => x.key === key)?.value;
+}
+
+function inRupees(value: number, unit: string) {
+  if (unit.startsWith("INR")) return inr(value);
+  const r = unit.startsWith("USD") ? rate("usd_inr") : unit.startsWith("GBP") ? rate("gbp_inr") : undefined;
+  return r === undefined ? "" : inr(value * r);
 }
 
 function level(s: string) {
@@ -120,6 +130,7 @@ export default function DataPage() {
                 <th>Key</th>
                 <th className="n">Value</th>
                 <th>Unit</th>
+                <th className="n">In rupees</th>
                 <th>Publisher</th>
                 <th>Excerpt</th>
                 <th>Fallback level</th>
@@ -131,6 +142,7 @@ export default function DataPage() {
                   <td className="num">{v.key}</td>
                   <td className="n">{num(v.value, 4)}</td>
                   <td>{v.unit}</td>
+                  <td className="n">{inRupees(v.value, v.unit)}</td>
                   <td>
                     <a href={v.url} rel="noopener noreferrer">
                       {v.publisher}

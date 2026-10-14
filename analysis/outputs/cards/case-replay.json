@@ -37,7 +37,7 @@
     ],
     "prep_steps": [
       "Only facts stated in each fetched source were recorded",
-      "Each case run through the live engine with no controls in place and a budget of INR 50,000",
+      "Each case run through the live engine with no controls in place and a budget of ₹50,000",
       "Verdict compares the action categories the top 3 controls address with the categories the source reports"
     ],
     "sample_rows": [
@@ -240,7 +240,7 @@
       }
     ]
   },
-  "yields": "For 3 of the 3 cases whose sources say how the attack worked, CyCRS's top 3 controls at INR 50,000 address that kind of attack. 1 case does not state the method, so it is shown without a verdict rather than counted as a success.",
+  "yields": "For 3 of the 3 cases whose sources say how the attack worked, CyCRS's top 3 controls at ₹50,000 address that kind of attack. 1 case does not state the method, so it is shown without a verdict rather than counted as a success.",
   "feeds": [],
   "limitations": [
     "Four public cases from large organisations, not small businesses.",

@@ -37,7 +37,7 @@
     ],
     "prep_steps": [
       "Three largest personas turned into profiles from their centroids",
-      "Budget INR 50,000, no controls in place",
+      "Budget ₹50,000, no controls in place",
       "8 one-at-a-time scenarios per persona"
     ],
     "sample_rows": [
@@ -137,7 +137,7 @@
     },
     {
       "model": "No sensitivity check",
-      "why_not": "The per-record cost alone moves results by up to 40,940,178 INR a year for these personas."
+      "why_not": "The per-record cost alone moves results by up to ₹4.09 crore a year for these personas."
     }
   ],
   "formula_tex": [
