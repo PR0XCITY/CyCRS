@@ -109,7 +109,7 @@
       }
     ]
   },
-  "why": "Risk is chance times cost, so each category's expected annual loss is pi x p_c x I_c with pi 0.468 (fallback level 1_india_msme) and a cost per record of INR 6,456. The attack models give p_c given an incident and the impact model gives records lost on the log scale, so the product keeps every step traceable to one model card.",
+  "why": "Risk is chance times cost, so each category's expected annual loss is pi x p_c x I_c with pi 0.468 (fallback level 1_india_msme) and a cost per record of ₹6,456. The attack models give p_c given an incident and the impact model gives records lost on the log scale, so the product keeps every step traceable to one model card.",
   "data_properties": [
     {
       "name": "Annual incident probability",
@@ -123,7 +123,7 @@
     },
     {
       "name": "Largest expected loss, small retail shop",
-      "value": "malware INR 590,318",
+      "value": "malware ₹5.90 lakh",
       "implication": "First category to defend."
     },
     {
@@ -283,7 +283,7 @@
       }
     ]
   },
-  "yields": "For a small retail shop, CyCRS estimates about INR 1,495,182 a year of expected loss, most of it from malware. These are estimates built from public averages, and each one carries the source and fallback level of its inputs.",
+  "yields": "For a small retail shop, CyCRS estimates about ₹14.95 lakh a year of expected loss, most of it from malware. These are estimates built from public averages, and each one carries the source and fallback level of its inputs.",
   "feeds": [
     "budget-optimiser"
   ],
@@ -291,6 +291,6 @@
     "Probabilities come from reported incidents, not from Indian small businesses directly.",
     "Categories can overlap within one incident, so the total may overstate loss.",
     "Impact uses IBM India average cost per record for every category.",
-    "Uncapped, one incident at a small retail shop would be priced at INR 456,798,424, 1.8 times IBM's India average, because VCDB record counts and IBM costs come from large organisations; small and medium profiles are therefore capped at INR 1,818,317 and INR 10,527,096, figures from a UK survey rather than India."
+    "Uncapped, one incident at a small retail shop would be priced at ₹45.68 crore, 1.8 times IBM's India average, because VCDB record counts and IBM costs come from large organisations; small and medium profiles are therefore capped at ₹18.18 lakh and ₹1.05 crore, figures from a UK survey rather than India."
   ]
 }

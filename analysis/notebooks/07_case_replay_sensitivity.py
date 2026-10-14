@@ -40,7 +40,7 @@ sys.path.insert(0, str(A))
 from src.cards import write_card
 from src.export_web import WEB, cards_export, schema_md, sources_export, write_export
 from src.log import get_logger, log_event
-from src.nbutil import OUT, save_fig, slug, var
+from src.nbutil import OUT, inr, save_fig, slug, var
 from src.recommender import recommend
 from src.replay import NOT_ASSESSABLE, actual_categories, case_profile, verdict
 from src.sensitivity import SCENARIOS, sensitivity, stable_controls, tornado
@@ -203,7 +203,7 @@ card_r = {
         ],
         "prep_steps": [
             "Only facts stated in each fetched source were recorded",
-            f"Each case run through the live engine with no controls in place and a budget of INR {BUDGET:,}",
+            f"Each case run through the live engine with no controls in place and a budget of {inr(BUDGET)}",
             "Verdict compares the action categories the top 3 controls address with the categories the source reports",
         ],
         "sample_rows": (
@@ -285,7 +285,7 @@ card_r = {
         ],
     },
     "yields": (
-        f"For {n_cov} of the {len(assessable)} cases whose sources say how the attack worked, CyCRS's top 3 controls at INR {BUDGET:,} address that kind of attack. "
+        f"For {n_cov} of the {len(assessable)} cases whose sources say how the attack worked, CyCRS's top 3 controls at {inr(BUDGET)} address that kind of attack. "
         f"{cases_n - len(assessable)} case{'s do' if cases_n - len(assessable) != 1 else ' does'} not state the method, so it is shown without a verdict rather than counted as a success."
     ),
     "feeds": [],
@@ -325,7 +325,7 @@ card_s = {
         ],
         "prep_steps": [
             "Three largest personas turned into profiles from their centroids",
-            f"Budget INR {BUDGET:,}, no controls in place",
+            f"Budget {inr(BUDGET)}, no controls in place",
             f"{len(SCENARIOS)} one-at-a-time scenarios per persona",
         ],
         "sample_rows": sd[["persona", "factor", "side", "multiplier", "loss_after_plan_inr", "same_order"]]
@@ -361,7 +361,7 @@ card_s = {
         },
         {
             "model": "No sensitivity check",
-            "why_not": f"The per-record cost alone moves results by up to {td['swing'].max():,.0f} INR a year for these personas.",
+            "why_not": f"The per-record cost alone moves results by up to {inr(td.loc[td['factor'] == 'per_record_cost', 'swing'].max())} a year for these personas.",
         },
     ],
     "formula_tex": [

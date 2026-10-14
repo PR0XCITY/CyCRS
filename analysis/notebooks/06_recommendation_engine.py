@@ -42,7 +42,7 @@ from src.cards import write_card
 from src.classify import PROFILE_ASSETS
 from src.export_web import WEB, build_bundle, export_all
 from src.log import get_logger, log_event
-from src.nbutil import MODELS, OUT, load_clean, save_fig, var, write_json
+from src.nbutil import MODELS, OUT, inr, load_clean, save_fig, var, write_json
 from src.recommender import (
     CATEGORIES,
     coverage_shares,
@@ -293,7 +293,7 @@ card_e = {
     },
     "why": (
         f"Risk is chance times cost, so each category's expected annual loss is pi x p_c x I_c with pi {cfg['annual_incident_prob']:.3f} "
-        f"(fallback level {inp['annual_incident_prob']['fallback_level']}) and a cost per record of INR {cfg['per_record_cost_inr']:,.0f}. "
+        f"(fallback level {inp['annual_incident_prob']['fallback_level']}) and a cost per record of {inr(cfg['per_record_cost_inr'])}. "
         "The attack models give p_c given an incident and the impact model gives records lost on the log scale, so the product keeps every "
         "step traceable to one model card."
     ),
@@ -310,7 +310,7 @@ card_e = {
         },
         {
             "name": f"Largest expected loss, {REF[0]['name']}",
-            "value": f"{topc} INR {lc.iloc[0]['expected_loss_inr']:,.0f}",
+            "value": f"{topc} {inr(lc.iloc[0]['expected_loss_inr'])}",
             "implication": "First category to defend.",
         },
         {
@@ -396,7 +396,7 @@ card_e = {
         ],
     },
     "yields": (
-        f"For a {REF[0]['name']}, CyCRS estimates about INR {r0['totals']['loss_no_controls_inr']:,.0f} a year of expected loss, most of it from {topc}. "
+        f"For a {REF[0]['name']}, CyCRS estimates about {inr(r0['totals']['loss_no_controls_inr'])} a year of expected loss, most of it from {topc}. "
         "These are estimates built from public averages, and each one carries the source and fallback level of its inputs."
     ),
     "feeds": ["budget-optimiser"],
@@ -404,7 +404,7 @@ card_e = {
         "Probabilities come from reported incidents, not from Indian small businesses directly.",
         "Categories can overlap within one incident, so the total may overstate loss.",
         "Impact uses IBM India average cost per record for every category.",
-        f"Uncapped, one incident at a {REF[0]['name']} would be priced at INR {raw0:,.0f}, {raw0 / cfg['breach_total_cost_inr']:.1f} times IBM's India average, because VCDB record counts and IBM costs come from large organisations; small and medium profiles are therefore capped at INR {cfg['impact_cap_small_inr']:,.0f} and INR {cfg['impact_cap_medium_inr']:,.0f}, figures from a UK survey rather than India.",
+        f"Uncapped, one incident at a {REF[0]['name']} would be priced at {inr(raw0)}, {raw0 / cfg['breach_total_cost_inr']:.1f} times IBM's India average, because VCDB record counts and IBM costs come from large organisations; small and medium profiles are therefore capped at {inr(cfg['impact_cap_small_inr'])} and {inr(cfg['impact_cap_medium_inr'])}, figures from a UK survey rather than India.",
     ],
 }
 card_e["data_in"]["sample_rows"] = card_e["data_in"]["sample_rows"][:8]
@@ -520,7 +520,7 @@ card_g = {
         ],
     },
     "yields": (
-        f"For a {REF[0]['name']} with INR {REF[0]['budget_inr']:,} a year, the plan is {', '.join(x['control'] for x in refs[0]['plan']) or 'nothing affordable'}, "
+        f"For a {REF[0]['name']} with {inr(REF[0]['budget_inr'])} a year, the plan is {', '.join(x['control'] for x in refs[0]['plan']) or 'nothing affordable'}, "
         f"cutting expected loss to {refs[0]['totals']['residual_risk_pct']:.1f}% of the starting estimate. "
         f"Only {len(ctl)} controls have sourced effectiveness and cost, so the others are shown as not yet scored rather than guessed."
     ),

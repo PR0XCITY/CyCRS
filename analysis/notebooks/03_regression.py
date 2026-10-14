@@ -47,6 +47,7 @@ from src.nbutil import (
     CATS,
     MODELS,
     OUT,
+    inr,
     load_clean,
     sample_rows,
     save_fig,
@@ -557,7 +558,7 @@ card_m = {
         f"{ka.iloc[0]['multiplier']:.2f}, and {top_s} has the largest sector or size effect "
         f"({ks.iloc[0]['multiplier']:.2f} times). "
         f"CyCRS uses this model to estimate records lost for each attack type and multiplies by the cost per record "
-        f"(INR {cfg['per_record_cost_inr']:,.0f}) to price each attack in rupees."
+        f"({inr(cfg['per_record_cost_inr'])}) to price each attack in rupees."
     ),
     "feeds": ["decision"],
     "limitations": [
