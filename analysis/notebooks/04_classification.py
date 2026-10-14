@@ -32,7 +32,10 @@ from sklearn.tree import DecisionTreeClassifier, export_text, plot_tree
 
 
 def find_root():
-    c = Path(globals().get("__file__", Path.cwd() / "x")).resolve().parent
+    try:
+        c = Path(__file__).resolve().parent
+    except NameError:
+        c = Path.cwd()
     for p in (c, *c.parents):
         if (p / "src" / "cards.py").exists():
             return p
