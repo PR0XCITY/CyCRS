@@ -5,6 +5,8 @@ import cards from "../../public/model/cards.json" with { type: "json" };
 const PROFILE = {
   sector: "Retail Trade",
   employees: 12,
+  country: "India",
+  state: "Maharashtra",
   city: "Pune",
   devices: 5,
   website: true,

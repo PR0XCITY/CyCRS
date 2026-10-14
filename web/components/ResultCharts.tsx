@@ -17,17 +17,17 @@ function distLabel(v: unknown) {
 
 function short(s: unknown) {
   const t = String(s);
-  return t.length > 30 ? `${t.slice(0, 28)}…` : t;
+  return t.length > 36 ? `${t.slice(0, 34)}…` : t;
 }
 
 export function PersonaChart({ data }: { data: Item[] }) {
   return (
-    <div className="mt-4 h-[280px]" role="img" aria-label="Distance from your profile to each persona; the chosen persona is highlighted">
+    <div className="mt-4 h-[220px]" role="img" aria-label="Distance from your profile to the five closest personas; the chosen persona is highlighted">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} layout="vertical" margin={{ left: 8, right: 48, top: 4, bottom: 4 }}>
           <CartesianGrid horizontal={false} stroke="var(--grid)" />
           <XAxis type="number" tick={TICK} stroke="var(--rule)" />
-          <YAxis type="category" dataKey="name" width={170} tick={TICK} tickFormatter={short} stroke="var(--rule)" />
+          <YAxis type="category" dataKey="name" width={230} tick={TICK} tickFormatter={short} stroke="var(--rule)" />
           <Bar dataKey="value" isAnimationActive={false} barSize={14}>
             {data.map((d) => (
               <Cell key={d.name} fill={d.chosen ? "var(--ink)" : "var(--rule)"} />

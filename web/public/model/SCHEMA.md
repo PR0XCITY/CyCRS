@@ -14,6 +14,10 @@ Numbers are rounded to 8 decimals. Each file is under 2 MB.
 | `categories[]` | string |
 | `size_bands.small_max_employees` | number |
 | `size_bands.medium_max_employees` | number |
+| `states[].name` | string |
+| `states[].type` | string |
+| `states[].cases_2024` | number |
+| `states[].crime_rate_2024` | number |
 | `attack.feature_order[]` | string |
 | `attack.sectors[]` | string |
 | `attack.reference_levels.sector` | string |

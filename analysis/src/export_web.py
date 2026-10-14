@@ -27,6 +27,7 @@ SCHEMA = {
         "assets": [STR],
         "categories": [STR],
         "size_bands": {"small_max_employees": NUM, "medium_max_employees": NUM},
+        "states": [{"name": STR, "type": STR, "cases_2024": NUM, "crime_rate_2024": NUM}],
         "attack": {
             "feature_order": [STR],
             "sectors": [STR],
@@ -262,6 +263,19 @@ def config_export(cfg):
     return out
 
 
+def ncrb_states():
+    with (ROOT / "data" / "processed" / "ncrb_state.csv").open(newline="", encoding="utf-8") as f:
+        return [
+            {
+                "name": r["state"],
+                "type": r["type"],
+                "cases_2024": int(r["cases_2024"]),
+                "crime_rate_2024": float(r["crime_rate_2024"]),
+            }
+            for r in csv.DictReader(f)
+        ]
+
+
 def build_bundle(cfg, coverage, version):
     att = json.loads((MODELS / "attack_models.json").read_text(encoding="utf-8"))
     imp = json.loads((MODELS / "mlr_impact.json").read_text(encoding="utf-8"))
@@ -273,6 +287,7 @@ def build_bundle(cfg, coverage, version):
         "assets": PROFILE_ASSETS,
         "categories": list(CATEGORIES),
         "size_bands": size_band_limits(),
+        "states": ncrb_states(),
         "attack": {k: att[k] for k in ("feature_order", "sectors", "reference_levels")}
         | {"models": {c: att["models"][c] for c in CATEGORIES}},
         "impact": {

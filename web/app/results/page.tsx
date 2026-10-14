@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import Results from "@/components/Results";
 import Link from "next/link";
 import Tex from "@/components/Tex";
-import { num } from "@/lib/format";
+import { count, inr, inrFull, num, pct } from "@/lib/format";
 import { model } from "@/lib/modelData";
 
 export const metadata: Metadata = { title: "Your risk and plan" };
@@ -24,6 +24,24 @@ function prettyLevel(s: string) {
   return s.replace(/^\d+_/, "").replace(/_/g, " ");
 }
 
+const INPUTS: Record<string, { label: string; show: (v: number) => string }> = {
+  annual_incident_prob: { label: "Chance of an incident in a year", show: chance },
+  per_record_cost_inr: { label: "Cost per record exposed", show: inrFull },
+  breach_total_cost_inr: { label: "Average breach cost in India", show: inr },
+  breach_avg_records: { label: "Records in an average breach", show: count },
+  usd_inr: { label: "Rupees per US dollar", show: rate },
+  impact_cap_small_inr: { label: "Most one incident can cost a small business", show: inr },
+  impact_cap_medium_inr: { label: "Most one incident can cost a medium business", show: inr },
+};
+
+function rate(v: number) {
+  return `₹${num(v, 2)}`;
+}
+
+function chance(v: number) {
+  return pct(100 * v, 1);
+}
+
 function Disclaimer() {
   return (
     <aside className="wrap mb-6" aria-label="Estimates disclaimer">
@@ -33,16 +51,23 @@ function Disclaimer() {
           organisations, the cost of one incident is capped for small and medium businesses using a UK government survey of small-business breach costs; treat the
           rupee figures as an upper range and trust the ranking of risks and controls most.
         </p>
-        <ul className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-muted">
-          {Object.entries(model.config).map(([k, v]) => (
-            <li key={k}>
-              {k.replace(/_/g, " ")}: <span className="num">{num(v.value, 4)}</span> ({prettyLevel(v.fallback_level)})
-            </li>
-          ))}
-        </ul>
-        <p className="mt-2">
-          <Link href="/data/">See every source and its fallback level</Link>
-        </p>
+        <details className="mt-2">
+          <summary className="cursor-pointer">Inputs used</summary>
+          <table className="data mt-2">
+            <tbody>
+              {Object.entries(model.config).map(([k, v]) => (
+                <tr key={k}>
+                  <td>{INPUTS[k]?.label ?? k.replace(/_/g, " ")}</td>
+                  <td className="n">{(INPUTS[k]?.show ?? inrFull)(v.value)}</td>
+                  <td className="text-muted">{prettyLevel(v.fallback_level)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p className="mt-2">
+            <Link href="/data/">See every source and its fallback level</Link>
+          </p>
+        </details>
       </div>
     </aside>
   );

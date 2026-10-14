@@ -6,6 +6,8 @@ export const BUDGET_MAX = 500000;
 export type ProfileForm = {
   sector: string;
   employees: number;
+  country: string;
+  state: string;
   city: string;
   devices: number;
   website: boolean;
@@ -20,10 +22,14 @@ function unique(a: unknown) {
   return Array.isArray(a) && new Set(a).size === a.length;
 }
 
-export function makeProfileSchema(sectors: readonly string[], controls: readonly string[]) {
+export const COUNTRIES = ["India"] as const;
+
+export function makeProfileSchema(sectors: readonly string[], controls: readonly string[], states: readonly string[]) {
   const businessShape = {
     sector: zenum(["Other", ...sectors], { error: "Choose a sector" }),
     employees: int({ error: "Enter a whole number" }).check(minimum(1, { error: "At least 1 person" }), maximum(1000000, { error: "Too large" })),
+    country: zenum(COUNTRIES, { error: "Choose your country" }),
+    state: zenum(states as [string, ...string[]], { error: "Choose your state or union territory" }),
     city: string({ error: "Enter your city" })
       .check(
         trim(),

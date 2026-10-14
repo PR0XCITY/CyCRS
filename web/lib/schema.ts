@@ -10,6 +10,7 @@ export const modelSchema = z.object({
   assets: z.array(z.string()),
   categories: z.array(z.string()),
   size_bands: z.object({ small_max_employees: num, medium_max_employees: num }),
+  states: z.array(z.object({ name: z.string(), type: z.string(), cases_2024: num, crime_rate_2024: num })),
   attack: z.object({
     feature_order: z.array(z.string()),
     sectors: z.array(z.string()),

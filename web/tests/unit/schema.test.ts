@@ -6,6 +6,8 @@ import { modelSchema } from "@/lib/schema";
 const GOOD = {
   sector: SECTORS[0] as string,
   employees: 12,
+  country: "India",
+  state: "Maharashtra",
   city: "Pune",
   devices: 6,
   website: true,

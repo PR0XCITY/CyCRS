@@ -7,7 +7,12 @@ export const PROFILE_KEY = "cycrs.profile.v1";
 export const DRAFT_KEY = "cycrs.draft.v1";
 export const CONTROL_NAMES = model.controls.map((c) => c.control);
 export const SECTORS = model.sectors;
-export const schemas = makeProfileSchema(SECTORS, CONTROL_NAMES);
+export const STATES = model.states.map((s) => s.name);
+export const schemas = makeProfileSchema(SECTORS, CONTROL_NAMES, STATES);
+
+export function stateOf(name: string) {
+  return model.states.find((s) => s.name === name);
+}
 
 export const ASSET_RULES = [
   { asset: "asset_user_device", answer: "Uses one or more computers, phones or tablets" },
