@@ -1,0 +1,4 @@
+persona,base_plan,stable_controls,scenarios_same_order,scenarios
+"Mixed sector, small, server",Endpoint protection; MFA; Offline or cloud backups; Email filtering,Endpoint protection; MFA; Offline or cloud backups; Email filtering,8,8
+"Mixed sector, unknown size, server",Endpoint protection; MFA; Offline or cloud backups; Email filtering,Endpoint protection; MFA; Offline or cloud backups; Email filtering,8,8
+"Mixed sector, large, server",Endpoint protection; MFA; Offline or cloud backups; Email filtering,Endpoint protection; MFA; Offline or cloud backups; Email filtering,8,8
