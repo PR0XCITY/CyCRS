@@ -139,7 +139,7 @@
     },
     {
       "name": "Residual risk after plan, small retail shop",
-      "value": 13.97220738,
+      "value": 31.66565707,
       "implication": "Share of expected loss left after the plan."
     }
   ],
@@ -198,24 +198,24 @@
         "rows": [
           [
             "small retail shop",
-            30459144.7393,
-            30459144.7393,
+            473459.1358,
+            473459.1358,
             0.0,
             "Endpoint protection; MFA; Offline or cloud backups; Email filtering",
             "MFA; Offline or cloud backups; Endpoint protection; Email filtering"
           ],
           [
             "medium clinic with MFA, no budget",
-            4703929.9268,
-            4703929.9268,
+            3149148.6994,
+            3149148.6994,
             0.0,
             "MFA; Endpoint protection",
             "MFA; Endpoint protection"
           ],
           [
             "small consultancy, tiny budget",
-            186508972.8662,
-            186508972.8662,
+            589537.5724,
+            589537.5724,
             0.0,
             "Endpoint protection; MFA",
             "MFA; Endpoint protection"
@@ -289,25 +289,25 @@
         "data": [
           {
             "x": "Endpoint protection",
-            "y": 48475597.79554221
+            "y": 676968.86002235
           },
           {
             "x": "MFA",
-            "y": 41633296.14040394
+            "y": 597327.00466301
           },
           {
             "x": "Offline or cloud backups",
-            "y": 33316699.89645784
+            "y": 522660.33413975
           },
           {
             "x": "Email filtering",
-            "y": 30459144.73929258
+            "y": 473459.13579271
           }
         ]
       }
     ]
   },
-  "yields": "For a small retail shop with INR 50,000 a year, the plan is Endpoint protection, MFA, Offline or cloud backups, Email filtering, cutting expected loss to 14.0% of the starting estimate. Only 4 controls have sourced effectiveness and cost, so the others are shown as not yet scored rather than guessed.",
+  "yields": "For a small retail shop with INR 50,000 a year, the plan is Endpoint protection, MFA, Offline or cloud backups, Email filtering, cutting expected loss to 31.7% of the starting estimate. Only 4 controls have sourced effectiveness and cost, so the others are shown as not yet scored rather than guessed.",
   "feeds": [],
   "limitations": [
     "8 controls cannot be ranked until their effectiveness or cost is sourced.",

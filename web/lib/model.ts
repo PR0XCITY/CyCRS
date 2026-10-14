@@ -21,6 +21,9 @@ export type CategoryTrace = {
   p_c: number;
   log_records: number;
   records: number;
+  impact_uncapped_inr: number;
+  impact_cap_inr: number | null;
+  capped: boolean;
   impact_inr: number;
   expected_loss_inr: number;
 };
@@ -96,6 +99,11 @@ export function scorable(model: Model) {
 
 export type Options = { pScale?: number };
 
+export function impactCap(model: Model, size: string) {
+  const e = model.config[`impact_cap_${size}_inr`];
+  return e ? e.value : null;
+}
+
 function cfgValue(model: Model, k: string) {
   const e = model.config[k];
   if (!e) throw new Error(`config ${k} missing`);
@@ -108,6 +116,7 @@ export function recommend(profile: EngineProfile, model: Model, opt: Options = {
   const pi = cfgValue(model, "annual_incident_prob");
   const cpr = cfgValue(model, "per_record_cost_inr");
   const scale = opt.pScale ?? 1;
+  const cap = impactCap(model, profile.size);
   const cats: CategoryTrace[] = [];
   const base: Record<string, number> = {};
   for (const c of CATEGORIES) {
@@ -116,7 +125,8 @@ export function recommend(profile: EngineProfile, model: Model, opt: Options = {
     const t = logitTrace(m, x);
     const p = Math.min(t.p * scale, 1);
     const r = impactRecords(model.impact, x, c);
-    const ic = r.records * cpr;
+    const raw = r.records * cpr;
+    const ic = cap === null ? raw : Math.min(raw, cap);
     const lc = pi * p * ic;
     base[c] = lc;
     cats.push({
@@ -127,6 +137,9 @@ export function recommend(profile: EngineProfile, model: Model, opt: Options = {
       p_c: p,
       log_records: r.y,
       records: r.records,
+      impact_uncapped_inr: raw,
+      impact_cap_inr: cap,
+      capped: cap !== null && raw > cap,
       impact_inr: ic,
       expected_loss_inr: lc,
     });

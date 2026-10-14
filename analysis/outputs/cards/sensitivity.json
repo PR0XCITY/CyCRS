@@ -46,7 +46,7 @@
         "factor": "per_record_cost",
         "side": "low",
         "multiplier": 0.5,
-        "loss_after_plan_inr": 15154792.98918933,
+        "loss_after_plan_inr": 473621.92039224,
         "same_order": true
       },
       {
@@ -54,7 +54,7 @@
         "factor": "per_record_cost",
         "side": "high",
         "multiplier": 1.5,
-        "loss_after_plan_inr": 45464378.967568,
+        "loss_after_plan_inr": 487836.47658184,
         "same_order": true
       },
       {
@@ -62,7 +62,7 @@
         "factor": "effectiveness",
         "side": "low",
         "multiplier": 0.8,
-        "loss_after_plan_inr": 40631520.48523022,
+        "loss_after_plan_inr": 555909.91294795,
         "same_order": true
       },
       {
@@ -70,7 +70,7 @@
         "factor": "effectiveness",
         "side": "high",
         "multiplier": 1.2,
-        "loss_after_plan_inr": 28469971.72605217,
+        "loss_after_plan_inr": 474036.34424649,
         "same_order": true
       },
       {
@@ -78,7 +78,7 @@
         "factor": "probabilities",
         "side": "low",
         "multiplier": 0.8,
-        "loss_after_plan_inr": 24247668.78270293,
+        "loss_after_plan_inr": 390269.18126547,
         "same_order": true
       },
       {
@@ -86,7 +86,7 @@
         "factor": "probabilities",
         "side": "high",
         "multiplier": 1.2,
-        "loss_after_plan_inr": 36371503.17405438,
+        "loss_after_plan_inr": 585403.7718982,
         "same_order": true
       },
       {
@@ -94,7 +94,7 @@
         "factor": "incident_probability",
         "side": "low",
         "multiplier": 0.5,
-        "loss_after_plan_inr": 15154792.98918933,
+        "loss_after_plan_inr": 243918.23829092,
         "same_order": true
       },
       {
@@ -102,7 +102,7 @@
         "factor": "incident_probability",
         "side": "high",
         "multiplier": 1.5,
-        "loss_after_plan_inr": 45464378.967568,
+        "loss_after_plan_inr": 731754.71487275,
         "same_order": true
       }
     ]
@@ -111,7 +111,7 @@
   "data_properties": [
     {
       "name": "Input with the largest swing",
-      "value": "incident probability and the per record cost",
+      "value": "incident probability",
       "implication": "The source to check first."
     },
     {
@@ -175,35 +175,35 @@
         "rows": [
           [
             "Mixed sector, small, server",
-            "per_record_cost",
-            15154792.99,
-            30309585.98,
-            45464378.97,
-            30309585.98
-          ],
-          [
-            "Mixed sector, small, server",
             "incident_probability",
-            15154792.99,
-            30309585.98,
-            45464378.97,
-            30309585.98
-          ],
-          [
-            "Mixed sector, small, server",
-            "effectiveness",
-            40631520.49,
-            30309585.98,
-            28469971.73,
-            12161548.76
+            243918.24,
+            487836.48,
+            731754.71,
+            487836.48
           ],
           [
             "Mixed sector, small, server",
             "probabilities",
-            24247668.78,
-            30309585.98,
-            36371503.17,
-            12123834.39
+            390269.18,
+            487836.48,
+            585403.77,
+            195134.59
+          ],
+          [
+            "Mixed sector, small, server",
+            "effectiveness",
+            555909.91,
+            487836.48,
+            474036.34,
+            81873.57
+          ],
+          [
+            "Mixed sector, small, server",
+            "per_record_cost",
+            473621.92,
+            487836.48,
+            487836.48,
+            14214.56
           ],
           [
             "Mixed sector, unknown size, server",
@@ -313,28 +313,28 @@
         "y_label": "Expected loss after plan (INR)",
         "data": [
           {
-            "x": "per_record_cost",
-            "low": 15154792.98918933,
-            "base": 30309585.97837866,
-            "high": 45464378.967568
-          },
-          {
             "x": "incident_probability",
-            "low": 15154792.98918933,
-            "base": 30309585.97837866,
-            "high": 45464378.967568
-          },
-          {
-            "x": "effectiveness",
-            "low": 40631520.48523022,
-            "base": 30309585.97837866,
-            "high": 28469971.72605217
+            "low": 243918.23829092,
+            "base": 487836.47658184,
+            "high": 731754.71487275
           },
           {
             "x": "probabilities",
-            "low": 24247668.78270293,
-            "base": 30309585.97837866,
-            "high": 36371503.17405438
+            "low": 390269.18126547,
+            "base": 487836.47658184,
+            "high": 585403.7718982
+          },
+          {
+            "x": "effectiveness",
+            "low": 555909.91294795,
+            "base": 487836.47658184,
+            "high": 474036.34424649
+          },
+          {
+            "x": "per_record_cost",
+            "low": 473621.92039224,
+            "base": 487836.47658184,
+            "high": 487836.47658184
           }
         ]
       },
@@ -404,7 +404,7 @@
       }
     ]
   },
-  "yields": "The rupee figures move most with the incident probability and the per record cost and least with the effectiveness, so the rupee level is only as good as those published averages. The set of controls to buy stays the same in every scenario, so the advice holds even when the rupee estimates are off.",
+  "yields": "The rupee figures move most with the incident probability and least with the effectiveness, so the rupee level is only as good as those published averages. The set of controls to buy stays the same in every scenario, so the advice holds even when the rupee estimates are off.",
   "feeds": [],
   "limitations": [
     "One-at-a-time ranges ignore inputs moving together.",

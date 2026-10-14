@@ -64,11 +64,16 @@ def test_scaled_bundle_does_not_mutate_and_clamps():
     )
 
 
-def test_cost_scales_loss_linearly_and_keeps_plan():
-    base = recommend(PROFILE, M)
-    r = run_scenario(PROFILE, M, "per_record_cost", 1.5)
+def test_cost_scales_loss_linearly_when_uncapped_and_keeps_plan():
+    big = {**PROFILE, "size": "large"}
+    base = recommend(big, M)
+    r = run_scenario(big, M, "per_record_cost", 1.5)
     assert r["totals"]["loss_no_controls_inr"] == pytest.approx(1.5 * base["totals"]["loss_no_controls_inr"])
     assert [x["control"] for x in r["plan"]] == [x["control"] for x in base["plan"]]
+    sb = recommend(PROFILE, M)
+    sr = run_scenario(PROFILE, M, "per_record_cost", 1.5)
+    assert sb["totals"]["loss_no_controls_inr"] <= sr["totals"]["loss_no_controls_inr"]
+    assert sr["totals"]["loss_no_controls_inr"] <= 1.5 * sb["totals"]["loss_no_controls_inr"] * (1 + 1e-9)
 
 
 def test_probability_scale_clamped():

@@ -94,6 +94,8 @@ def resolve(spec, vs):
         return None
     if spec["derive"] == "divide":
         return a / b
+    if spec["derive"] == "multiply":
+        return a * b
     raise ValueError(f"unknown derivation {spec['derive']}")
 
 

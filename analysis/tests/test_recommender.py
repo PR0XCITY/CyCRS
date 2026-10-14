@@ -146,3 +146,21 @@ def test_reference_profiles_reproduce():
     w = Path(__file__).parents[2] / "web" / "tests" / "fixtures" / "reference.json"
     assert w.read_text(encoding="utf-8") == (FX / "reference.json").read_text(encoding="utf-8")
     assert not (WEB / "reference.json").exists()
+
+
+def test_impact_cap_by_size():
+    m = load("model.json")
+    cap = m["config"]["impact_cap_small_inr"]["value"]
+    p = {
+        "sector": m["sectors"][0],
+        "size": "small",
+        "assets": ["asset_server"],
+        "controls": [],
+        "budget_inr": 0,
+    }
+    r = recommend(p, m)
+    for c in r["categories"]:
+        assert c["impact_inr"] == pytest.approx(min(c["impact_uncapped_inr"], cap))
+        assert c["capped"] == (c["impact_uncapped_inr"] > cap)
+    big = recommend({**p, "size": "large"}, m)
+    assert all(c["impact_cap_inr"] is None and not c["capped"] for c in big["categories"])

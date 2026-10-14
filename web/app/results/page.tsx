@@ -29,8 +29,9 @@ function Disclaimer() {
     <aside className="wrap mb-6" aria-label="Estimates disclaimer">
       <div className="panel px-4 py-3 text-sm border-l-4" style={{ borderLeftColor: "var(--risk)" }}>
         <p>
-          <strong>These are estimates.</strong> They combine public breach records with published averages. Rupee amounts are likely too high for a small business,
-          because the record counts and the cost per record come mostly from large organisations; trust the ranking of risks and controls more than the rupee level.
+          <strong>These are estimates.</strong> They combine public breach records with published averages. Because breach records and costs come mostly from large
+          organisations, the cost of one incident is capped for small and medium businesses using a UK government survey of small-business breach costs; treat the
+          rupee figures as an upper range and trust the ranking of risks and controls most.
         </p>
         <ul className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-muted">
           {Object.entries(model.config).map(([k, v]) => (

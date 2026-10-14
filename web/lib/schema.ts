@@ -44,6 +44,7 @@ export const modelSchema = z.object({
       cost_url: z.string(),
       cost_excerpt: z.string(),
       coverage: z.record(z.string(), num),
+      effectiveness_note: z.string(),
     }),
   ),
   config: z.record(

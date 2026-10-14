@@ -255,6 +255,8 @@ lc = cl.sort_values("expected_loss_inr", ascending=False)
 imax = max(c["impact_inr"] for r in refs for c in r["categories"])
 iratio = imax / cfg["breach_total_cost_inr"]
 small_i = max(c["impact_inr"] for c in r0["categories"])
+raw0 = max(c["impact_uncapped_inr"] for c in r0["categories"])
+ncap0 = sum(c["capped"] for c in r0["categories"])
 topc = lc.index[0]
 card_e = {
     "id": "expected-loss",
@@ -312,9 +314,19 @@ card_e = {
             "implication": "First category to defend.",
         },
         {
-            "name": "Largest single-incident impact vs IBM India average breach cost",
-            "value": round(iratio, 4),
-            "implication": f"Impacts for small businesses reach {iratio:.1f} times the average for large Indian organisations, so rupee figures overstate small-business loss.",
+            "name": f"Uncapped single-incident impact vs IBM India average, {REF[0]['name']}",
+            "value": round(raw0 / cfg["breach_total_cost_inr"], 4),
+            "implication": "Records x cost per record overstates small-business loss, so a size-based cap is applied.",
+        },
+        {
+            "name": "Impact cap for small businesses (INR per incident)",
+            "value": cfg["impact_cap_small_inr"],
+            "implication": "UK government survey: top 5% of most disruptive breaches at micro and small firms.",
+        },
+        {
+            "name": f"Attack types at the cap, {REF[0]['name']}",
+            "value": f"{ncap0} of {len(r0['categories'])}",
+            "implication": "When every type is capped, the ranking of attacks follows their probabilities only.",
         },
     ],
     "alternatives": [
@@ -329,7 +341,10 @@ card_e = {
     ],
     "formula_tex": [
         {"label": "Expected loss per category", "tex": r"L_c = \pi \, p_c \, I_c"},
-        {"label": "Impact", "tex": r"I_c = (10^{\hat y_c}-1)\times \text{cost per record}"},
+        {
+            "label": "Impact",
+            "tex": r"I_c = \min\left((10^{\hat y_c}-1)\times \text{cost per record},\ \text{cap}_{\text{size}}\right)",
+        },
         {"label": "Total", "tex": r"L = \sum_c L_c"},
     ],
     "assumptions": [
@@ -389,7 +404,7 @@ card_e = {
         "Probabilities come from reported incidents, not from Indian small businesses directly.",
         "Categories can overlap within one incident, so the total may overstate loss.",
         "Impact uses IBM India average cost per record for every category.",
-        f"For a {REF[0]['name']} one incident is priced up to INR {small_i:,.0f}, above IBM's India average of INR {cfg['breach_total_cost_inr']:,.0f} per breach, because VCDB record counts and IBM costs come from large organisations; use the ranking of categories and controls rather than the rupee level.",
+        f"Uncapped, one incident at a {REF[0]['name']} would be priced at INR {raw0:,.0f}, {raw0 / cfg['breach_total_cost_inr']:.1f} times IBM's India average, because VCDB record counts and IBM costs come from large organisations; small and medium profiles are therefore capped at INR {cfg['impact_cap_small_inr']:,.0f} and INR {cfg['impact_cap_medium_inr']:,.0f}, figures from a UK survey rather than India.",
     ],
 }
 card_e["data_in"]["sample_rows"] = card_e["data_in"]["sample_rows"][:8]

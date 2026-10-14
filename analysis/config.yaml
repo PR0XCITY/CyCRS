@@ -14,6 +14,12 @@ inputs:
     key: annual_incident_prob
   usd_inr:
     key: usd_inr
+  impact_cap_small_inr:
+    derive: multiply
+    of: [smb_breach_cost_small_gbp, gbp_inr]
+  impact_cap_medium_inr:
+    derive: multiply
+    of: [smb_breach_cost_medium_gbp, gbp_inr]
 
 effectiveness:
   mfa: eff_mfa

@@ -1,12 +1,12 @@
 persona,factor,side,multiplier,loss_no_controls_inr,loss_after_plan_inr,plan,same_order,same_set
-"Mixed sector, small, server",per_record_cost,low,0.5,58803885.670876205,15154792.98918933,Endpoint protection; MFA; Offline or cloud backups; Email filtering,True,True
-"Mixed sector, small, server",per_record_cost,high,1.5,176411657.0126286,45464378.967567995,Endpoint protection; MFA; Offline or cloud backups; Email filtering,True,True
-"Mixed sector, small, server",effectiveness,low,0.8,117607771.34175241,40631520.48523022,Endpoint protection; MFA; Offline or cloud backups; Email filtering,True,True
-"Mixed sector, small, server",effectiveness,high,1.2,117607771.34175241,28469971.72605217,Endpoint protection; MFA; Offline or cloud backups; Email filtering,True,True
-"Mixed sector, small, server",probabilities,low,0.8,94086217.07340194,24247668.782702934,Endpoint protection; MFA; Offline or cloud backups; Email filtering,True,True
-"Mixed sector, small, server",probabilities,high,1.2,141129325.61010292,36371503.174054384,Endpoint protection; MFA; Offline or cloud backups; Email filtering,True,True
-"Mixed sector, small, server",incident_probability,low,0.5,58803885.670876205,15154792.98918933,Endpoint protection; MFA; Offline or cloud backups; Email filtering,True,True
-"Mixed sector, small, server",incident_probability,high,1.5,176411657.0126286,45464378.967567995,Endpoint protection; MFA; Offline or cloud backups; Email filtering,True,True
+"Mixed sector, small, server",per_record_cost,low,0.5,1010058.2258396158,473621.9203922371,Endpoint protection; MFA; Offline or cloud backups; Email filtering,True,True
+"Mixed sector, small, server",per_record_cost,high,1.5,1024579.3570214212,487836.47658183635,Endpoint protection; MFA; Offline or cloud backups; Email filtering,True,True
+"Mixed sector, small, server",effectiveness,low,0.8,1024579.3570214212,555909.9129479537,Endpoint protection; MFA; Offline or cloud backups; Email filtering,True,True
+"Mixed sector, small, server",effectiveness,high,1.2,1024579.3570214212,474036.34424649394,Endpoint protection; MFA; Offline or cloud backups; Email filtering,True,True
+"Mixed sector, small, server",probabilities,low,0.8,819663.485617137,390269.1812654691,Endpoint protection; MFA; Offline or cloud backups; Email filtering,True,True
+"Mixed sector, small, server",probabilities,high,1.2,1229495.228425705,585403.7718982035,Endpoint protection; MFA; Offline or cloud backups; Email filtering,True,True
+"Mixed sector, small, server",incident_probability,low,0.5,512289.6785107106,243918.23829091818,Endpoint protection; MFA; Offline or cloud backups; Email filtering,True,True
+"Mixed sector, small, server",incident_probability,high,1.5,1536869.0355321318,731754.7148727546,Endpoint protection; MFA; Offline or cloud backups; Email filtering,True,True
 "Mixed sector, unknown size, server",per_record_cost,low,0.5,69999282.70646928,20470088.92487276,Endpoint protection; MFA; Offline or cloud backups; Email filtering,True,True
 "Mixed sector, unknown size, server",per_record_cost,high,1.5,209997848.1194078,61410266.77461826,Endpoint protection; MFA; Offline or cloud backups; Email filtering,True,True
 "Mixed sector, unknown size, server",effectiveness,low,0.8,139998565.41293857,53321429.795519754,Endpoint protection; MFA; Offline or cloud backups; Email filtering,True,True

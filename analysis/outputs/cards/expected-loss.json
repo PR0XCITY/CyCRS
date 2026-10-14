@@ -37,30 +37,30 @@
     "sample_rows": [
       {
         "profile": "small retail shop",
-        "hacking": 62415080.07,
-        "malware": 148300068.31,
-        "social": 2363806.93,
-        "error": 657010.56,
-        "misuse": 45659.48,
-        "physical": 4216461.26
+        "hacking": 478106.48,
+        "malware": 590318.3,
+        "social": 153591.57,
+        "error": 56613.6,
+        "misuse": 25417.27,
+        "physical": 191134.56
       },
       {
         "profile": "medium clinic with MFA, no budget",
-        "hacking": 802498.64,
-        "malware": 992263.35,
-        "social": 358063.11,
-        "error": 3739984.62,
+        "hacking": 53109.54,
+        "malware": 34124.18,
+        "social": 201025.7,
+        "error": 2784651.91,
         "misuse": 197261.52,
-        "physical": 202874.2
+        "physical": 79458.37
       },
       {
         "profile": "small consultancy, tiny budget",
-        "hacking": 315759326.53,
-        "malware": 221089704.06,
-        "social": 3023663.7,
-        "error": 7212865.99,
-        "misuse": 956777.02,
-        "physical": 499163.03
+        "hacking": 551766.0,
+        "malware": 200761.97,
+        "social": 44810.97,
+        "error": 141751.11,
+        "misuse": 121316.38,
+        "physical": 5161.22
       },
       {
         "profile": "large finance firm, big budget",
@@ -123,13 +123,23 @@
     },
     {
       "name": "Largest expected loss, small retail shop",
-      "value": "malware INR 148,300,068",
+      "value": "malware INR 590,318",
       "implication": "First category to defend."
     },
     {
-      "name": "Largest single-incident impact vs IBM India average breach cost",
-      "value": 7.8527,
-      "implication": "Impacts for small businesses reach 7.9 times the average for large Indian organisations, so rupee figures overstate small-business loss."
+      "name": "Uncapped single-incident impact vs IBM India average, small retail shop",
+      "value": 1.7914,
+      "implication": "Records x cost per record overstates small-business loss, so a size-based cap is applied."
+    },
+    {
+      "name": "Impact cap for small businesses (INR per incident)",
+      "value": 1818316.568,
+      "implication": "UK government survey: top 5% of most disruptive breaches at micro and small firms."
+    },
+    {
+      "name": "Attack types at the cap, small retail shop",
+      "value": "6 of 6",
+      "implication": "When every type is capped, the ranking of attacks follows their probabilities only."
     }
   ],
   "alternatives": [
@@ -149,7 +159,7 @@
     },
     {
       "label": "Impact",
-      "tex": "I_c = (10^{\\hat y_c}-1)\\times \\text{cost per record}"
+      "tex": "I_c = \\min\\left((10^{\\hat y_c}-1)\\times \\text{cost per record},\\ \\text{cap}_{\\text{size}}\\right)"
     },
     {
       "label": "Total",
@@ -176,9 +186,9 @@
     "key_numbers": {
       "annual_incident_prob": 0.468,
       "per_record_cost_inr": 6455.69620253,
-      "ref_total_0": 217998086.60082448,
-      "ref_total_1": 6292945.4369304,
-      "ref_total_2": 548541500.3287688,
+      "ref_total_0": 1495181.78227244,
+      "ref_total_1": 3349631.21294009,
+      "ref_total_2": 1065567.63545722,
       "ref_total_3": 385842137.9421339,
       "ref_total_4": 12537822.9601097
     },
@@ -197,43 +207,43 @@
             "hacking",
             0.56183564,
             36769.80350073,
-            237374680.8275177,
-            62415080.06514207
+            1818316.568,
+            478106.48456631
           ],
           [
             "malware",
             0.69369873,
             70758.9716113,
-            456798424.32610863,
-            148300068.30760446
+            1818316.568,
+            590318.3042653
           ],
           [
             "social",
             0.18048954,
             4334.8196573,
-            27984278.80030264,
-            2363806.93005793
+            1818316.568,
+            153591.5695791
           ],
           [
             "error",
             0.06652814,
             3268.72230553,
-            21101878.17491031,
-            657010.5614399
+            1818316.568,
+            56613.59521247
           ],
           [
             "misuse",
             0.02986851,
             505.97428337,
-            3266416.25975659,
-            45659.47959397
+            1818316.568,
+            25417.27129358
           ],
           [
             "physical",
             0.2246073,
             6213.48580001,
-            40112376.68361731,
-            4216461.25698616
+            1818316.568,
+            191134.55735569
           ]
         ]
       }
@@ -247,33 +257,33 @@
         "data": [
           {
             "x": "hacking",
-            "y": 62415080.06514207
+            "y": 478106.48456631
           },
           {
             "x": "malware",
-            "y": 148300068.30760446
+            "y": 590318.3042653
           },
           {
             "x": "social",
-            "y": 2363806.93005793
+            "y": 153591.5695791
           },
           {
             "x": "error",
-            "y": 657010.5614399
+            "y": 56613.59521247
           },
           {
             "x": "misuse",
-            "y": 45659.47959397
+            "y": 25417.27129358
           },
           {
             "x": "physical",
-            "y": 4216461.25698616
+            "y": 191134.55735569
           }
         ]
       }
     ]
   },
-  "yields": "For a small retail shop, CyCRS estimates about INR 217,998,087 a year of expected loss, most of it from malware. These are estimates built from public averages, and each one carries the source and fallback level of its inputs.",
+  "yields": "For a small retail shop, CyCRS estimates about INR 1,495,182 a year of expected loss, most of it from malware. These are estimates built from public averages, and each one carries the source and fallback level of its inputs.",
   "feeds": [
     "budget-optimiser"
   ],
@@ -281,6 +291,6 @@
     "Probabilities come from reported incidents, not from Indian small businesses directly.",
     "Categories can overlap within one incident, so the total may overstate loss.",
     "Impact uses IBM India average cost per record for every category.",
-    "For a small retail shop one incident is priced up to INR 456,798,424, above IBM's India average of INR 255,000,000 per breach, because VCDB record counts and IBM costs come from large organisations; use the ranking of categories and controls rather than the rupee level."
+    "Uncapped, one incident at a small retail shop would be priced at INR 456,798,424, 1.8 times IBM's India average, because VCDB record counts and IBM costs come from large organisations; small and medium profiles are therefore capped at INR 1,818,317 and INR 10,527,096, figures from a UK survey rather than India."
   ]
 }
