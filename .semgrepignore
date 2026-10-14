@@ -1,0 +1,9 @@
+.venv/
+web/node_modules/
+web/.next/
+web/out/
+web/screenshots/
+web/test-results/
+web/playwright-report/
+analysis/data/raw/vcdb/
+analysis/logs/
