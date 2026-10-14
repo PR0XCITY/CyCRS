@@ -116,6 +116,7 @@
   "results": {
     "key_numbers": {
       "intercept": 4.90613865,
+      "skew_log_records": 0.36008094,
       "slope": -0.52803525,
       "r2": 0.11715266,
       "p_value": 0.0,

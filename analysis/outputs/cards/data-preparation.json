@@ -489,6 +489,8 @@
       "breach_no": 775,
       "regression_rows": 5398,
       "skew_raw": 50.56625329,
+      "mean_records_lost": 22774208.49814746,
+      "median_records_lost": 1364.0,
       "skew_log": 0.36008094
     },
     "tables": [

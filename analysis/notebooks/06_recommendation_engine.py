@@ -499,7 +499,8 @@ card_g = {
         },
     ],
     "results": {
-        "key_numbers": {"controls_scored": len(ctl), "max_gap_pct": max_gap},
+        "key_numbers": {"controls_scored": len(ctl),
+            "reference_budget_inr": REF[0]["budget_inr"], "max_gap_pct": max_gap},
         "tables": [
             {
                 "title": "Greedy vs exhaustive on reference profiles",

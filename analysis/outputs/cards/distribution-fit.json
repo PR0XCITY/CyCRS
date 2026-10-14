@@ -110,6 +110,7 @@
   "results": {
     "key_numbers": {
       "n": 5398,
+      "skew_records_lost": 50.56625329,
       "ks_d_normal": 0.48580107,
       "ks_d_lognormal": 0.09139524,
       "lognormal_sigma": 5.03153505,

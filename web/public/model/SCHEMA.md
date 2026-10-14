@@ -12,6 +12,8 @@ Numbers are rounded to 8 decimals. Each file is under 2 MB.
 | `sizes[]` | string |
 | `assets[]` | string |
 | `categories[]` | string |
+| `size_bands.small_max_employees` | number |
+| `size_bands.medium_max_employees` | number |
 | `attack.feature_order[]` | string |
 | `attack.sectors[]` | string |
 | `attack.reference_levels.sector` | string |

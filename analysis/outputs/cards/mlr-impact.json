@@ -248,6 +248,9 @@
   "results": {
     "key_numbers": {
       "r2_business": 0.35434562,
+      "skew_records_lost": 50.56625329,
+      "ks_d_lognormal": 0.09139524,
+      "ks_d_normal": 0.48580107,
       "adj_r2_business": 0.35142644,
       "test_rmse_business": 1.65684381,
       "test_rmse_full": 1.56439111,

@@ -369,6 +369,7 @@ card_b = {
     "results": {
         "key_numbers": {
             "best_model": best,
+            "youden_j": yj["j"],
             "best_cv_auc": cb.loc[best, "cv_auc_mean"],
             "youden_threshold": yj["threshold"],
             "k_knn": k_best,
@@ -404,6 +405,11 @@ card_b = {
                         mj["specificity"],
                     ],
                 ],
+            },
+            {
+                "title": "Strongest significant logistic odds ratios",
+                "columns": ["term", "odds_ratio", "p_value"],
+                "rows": top_or[["term", "odds_ratio", "p_value"]].values.tolist(),
             },
             {
                 "title": "Decision tree rules (depth 4)",

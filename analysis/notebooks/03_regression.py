@@ -321,6 +321,7 @@ card_s = {
     "results": {
         "key_numbers": {
             "intercept": b0,
+            "skew_log_records": float(st.loc["log10_records_lost", "skewness"]),
             "slope": b1,
             "r2": slr.rsquared,
             "p_value": float(slr.pvalues["log_emp"]),
@@ -508,6 +509,9 @@ card_m = {
     "results": {
         "key_numbers": {
             "r2_business": cb.loc["business", "r2"],
+            "skew_records_lost": sk_y,
+            "ks_d_lognormal": float(fd.loc["lognormal", "ks_d"]),
+            "ks_d_normal": float(fd.loc["normal", "ks_d"]),
             "adj_r2_business": cb.loc["business", "adj_r2"],
             "test_rmse_business": cb.loc["business", "test_rmse"],
             "test_rmse_full": cb.loc["full", "test_rmse"],

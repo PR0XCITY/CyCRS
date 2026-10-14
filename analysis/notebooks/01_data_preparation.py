@@ -426,6 +426,8 @@ card = {
             "breach_no": n_neg,
             "regression_rows": n_reg,
             "skew_raw": sk0,
+            "mean_records_lost": mean_dt,
+            "median_records_lost": med_dt,
             "skew_log": sk1,
         },
         "tables": [
