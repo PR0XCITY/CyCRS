@@ -127,7 +127,7 @@
       }
     ]
   },
-  "why": "Normality checks fail for breach size (internal p 2.1e-42) and for log discovery time (p 3.6e-15), so rank-based tests (Mann-Whitney, Kruskal-Wallis) are primary. Attack type, size and sector are categorical, so association is tested with chi-square and sized with Cramer's V, and ransomware share is a proportion, so a two-proportion z-test fits. Running 8 tests raises the chance of a false alarm, so Holm-adjusted p-values decide.",
+  "why": "Normality checks fail for breach size (internal p 2.1e-42) and for log discovery time (p 3.6e-15), so rank-based tests (Mann-Whitney, Kruskal-Wallis) are primary. Attack type, size and sector are categorical, so association is tested with chi-square and sized with Cramer's V, and ransomware share is a proportion, so a two-proportion z-test fits. Running 9 tests raises the chance of a false alarm, so Holm-adjusted p-values decide.",
   "data_properties": [
     {
       "name": "Shapiro-Wilk p, log records lost, internal",
@@ -146,7 +146,7 @@
     },
     {
       "name": "Tests rejected after Holm",
-      "value": "6 of 8",
+      "value": "7 of 9",
       "implication": "Number of differences treated as real."
     }
   ],
@@ -229,8 +229,8 @@
   ],
   "results": {
     "key_numbers": {
-      "tests": 8,
-      "rejected_holm": 6,
+      "tests": 9,
+      "rejected_holm": 7,
       "ransomware_share_2020_on": 0.55174353,
       "ransomware_share_before_2020": 0.02438195
     },
@@ -323,6 +323,18 @@
             "Ransomware share moved from 2.4% before 2020 to 55.2% from 2020, so backups and endpoint protection rank higher."
           ],
           [
+            "Robustness: has ransomware risen since 2020 without the 2023 batch?",
+            "Excluding 2023, the ransomware share is the same before and from 2020",
+            "Two-proportion z-test",
+            "Same binary outcome with 857 incidents dated 2023 removed, because 91% of them are ransomware and may reflect how VCDB collected that year",
+            28.053,
+            0.0,
+            0.0,
+            "Cohen's h 0.666 (medium)",
+            "reject H0",
+            "Without 2023 the share still moves from 2.4% to 22.1%, so the rise is not only a 2023 collection effect."
+          ],
+          [
             "Is cyber crime more common in some regions of India?",
             "Mean cyber crime rate per lakh is equal across the five regions",
             "One-way ANOVA with Tukey HSD",
@@ -387,6 +399,11 @@
             "effect": "Cohen's h"
           },
           {
+            "x": "Robustness: has ransomware risen since 2020 without the 2023 batch?",
+            "y": 0.66644565,
+            "effect": "Cohen's h"
+          },
+          {
             "x": "Is cyber crime more common in some regions of India?",
             "y": 0.2411541,
             "effect": "eta squared"
@@ -400,7 +417,7 @@
       }
     ]
   },
-  "yields": "6 of 8 tested differences hold up after correcting for multiple tests: attack mix by business size, attack mix by sector, breach size by insider or outsider, detection time by sector (ANOVA), the rise in ransomware share, crime type mix by Indian region, while detection time by sector (Kruskal-Wallis), crime rate by Indian region could be chance. CyCRS uses only the differences that survive as inputs for tailoring its advice, and shows the effect size so a statistically real but tiny difference is not oversold.",
+  "yields": "7 of 9 tested differences hold up after correcting for multiple tests: attack mix by business size, attack mix by sector, breach size by insider or outsider, detection time by sector (ANOVA), the rise in ransomware share, the ransomware rise without 2023, crime type mix by Indian region, while detection time by sector (Kruskal-Wallis), crime rate by Indian region could be chance. CyCRS uses only the differences that survive as inputs for tailoring its advice, and shows the effect size so a statistically real but tiny difference is not oversold.",
   "feeds": [
     "attack-likelihood",
     "breach-impact"
@@ -409,6 +426,6 @@
     "VCDB is not a random sample of businesses, so tests describe reported incidents.",
     "With thousands of incidents even negligible differences can be significant; read the effect size.",
     "The five-region grouping of states is a CyCRS choice and affects the regional tests.",
-    "857 incidents are dated 2023 and 91% of them involve ransomware, so the rise in ransomware share may partly reflect how VCDB collected recent cases."
+    "857 incidents are dated 2023 and 91% of them involve ransomware; without them the share from 2020 is 22.1% instead of 55.2% (robustness row), so part of the rise is a collection effect."
   ]
 }

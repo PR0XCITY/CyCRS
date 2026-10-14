@@ -473,6 +473,21 @@ add(
     "Ransomware share has not changed.",
     {"n": n1 + n2, "share_2020_on": k1 / n1, "share_before": k2 / n2},
 )
+a6 = a5[a5["year"] != 2023]
+k3, n3 = int(a6["v_ransomware"].sum()), len(a6)
+r5b = two_proportion_z(k3, n3, k2, n2)
+add(
+    "Robustness: has ransomware risen since 2020 without the 2023 batch?",
+    "Excluding 2023, the ransomware share is the same before and from 2020",
+    "Excluding 2023, the ransomware share differs between the two periods",
+    "Two-proportion z-test",
+    f"Same binary outcome with {n23} incidents dated 2023 removed, because {100 * r23:.0f}% of them are ransomware and may reflect "
+    "how VCDB collected that year",
+    r5b,
+    f"Without 2023 the share still moves from {100 * k2 / n2:.1f}% to {100 * k3 / n3:.1f}%, so the rise is not only a 2023 collection effect.",
+    "Without 2023 the rise disappears, so it is mostly a 2023 collection effect.",
+    {"n": n3 + n2, "share_2020_on": k3 / n3, "share_before": k2 / n2},
+)
 
 NC = A / "data" / "processed" / "ncrb_state.csv"
 if NC.exists():
@@ -966,6 +981,7 @@ SHORT = {
     "Do some sectors take longer to notice a breach?": "detection time by sector (Kruskal-Wallis)",
     "Same question, parametric comparison": "detection time by sector (ANOVA)",
     "Has ransomware become more common since 2020?": "the rise in ransomware share",
+    "Robustness: has ransomware risen since 2020 without the 2023 batch?": "the ransomware rise without 2023",
     "Is cyber crime more common in some regions of India?": "crime rate by Indian region",
     "Do regions differ in the type of cyber crime?": "crime type mix by Indian region",
 }
@@ -1130,8 +1146,8 @@ card_h = {
         "VCDB is not a random sample of businesses, so tests describe reported incidents.",
         "With thousands of incidents even negligible differences can be significant; read the effect size.",
         "The five-region grouping of states is a CyCRS choice and affects the regional tests.",
-        f"{n23} incidents are dated 2023 and {100 * r23:.0f}% of them involve ransomware, so the rise in ransomware share "
-        "may partly reflect how VCDB collected recent cases.",
+        f"{n23} incidents are dated 2023 and {100 * r23:.0f}% of them involve ransomware; without them the share from 2020 is "
+        f"{100 * k3 / n3:.1f}% instead of {100 * k1 / n1:.1f}% (robustness row), so part of the rise is a collection effect.",
     ],
 }
 write_card(card_h)
