@@ -136,6 +136,8 @@ export const sourcesSchema = z.object({
       summary: z.string(),
       source_url: z.string(),
       accessed: z.string(),
+      profile: z.object({ sector: z.string(), size: z.string(), assets: z.array(z.string()) }),
+      actual_categories: z.array(z.string()),
     }),
   ),
 });
