@@ -1,0 +1,413 @@
+{
+  "id": "sensitivity",
+  "title": "How much the answer depends on the inputs",
+  "module": "7: Sensitivity analysis",
+  "stage": "evaluate",
+  "used_live": false,
+  "order": 18,
+  "question": "If the published figures behind CyCRS are off, how much do the rupee amounts and the order of recommended controls change?",
+  "data_in": {
+    "dataset": "Exported model bundle (model.json) applied to the three largest personas",
+    "n_rows": 24,
+    "variables": [
+      {
+        "name": "per_record_cost_inr",
+        "type": "numeric",
+        "scale": "ratio",
+        "transform": "x0.5 and x1.5"
+      },
+      {
+        "name": "effectiveness",
+        "type": "numeric",
+        "scale": "ratio",
+        "transform": "x0.8 and x1.2, capped at 1"
+      },
+      {
+        "name": "p_c",
+        "type": "numeric",
+        "scale": "ratio",
+        "transform": "x0.8 and x1.2, capped at 1"
+      },
+      {
+        "name": "annual_incident_prob",
+        "type": "numeric",
+        "scale": "ratio",
+        "transform": "x0.5 and x1.5, capped at 1"
+      }
+    ],
+    "prep_steps": [
+      "Three largest personas turned into profiles from their centroids",
+      "Budget INR 50,000, no controls in place",
+      "8 one-at-a-time scenarios per persona"
+    ],
+    "sample_rows": [
+      {
+        "persona": "Mixed sector, small, server",
+        "factor": "per_record_cost",
+        "side": "low",
+        "multiplier": 0.5,
+        "loss_after_plan_inr": 15154792.98918933,
+        "same_order": true
+      },
+      {
+        "persona": "Mixed sector, small, server",
+        "factor": "per_record_cost",
+        "side": "high",
+        "multiplier": 1.5,
+        "loss_after_plan_inr": 45464378.967568,
+        "same_order": true
+      },
+      {
+        "persona": "Mixed sector, small, server",
+        "factor": "effectiveness",
+        "side": "low",
+        "multiplier": 0.8,
+        "loss_after_plan_inr": 40631520.48523022,
+        "same_order": true
+      },
+      {
+        "persona": "Mixed sector, small, server",
+        "factor": "effectiveness",
+        "side": "high",
+        "multiplier": 1.2,
+        "loss_after_plan_inr": 28469971.72605217,
+        "same_order": true
+      },
+      {
+        "persona": "Mixed sector, small, server",
+        "factor": "probabilities",
+        "side": "low",
+        "multiplier": 0.8,
+        "loss_after_plan_inr": 24247668.78270293,
+        "same_order": true
+      },
+      {
+        "persona": "Mixed sector, small, server",
+        "factor": "probabilities",
+        "side": "high",
+        "multiplier": 1.2,
+        "loss_after_plan_inr": 36371503.17405438,
+        "same_order": true
+      },
+      {
+        "persona": "Mixed sector, small, server",
+        "factor": "incident_probability",
+        "side": "low",
+        "multiplier": 0.5,
+        "loss_after_plan_inr": 15154792.98918933,
+        "same_order": true
+      },
+      {
+        "persona": "Mixed sector, small, server",
+        "factor": "incident_probability",
+        "side": "high",
+        "multiplier": 1.5,
+        "loss_after_plan_inr": 45464378.967568,
+        "same_order": true
+      }
+    ]
+  },
+  "why": "Every rupee figure multiplies a few published inputs, so moving one input at a time and watching the result shows which sources matter most. 0 of 24 scenarios change the order of the plan and 0 change which controls are in it, which separates rupee uncertainty from advice uncertainty.",
+  "data_properties": [
+    {
+      "name": "Input with the largest swing",
+      "value": "incident probability and the per record cost",
+      "implication": "The source to check first."
+    },
+    {
+      "name": "Input with the smallest swing",
+      "value": "effectiveness",
+      "implication": "Least influential on the rupee figure."
+    },
+    {
+      "name": "Scenarios changing plan order",
+      "value": "0 of 24",
+      "implication": "Ranking robustness."
+    },
+    {
+      "name": "Scenarios changing the set of controls",
+      "value": "0 of 24",
+      "implication": "Which controls to buy is robust when this is 0."
+    }
+  ],
+  "alternatives": [
+    {
+      "model": "Monte Carlo over all inputs at once",
+      "why_not": "Needs distributions for each input that the sources do not give; one-at-a-time ranges stay traceable to each source."
+    },
+    {
+      "model": "No sensitivity check",
+      "why_not": "The per-record cost alone moves results by up to 40,940,178 INR a year for these personas."
+    }
+  ],
+  "formula_tex": [
+    {
+      "label": "Swing",
+      "tex": "\\Delta_f = \\left|L(f_{\\text{high}}) - L(f_{\\text{low}})\\right|"
+    }
+  ],
+  "assumptions": [
+    {
+      "check": "Inputs varied one at a time",
+      "statistic": 8.0,
+      "p_value": null,
+      "verdict": "interactions ignored",
+      "action_taken": "Ranges chosen per input type as briefed."
+    }
+  ],
+  "results": {
+    "key_numbers": {
+      "scenarios": 24,
+      "order_changes": 0,
+      "set_changes": 0
+    },
+    "tables": [
+      {
+        "title": "Tornado data (expected loss after plan, INR)",
+        "columns": [
+          "persona",
+          "factor",
+          "low",
+          "base",
+          "high",
+          "swing"
+        ],
+        "rows": [
+          [
+            "Mixed sector, small, server",
+            "per_record_cost",
+            15154792.99,
+            30309585.98,
+            45464378.97,
+            30309585.98
+          ],
+          [
+            "Mixed sector, small, server",
+            "incident_probability",
+            15154792.99,
+            30309585.98,
+            45464378.97,
+            30309585.98
+          ],
+          [
+            "Mixed sector, small, server",
+            "effectiveness",
+            40631520.49,
+            30309585.98,
+            28469971.73,
+            12161548.76
+          ],
+          [
+            "Mixed sector, small, server",
+            "probabilities",
+            24247668.78,
+            30309585.98,
+            36371503.17,
+            12123834.39
+          ],
+          [
+            "Mixed sector, unknown size, server",
+            "incident_probability",
+            20470088.92,
+            40940177.85,
+            61410266.77,
+            40940177.85
+          ],
+          [
+            "Mixed sector, unknown size, server",
+            "per_record_cost",
+            20470088.92,
+            40940177.85,
+            61410266.77,
+            40940177.85
+          ],
+          [
+            "Mixed sector, unknown size, server",
+            "probabilities",
+            32752142.28,
+            40940177.85,
+            49128213.42,
+            16376071.14
+          ],
+          [
+            "Mixed sector, unknown size, server",
+            "effectiveness",
+            53321429.8,
+            40940177.85,
+            38489931.92,
+            14831497.88
+          ],
+          [
+            "Mixed sector, large, server",
+            "incident_probability",
+            12343134.1,
+            24686268.19,
+            37029402.29,
+            24686268.19
+          ],
+          [
+            "Mixed sector, large, server",
+            "per_record_cost",
+            12343134.1,
+            24686268.19,
+            37029402.29,
+            24686268.19
+          ],
+          [
+            "Mixed sector, large, server",
+            "effectiveness",
+            34071902.94,
+            24686268.19,
+            23163593.1,
+            10908309.84
+          ],
+          [
+            "Mixed sector, large, server",
+            "probabilities",
+            19749014.55,
+            24686268.19,
+            29623521.83,
+            9874507.28
+          ]
+        ]
+      },
+      {
+        "title": "Controls stable under every scenario",
+        "columns": [
+          "persona",
+          "base_plan",
+          "stable_controls",
+          "scenarios_same_order",
+          "scenarios"
+        ],
+        "rows": [
+          [
+            "Mixed sector, small, server",
+            "Endpoint protection; MFA; Offline or cloud backups; Email filtering",
+            "Endpoint protection; MFA; Offline or cloud backups; Email filtering",
+            8,
+            8
+          ],
+          [
+            "Mixed sector, unknown size, server",
+            "Endpoint protection; MFA; Offline or cloud backups; Email filtering",
+            "Endpoint protection; MFA; Offline or cloud backups; Email filtering",
+            8,
+            8
+          ],
+          [
+            "Mixed sector, large, server",
+            "Endpoint protection; MFA; Offline or cloud backups; Email filtering",
+            "Endpoint protection; MFA; Offline or cloud backups; Email filtering",
+            8,
+            8
+          ]
+        ]
+      }
+    ],
+    "charts": [
+      {
+        "type": "bar",
+        "title": "Tornado: Mixed sector, small, server",
+        "x_label": "Input",
+        "y_label": "Expected loss after plan (INR)",
+        "data": [
+          {
+            "x": "per_record_cost",
+            "low": 15154792.98918933,
+            "base": 30309585.97837866,
+            "high": 45464378.967568
+          },
+          {
+            "x": "incident_probability",
+            "low": 15154792.98918933,
+            "base": 30309585.97837866,
+            "high": 45464378.967568
+          },
+          {
+            "x": "effectiveness",
+            "low": 40631520.48523022,
+            "base": 30309585.97837866,
+            "high": 28469971.72605217
+          },
+          {
+            "x": "probabilities",
+            "low": 24247668.78270293,
+            "base": 30309585.97837866,
+            "high": 36371503.17405438
+          }
+        ]
+      },
+      {
+        "type": "bar",
+        "title": "Tornado: Mixed sector, unknown size, server",
+        "x_label": "Input",
+        "y_label": "Expected loss after plan (INR)",
+        "data": [
+          {
+            "x": "incident_probability",
+            "low": 20470088.92487276,
+            "base": 40940177.84974552,
+            "high": 61410266.77461828
+          },
+          {
+            "x": "per_record_cost",
+            "low": 20470088.92487276,
+            "base": 40940177.84974552,
+            "high": 61410266.77461826
+          },
+          {
+            "x": "probabilities",
+            "low": 32752142.27979641,
+            "base": 40940177.84974552,
+            "high": 49128213.41969462
+          },
+          {
+            "x": "effectiveness",
+            "low": 53321429.79551975,
+            "base": 40940177.84974552,
+            "high": 38489931.91631529
+          }
+        ]
+      },
+      {
+        "type": "bar",
+        "title": "Tornado: Mixed sector, large, server",
+        "x_label": "Input",
+        "y_label": "Expected loss after plan (INR)",
+        "data": [
+          {
+            "x": "incident_probability",
+            "low": 12343134.0958232,
+            "base": 24686268.19164639,
+            "high": 37029402.2874696
+          },
+          {
+            "x": "per_record_cost",
+            "low": 12343134.0958232,
+            "base": 24686268.19164639,
+            "high": 37029402.28746959
+          },
+          {
+            "x": "effectiveness",
+            "low": 34071902.94368684,
+            "base": 24686268.19164639,
+            "high": 23163593.10330145
+          },
+          {
+            "x": "probabilities",
+            "low": 19749014.55331712,
+            "base": 24686268.19164639,
+            "high": 29623521.82997566
+          }
+        ]
+      }
+    ]
+  },
+  "yields": "The rupee figures move most with the incident probability and the per record cost and least with the effectiveness, so the rupee level is only as good as those published averages. The set of controls to buy stays the same in every scenario, so the advice holds even when the rupee estimates are off.",
+  "feeds": [],
+  "limitations": [
+    "One-at-a-time ranges ignore inputs moving together.",
+    "Only four controls can be scored, which limits how much the plan can change."
+  ]
+}

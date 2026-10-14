@@ -1,0 +1,249 @@
+{
+  "id": "case-replay",
+  "title": "Replaying real Indian incidents",
+  "module": "6: Decision analysis (evaluation on documented cases)",
+  "stage": "evaluate",
+  "used_live": false,
+  "order": 17,
+  "question": "If these Indian organisations had asked CyCRS for a plan at a ₹50,000 budget, would its top 3 controls have addressed what actually happened?",
+  "data_in": {
+    "dataset": "data/raw/cases.csv: documented Indian incidents from news and government sources",
+    "n_rows": 4,
+    "variables": [
+      {
+        "name": "sector",
+        "type": "categorical",
+        "scale": "nominal",
+        "transform": "Other when outside the model's top 8"
+      },
+      {
+        "name": "size_bucket",
+        "type": "categorical",
+        "scale": "ordinal",
+        "transform": "unknown when the source does not say"
+      },
+      {
+        "name": "assets",
+        "type": "categorical",
+        "scale": "nominal",
+        "transform": "mapped to asset flags"
+      },
+      {
+        "name": "actual_actions",
+        "type": "categorical",
+        "scale": "nominal",
+        "transform": "VERIS action categories stated in the source"
+      }
+    ],
+    "prep_steps": [
+      "Only facts stated in each fetched source were recorded",
+      "Each case run through the live engine with no controls in place and a budget of INR 50,000",
+      "Verdict compares the action categories the top 3 controls address with the categories the source reports"
+    ],
+    "sample_rows": [
+      {
+        "case": "Star Health and Allied Insurance",
+        "sector_used": "Finance and Insurance",
+        "size_used": "unknown",
+        "actual_categories": "unknown",
+        "top3": "Endpoint protection; MFA; Offline or cloud backups",
+        "verdict": "not assessable (actions unknown)"
+      },
+      {
+        "case": "AIIMS New Delhi",
+        "sector_used": "Health Care and Social Assistance",
+        "size_used": "unknown",
+        "actual_categories": "malware",
+        "top3": "Endpoint protection; MFA; Offline or cloud backups",
+        "verdict": "covered"
+      },
+      {
+        "case": "C-Edge Technologies",
+        "sector_used": "Professional, Scientific, and Technical Services",
+        "size_used": "unknown",
+        "actual_categories": "malware",
+        "top3": "Endpoint protection; MFA; Offline or cloud backups",
+        "verdict": "covered"
+      },
+      {
+        "case": "Tata Technologies",
+        "sector_used": "Professional, Scientific, and Technical Services",
+        "size_used": "large",
+        "actual_categories": "malware",
+        "top3": "Endpoint protection; MFA; Offline or cloud backups",
+        "verdict": "covered"
+      },
+      {
+        "case": "Star Health and Allied Insurance",
+        "sector_used": "Finance and Insurance",
+        "size_used": "unknown",
+        "actual_categories": "unknown",
+        "top3": "Endpoint protection; MFA; Offline or cloud backups",
+        "verdict": "not assessable (actions unknown)"
+      },
+      {
+        "case": "AIIMS New Delhi",
+        "sector_used": "Health Care and Social Assistance",
+        "size_used": "unknown",
+        "actual_categories": "malware",
+        "top3": "Endpoint protection; MFA; Offline or cloud backups",
+        "verdict": "covered"
+      },
+      {
+        "case": "C-Edge Technologies",
+        "sector_used": "Professional, Scientific, and Technical Services",
+        "size_used": "unknown",
+        "actual_categories": "malware",
+        "top3": "Endpoint protection; MFA; Offline or cloud backups",
+        "verdict": "covered"
+      },
+      {
+        "case": "Tata Technologies",
+        "sector_used": "Professional, Scientific, and Technical Services",
+        "size_used": "large",
+        "actual_categories": "malware",
+        "top3": "Endpoint protection; MFA; Offline or cloud backups",
+        "verdict": "covered"
+      }
+    ]
+  },
+  "why": "Only 4 Indian incidents are documented well enough to replay, too few for a hit rate, so each case is judged on its own. A verdict per case shows a reader exactly where the advice matches reality and where the source is too thin to judge.",
+  "data_properties": [
+    {
+      "name": "Cases replayed",
+      "value": 4,
+      "implication": "Small qualitative check, not a statistical test."
+    },
+    {
+      "name": "Cases with known attack categories",
+      "value": 3,
+      "implication": "Only these can get a verdict."
+    },
+    {
+      "name": "Covered among assessable cases",
+      "value": "3 of 3",
+      "implication": "How often the top 3 addressed what happened."
+    }
+  ],
+  "alternatives": [
+    {
+      "model": "Coverage hit rate on Indian cases",
+      "why_not": "With 4 cases a rate would swing by 25 points per case; the VCDB hit rate is the statistical check."
+    },
+    {
+      "model": "Guessing missing attack details",
+      "why_not": "Sources that do not state the method are marked not assessable instead of filled in."
+    }
+  ],
+  "formula_tex": [
+    {
+      "label": "Verdict",
+      "tex": "\\text{covered} \\iff A_{\\text{actual}} \\subseteq \\bigcup_{k\\in \\text{top3}} A_k"
+    }
+  ],
+  "assumptions": [
+    {
+      "check": "Source states the attack category",
+      "statistic": 3.0,
+      "p_value": null,
+      "verdict": "3 of 4",
+      "action_taken": "Others shown as not assessable."
+    },
+    {
+      "check": "Case profile from source only",
+      "statistic": null,
+      "p_value": null,
+      "verdict": "unknown size and assets left unknown",
+      "action_taken": "Engine uses its reference levels for unknowns."
+    }
+  ],
+  "results": {
+    "key_numbers": {
+      "cases": 4,
+      "assessable": 3,
+      "covered": 3,
+      "budget_inr": 50000
+    },
+    "tables": [
+      {
+        "title": "Case replay results",
+        "columns": [
+          "case",
+          "year",
+          "sector_used",
+          "size_used",
+          "assets_used",
+          "actual_categories",
+          "top3",
+          "verdict"
+        ],
+        "rows": [
+          [
+            "Star Health and Allied Insurance",
+            "2024",
+            "Finance and Insurance",
+            "unknown",
+            "none stated",
+            "unknown",
+            "Endpoint protection; MFA; Offline or cloud backups",
+            "not assessable (actions unknown)"
+          ],
+          [
+            "AIIMS New Delhi",
+            "2022",
+            "Health Care and Social Assistance",
+            "unknown",
+            "asset_server",
+            "malware",
+            "Endpoint protection; MFA; Offline or cloud backups",
+            "covered"
+          ],
+          [
+            "C-Edge Technologies",
+            "2024",
+            "Professional, Scientific, and Technical Services",
+            "unknown",
+            "none stated",
+            "malware",
+            "Endpoint protection; MFA; Offline or cloud backups",
+            "covered"
+          ],
+          [
+            "Tata Technologies",
+            "2025",
+            "Professional, Scientific, and Technical Services",
+            "large",
+            "none stated",
+            "malware",
+            "Endpoint protection; MFA; Offline or cloud backups",
+            "covered"
+          ]
+        ]
+      }
+    ],
+    "charts": [
+      {
+        "type": "bar",
+        "title": "Verdicts",
+        "x_label": "Verdict",
+        "y_label": "Cases",
+        "data": [
+          {
+            "x": "covered",
+            "y": 3
+          },
+          {
+            "x": "not assessable (actions unknown)",
+            "y": 1
+          }
+        ]
+      }
+    ]
+  },
+  "yields": "For 3 of the 3 cases whose sources say how the attack worked, CyCRS's top 3 controls at INR 50,000 address that kind of attack. 1 case does not state the method, so it is shown without a verdict rather than counted as a success.",
+  "feeds": [],
+  "limitations": [
+    "Four public cases from large organisations, not small businesses.",
+    "Addressing an attack type does not prove the control would have stopped that incident."
+  ]
+}
