@@ -447,7 +447,7 @@ card_b = {
     "feeds": ["attack-likelihood"],
     "limitations": [
         f"Only {bal['train_no'] + bal['test_no']} incidents are confirmed No, so every No-side metric is uncertain.",
-        "Potentially and Unknown disclosures were dropped, which removes the most ambiguous cases.",
+        "Potentially and Unknown disclosures were dropped; incidents with no confidentiality section count as No, which assumes VERIS coders recorded every exposure.",
         f"CV AUC SD for the best model is {cb.loc[best, 'cv_auc_sd']:.3f}, so model ranks may change with a new sample.",
     ],
 }

@@ -67,6 +67,7 @@ def test_target_rules():
     assert breach_target("No") == 0
     assert math.isnan(breach_target("Potentially"))
     assert math.isnan(breach_target("Unknown"))
+    assert breach_target("Not coded") == 0
     assert math.isnan(breach_target(None))
 
 
@@ -96,13 +97,13 @@ def test_no_disclosure(df):
     assert r["discovery_days"] == pytest.approx(7 / 24)
 
 
-def test_potentially_and_not_coded_dropped(df):
+def test_potentially_dropped_and_not_coded_is_no(df):
     p = row(df, "e36f5ee0")
     n = row(df, "2468560D")
     assert p["data_disclosure"] == "Potentially"
     assert n["data_disclosure"] == "Not coded"
     assert p["breach"] is None or str(p["breach"]) == "<NA>"
-    assert n["breach"] is None or str(n["breach"]) == "<NA>"
+    assert n["breach"] == 0
     assert p["v_ransomware"] == 1
     assert n["availability"] == 1 and n["integrity"] == 1
 

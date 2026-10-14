@@ -1,52 +1,76 @@
 |--- actor_external <= 0.50
 |   |--- sector_health_care_and_social_assistance <= 0.50
-|   |   |--- action_misuse <= 0.50
-|   |   |   |--- actor_partner <= 0.50
-|   |   |   |   |--- asset_media <= 0.50
+|   |   |--- action_error <= 0.50
+|   |   |   |--- sector_public_administration <= 0.50
+|   |   |   |   |--- sector_manufacturing <= 0.50
+|   |   |   |   |   |--- truncated branch of depth 6
+|   |   |   |   |--- sector_manufacturing >  0.50
 |   |   |   |   |   |--- class: 1
-|   |   |   |   |--- asset_media >  0.50
+|   |   |   |--- sector_public_administration >  0.50
+|   |   |   |   |--- size_medium <= 0.50
+|   |   |   |   |   |--- truncated branch of depth 4
+|   |   |   |   |--- size_medium >  0.50
+|   |   |   |   |   |--- class: 0
+|   |   |--- action_error >  0.50
+|   |   |   |--- sector_public_administration <= 0.50
+|   |   |   |   |--- size_large <= 0.50
+|   |   |   |   |   |--- truncated branch of depth 5
+|   |   |   |   |--- size_large >  0.50
+|   |   |   |   |   |--- truncated branch of depth 5
+|   |   |   |--- sector_public_administration >  0.50
+|   |   |   |   |--- size_large <= 0.50
+|   |   |   |   |   |--- truncated branch of depth 3
+|   |   |   |   |--- size_large >  0.50
 |   |   |   |   |   |--- truncated branch of depth 2
-|   |   |   |--- actor_partner >  0.50
-|   |   |   |   |--- class: 0
-|   |   |--- action_misuse >  0.50
-|   |   |   |--- sector_finance_and_insurance <= 0.50
-|   |   |   |   |--- sector_public_administration <= 0.50
-|   |   |   |   |   |--- truncated branch of depth 3
-|   |   |   |   |--- sector_public_administration >  0.50
-|   |   |   |   |   |--- truncated branch of depth 3
-|   |   |   |--- sector_finance_and_insurance >  0.50
-|   |   |   |   |--- class: 0
 |   |--- sector_health_care_and_social_assistance >  0.50
-|   |   |--- class: 1
+|   |   |--- action_physical <= 0.50
+|   |   |   |--- asset_user_device <= 0.50
+|   |   |   |   |--- actor_partner <= 0.50
+|   |   |   |   |   |--- truncated branch of depth 5
+|   |   |   |   |--- actor_partner >  0.50
+|   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |--- asset_user_device >  0.50
+|   |   |   |   |--- size_large <= 0.50
+|   |   |   |   |   |--- class: 1
+|   |   |   |   |--- size_large >  0.50
+|   |   |   |   |   |--- class: 1
+|   |   |--- action_physical >  0.50
+|   |   |   |--- class: 1
 |--- actor_external >  0.50
 |   |--- size_large <= 0.50
 |   |   |--- sector_health_care_and_social_assistance <= 0.50
 |   |   |   |--- sector_retail_trade <= 0.50
-|   |   |   |   |--- action_social <= 0.50
+|   |   |   |   |--- size_medium <= 0.50
 |   |   |   |   |   |--- truncated branch of depth 6
-|   |   |   |   |--- action_social >  0.50
-|   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |--- size_medium >  0.50
+|   |   |   |   |   |--- truncated branch of depth 6
 |   |   |   |--- sector_retail_trade >  0.50
-|   |   |   |   |--- asset_server <= 0.50
+|   |   |   |   |--- action_hacking <= 0.50
 |   |   |   |   |   |--- class: 1
-|   |   |   |   |--- asset_server >  0.50
+|   |   |   |   |--- action_hacking >  0.50
 |   |   |   |   |   |--- class: 1
 |   |   |--- sector_health_care_and_social_assistance >  0.50
-|   |   |   |--- asset_server <= 0.50
-|   |   |   |   |--- class: 1
-|   |   |   |--- asset_server >  0.50
-|   |   |   |   |--- size_medium <= 0.50
+|   |   |   |--- action_malware <= 0.50
+|   |   |   |   |--- size_unknown <= 0.50
 |   |   |   |   |   |--- class: 1
-|   |   |   |   |--- size_medium >  0.50
-|   |   |   |   |   |--- class: 1
-|   |--- size_large >  0.50
-|   |   |--- asset_user_device <= 0.50
-|   |   |   |--- sector_educational_services <= 0.50
-|   |   |   |   |--- sector_finance_and_insurance <= 0.50
-|   |   |   |   |   |--- truncated branch of depth 6
-|   |   |   |   |--- sector_finance_and_insurance >  0.50
+|   |   |   |   |--- size_unknown >  0.50
 |   |   |   |   |   |--- truncated branch of depth 2
-|   |   |   |--- sector_educational_services >  0.50
+|   |   |   |--- action_malware >  0.50
+|   |   |   |   |--- class: 0
+|   |--- size_large >  0.50
+|   |   |--- sector_educational_services <= 0.50
+|   |   |   |--- action_physical <= 0.50
+|   |   |   |   |--- action_hacking <= 0.50
+|   |   |   |   |   |--- truncated branch of depth 5
+|   |   |   |   |--- action_hacking >  0.50
+|   |   |   |   |   |--- truncated branch of depth 6
+|   |   |   |--- action_physical >  0.50
+|   |   |   |   |--- sector_retail_trade <= 0.50
+|   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |--- sector_retail_trade >  0.50
+|   |   |   |   |   |--- class: 0
+|   |   |--- sector_educational_services >  0.50
+|   |   |   |--- action_malware <= 0.50
+|   |   |   |   |--- class: 0
+|   |   |   |--- action_malware >  0.50
 |   |   |   |   |--- class: 1
-|   |   |--- asset_user_device >  0.50
-|   |   |   |--- class: 0
