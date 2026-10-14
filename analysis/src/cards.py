@@ -38,7 +38,7 @@ RESULTS = ("key_numbers", "tables", "charts")
 TABLE = ("title", "columns", "rows")
 CHART = ("type", "title", "x_label", "y_label", "data")
 BANNED = ("victim_name", "summary", "notes", "reference", "incident_id", "source_id", "source_file")
-EM_DASH = "—"
+EM_DASH = chr(0x2014)
 
 
 class CardError(ValueError):

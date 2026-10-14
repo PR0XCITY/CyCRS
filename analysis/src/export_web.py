@@ -363,4 +363,4 @@ def export_all(bundle, out=WEB):
 
 
 def em_dash_free(p):
-    return not re.search("—", Path(p).read_text(encoding="utf-8"))
+    return not re.search(chr(0x2014), Path(p).read_text(encoding="utf-8"))
