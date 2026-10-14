@@ -72,3 +72,20 @@ test("every model page has seven numbered sections and pipeline links", async ({
     await expect(page.locator("[data-section]")).toHaveCount(7);
   }
 });
+
+test("cases show plan, verdict, source and an openable trace panel", async ({ page }) => {
+  await page.goto("/cases/");
+  const items = page.locator("[data-case]");
+  const n = await items.count();
+  expect(n).toBeGreaterThanOrEqual(4);
+  for (let i = 0; i < n; i++) {
+    const it = items.nth(i);
+    await expect(it.getByText("Verdict")).toBeVisible();
+    await expect(it.getByRole("link", { name: "Source" })).toHaveAttribute("href", /^https:\/\//);
+    await expect(it.locator("ol li").first()).toBeVisible();
+    const p = page.getByTestId(`panel-case-${i}`);
+    await p.locator("summary").click();
+    await expect(p).toHaveAttribute("open", "");
+    await expect(p.getByText(/^Step 1: picked/)).toBeVisible();
+  }
+});

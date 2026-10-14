@@ -21,7 +21,7 @@ const F = {
 
 function prettyLevel(s: string) {
   if (!s) return "direct value";
-  return s.replace(/^d+_/, "").replace(/_/g, " ");
+  return s.replace(/^\d+_/, "").replace(/_/g, " ");
 }
 
 function Disclaimer() {
