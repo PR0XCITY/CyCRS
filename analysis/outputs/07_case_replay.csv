@@ -1,0 +1,5 @@
+case,year,sector_used,size_used,assets_used,actual_categories,top3,verdict,covered_categories,loss_no_controls_inr,residual_risk_pct
+Star Health and Allied Insurance,2024,Finance and Insurance,unknown,none stated,unknown,Endpoint protection; MFA; Offline or cloud backups,not assessable (actions unknown),,59650235.84744087,55.0034830464888
+AIIMS New Delhi,2022,Health Care and Social Assistance,unknown,asset_server,malware,Endpoint protection; MFA; Offline or cloud backups,covered,malware,21551488.302834243,29.052681614851018
+C-Edge Technologies,2024,"Professional, Scientific, and Technical Services",unknown,none stated,malware,Endpoint protection; MFA; Offline or cloud backups,covered,malware,177937320.40902787,42.11407128051981
+Tata Technologies,2025,"Professional, Scientific, and Technical Services",large,none stated,malware,Endpoint protection; MFA; Offline or cloud backups,covered,malware,111438029.87687343,37.73719322004029

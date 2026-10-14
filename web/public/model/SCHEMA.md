@@ -75,6 +75,10 @@ Numbers are rounded to 8 decimals. Each file is under 2 MB.
 | `cases[].summary` | string |
 | `cases[].source_url` | string |
 | `cases[].accessed` | string |
+| `cases[].profile.sector` | string |
+| `cases[].profile.size` | string |
+| `cases[].profile.assets[]` | string |
+| `cases[].actual_categories[]` | string |
 
 ## lineage.json
 
