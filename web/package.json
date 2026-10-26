@@ -15,7 +15,7 @@
     "verify": "npm run lint && tsc --noEmit && vitest run && next build"
   },
   "dependencies": {
-    "katex": "0.18.9",
+    "katex": "0.19.0",
     "next": "16.3.8",
     "react": "19.3.0",
     "react-dom": "19.3.0",
