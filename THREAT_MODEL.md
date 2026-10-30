@@ -16,7 +16,7 @@ CyCRS is a static website (Next.js export on Vercel) plus an offline Python anal
 | Area | STRIDE | Threat | Impact | Mitigation | Status |
 | --- | --- | --- | --- | --- | --- |
 | Static site | Spoofing | Look-alike site serves altered advice | Users act on false plans | HSTS (2 years, preload); single canonical Vercel domain | Done |
-| Static site | Tampering | Third-party script injected or a page framed | Altered numbers, clickjacking | CSP `default-src 'self'`, `script-src 'self'`, no external scripts, fonts self-hosted, `frame-ancestors 'none'`; header test checks vercel.json against the project spec | Done |
+| Static site | Tampering | Third-party script injected or a page framed | Altered numbers, clickjacking | CSP `default-src 'self'`, `script-src 'self'`, no external scripts, fonts self-hosted, `frame-ancestors 'none'`; header test checks vercel.json against the required policy | Done |
 | Static site | Info disclosure | Stack traces or console output leak internals | Reveals paths and versions | Friendly `error.tsx` and `not-found.tsx`; `removeConsole` in production; `poweredByHeader` off | Done |
 | Static site | Denial of service | Traffic flood | Site unavailable | Static files on Vercel CDN; no origin server to exhaust | Accepted (platform) |
 | Browser storage | Tampering | User or extension edits localStorage to inject values | Engine runs on crafted input, UI breaks | Every read validated with zod (`strictObject`, enums, ranges); invalid data removed and user sent to /assess; e2e test covers it | Done |

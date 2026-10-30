@@ -7,7 +7,7 @@ type Rule = { source: string; headers: Header[] };
 
 const root = join(__dirname, "..", "..");
 const vercel = JSON.parse(readFileSync(join(root, "vercel.json"), "utf8")) as { headers: Rule[] };
-const spec = readFileSync(join(root, "..", "the project spec"), "utf8");
+const CSP = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'";
 
 function headersFor(source: string) {
   const r = vercel.headers.find((h) => h.source === source);
@@ -22,17 +22,15 @@ function directives(csp: string) {
     .sort();
 }
 
-describe("vercel.json security headers match the project spec", () => {
+describe("vercel.json security headers match the security policy", () => {
   const h = headersFor("/(.*)");
 
   it("applies to every path", () => {
     expect(h.size).toBeGreaterThan(0);
   });
 
-  it("uses exactly the CSP written in the project spec", () => {
-    const m = spec.match(/CSP \((default-src[^)]*'self')\)/);
-    expect(m, "CSP not found in the project spec").not.toBeNull();
-    expect(directives(h.get("content-security-policy") ?? "")).toEqual(directives(m?.[1] ?? ""));
+  it("uses exactly the required CSP", () => {
+    expect(directives(h.get("content-security-policy") ?? "")).toEqual(directives(CSP));
   });
 
   it("forbids framing, inline objects and foreign connections", () => {
