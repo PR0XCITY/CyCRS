@@ -22,3 +22,5 @@ web/playwright-report/
 web/test-results/
 web/*.tsbuildinfo
 web/screenshots/
+
+report/
